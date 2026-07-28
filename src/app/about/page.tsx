@@ -1,7 +1,7 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 
 import { Reveal } from "@/components/motion";
-import { ContractorRow, CtaBand, ServiceArea } from "@/components/sections";
 import {
   Card,
   Container,
@@ -76,6 +76,10 @@ export default function AboutPage() {
                     work. The conversations differ. The work does not: read the
                     schedule, source against it, and be on site on time.
                   </p>
+                  <p className="text-bone">
+                    The aim is simple. Appliances should be the least eventful
+                    part of your schedule.
+                  </p>
                 </div>
               </Reveal>
             </div>
@@ -83,23 +87,8 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Mission */}
-      <Section space="base" tone="walnut" aria-labelledby="mission">
-        <Container>
-          <SectionHeading
-            eyebrow="Mission"
-            align="center"
-            lead="Remove the appliance scope from a project's critical path entirely."
-          >
-            <span id="mission">
-              Appliances should be the least eventful part of your schedule
-            </span>
-          </SectionHeading>
-        </Container>
-      </Section>
-
       {/* Approach */}
-      <Section space="airy" tone="charcoal" aria-labelledby="approach">
+      <Section space="airy" tone="walnut" aria-labelledby="approach">
         <Container>
           <SectionHeading
             eyebrow="Our approach"
@@ -176,23 +165,27 @@ export default function AboutPage() {
                   any form.
                 </p>
               </Reveal>
+
+              {/* A single inline link rather than a closing CTA band. This page
+                  already ends on an invitation; wrapping it in another
+                  eyebrow-heading-lead-button section would be the templated
+                  padding this page was audited to remove. */}
+              <Reveal delay={200}>
+                <Link
+                  href="/contact"
+                  className="label-caps-lg link-underline mt-10 inline-flex items-center gap-2 text-amber"
+                >
+                  Start a conversation
+                  <span aria-hidden="true" className="text-sm leading-none">
+                    ↗
+                  </span>
+                </Link>
+              </Reveal>
             </div>
           </div>
         </Container>
       </Section>
 
-      <Section space="tight" tone="charcoal">
-        <Container>
-          <ContractorRow />
-        </Container>
-      </Section>
-
-      <ServiceArea tone="walnut" />
-
-      <CtaBand
-        title="Bring us in early"
-        body="Send the appliance schedule as soon as one exists. The earlier we see it, the more room remains to align selections with the budget and the build sequence."
-      />
     </PageShell>
   );
 }

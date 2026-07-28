@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 
 import { DrawRule, Reveal } from "@/components/motion";
-import { CtaBand, ServiceArea } from "@/components/sections";
-import { BlueprintToReality } from "@/components/blueprint-to-reality";
+import { CtaBand } from "@/components/sections";
 import { Hero } from "@/components/hero";
 import {
   Card,
@@ -84,38 +83,6 @@ export default function ProcessPage() {
               </Reveal>
             ))}
           </ol>
-        </Container>
-      </Section>
-
-      {/* Blueprint to reality — the showcase instance */}
-      <Section space="airy" tone="raised" aria-labelledby="resolve">
-        <Container>
-          <SectionHeading
-            eyebrow="Spec to installed"
-            align="center"
-            lead="The entire process, compressed into a single object. Scroll to resolve it."
-          >
-            <span id="resolve">What step three actually looks like</span>
-          </SectionHeading>
-
-          <div className="mt-20 space-y-24 lg:space-y-32">
-            <BlueprintToReality
-              kind="refrigeration"
-              layout="copy-wide"
-              eyebrow="Step 01 → 03"
-              title="A refrigeration line item, delivered and set"
-              body="It begins as a callout: a model class, a cutout, a utility requirement. It ends as a unit standing in a finished opening. Everything we do happens between those two states."
-            />
-
-            <BlueprintToReality
-              kind="dishwasher"
-              layout="media-wide"
-              eyebrow="Coordination"
-              title="Sequenced to the trades working around us"
-              body="Installation is scheduled against the build, not our calendar. On tenant improvement work that often means a narrow window after the millwork lands and before the final walkthrough."
-              reverse
-            />
-          </div>
         </Container>
       </Section>
 
@@ -207,7 +174,6 @@ export default function ProcessPage() {
         </Container>
       </Section>
 
-      <ServiceArea tone="raised" />
 
       <CtaBand
         title="Ready when your schedule is"

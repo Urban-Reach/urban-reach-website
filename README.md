@@ -172,6 +172,47 @@ Profile for NAP consistency.
 
 ---
 
+## Section allocation — read before adding a section
+
+The pages were audited for reuse. Each section now belongs to exactly one page,
+and nothing is a reordered copy of another page's block. Current allocation:
+
+| | Home | About | Appliances | Process | Contact |
+| --- | --- | --- | --- | --- | --- |
+| `TrustStrip` (logos only) | ✓ | | | | |
+| `BrandGrid` (+ explanatory copy) | | | ✓ | | |
+| `BlueprintToReality` | refrigeration | | dishwasher, beverage | | |
+| Service area | | | | | ✓ (as contact info) |
+| `CtaBand` | ✓ | | ✓ | ✓ | |
+
+What was removed and why:
+
+- **`ServiceArea` appeared on all five pages.** Deleted. The city list is
+  contact information, so it lives on `/contact` only; the footer already
+  carries a service-area line site-wide.
+- **`ContractorRow` was on Home and About.** Deleted, folded into `TrustStrip`.
+- **The appliance category card grid was identical on Home and Appliances.**
+  Removed from Home. Home links through instead. This also stops the two pages
+  competing for the same search phrase.
+- **Process carried two `BlueprintToReality` instances that reused the
+  refrigeration unit from Home and the dishwasher from Appliances** — the whole
+  section was a reshuffle. Removed. Process stands on its three steps, tenant
+  improvements, and what-to-send, all of which are unique to it.
+- **About's Mission section was a lone centred heading with no body.** Its
+  statement folded into the story copy and the section went away.
+- **About's closing `CtaBand`** was replaced with a single inline link. The page
+  already ends on an invitation; wrapping it in another
+  eyebrow-heading-lead-button block was the padding this audit removed.
+
+`TrustStrip` and `BrandGrid` share the same logo assets but are not the same
+section: the strip is a bare recognition signal under the hero, while the
+Appliances section's actual substance is the copy explaining what each
+manufacturer covers.
+
+**If a page lacks enough real content to justify a section, leave it out.** Do
+not reintroduce a section from another page to make a page feel complete. About
+is deliberately the leanest page on the site.
+
 ## Page composition — read before adding a page
 
 `Hero` and `PageShell` exist so the site reads as one design language while each
@@ -273,14 +314,22 @@ line, the stainless reach-ins, the prep counters and window wall — so each pag
 gets its own photographic moment from a single source frame, and darkens it at
 source.
 
-`HeroMedia` in `hero.tsx` then layers a five-part scrim over it: a global
-charcoal tint, a directional gradient weighted toward wherever the copy sits, a
-focused ellipse directly behind the text block, a vignette, and film grain. This
-is not decoration. The source frame is much brighter on the chrome and the
-window wall than through the centre floor, so one flat overlay either crushes
-the photo or leaves copy sitting on a highlight. Measured against the brightest
-pixel that ends up behind each block: wordmark 12.8:1, tagline 6.0:1, lead
-7.9:1 — all clear WCAG AA. **Never place hero text on the raw image.**
+`HeroMedia` in `hero.tsx` then layers a five-part scrim over it. The split is
+deliberate: the layers covering the WHOLE frame are kept light so the
+photograph reads as a present part of the hero, and the legibility work is
+concentrated in layer 3, which only covers the text block. Lifting the global
+tint alone washed the copy out; lifting it while tightening layer 3 makes the
+image stronger AND the text no less readable.
+
+Measured against the brightest pixel that ends up behind each block: wordmark
+9.0:1, tagline 5.1:1, lead 5.0:1 — all clear WCAG AA. **Re-measure after
+changing any of those numbers, and never place hero text on the raw image.**
+
+Above the copy sits a **light bridge** — a warm bloom and a narrow sheen that
+graze the wordmark so the type looks lit by the scene rather than pasted onto
+it. It uses `mix-blend-plus-lighter`, which can only ADD light, so it
+physically cannot reduce text contrast. It is also `pointer-events: none`, so
+it cannot intercept clicks despite sitting at `z-20` above the CTAs.
 
 ---
 

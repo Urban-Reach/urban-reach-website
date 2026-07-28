@@ -1,16 +1,9 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 
 import { Reveal } from "@/components/motion";
 import { Hero } from "@/components/hero";
-import {
-  BrandGrid,
-  ContractorRow,
-  CtaBand,
-  ServiceArea,
-} from "@/components/sections";
+import { CtaBand, TrustStrip } from "@/components/sections";
 import { BlueprintToReality } from "@/components/blueprint-to-reality";
-import { CategoryGlyph } from "@/components/appliance-art";
 import {
   ButtonLink,
   Card,
@@ -20,7 +13,6 @@ import {
   Section,
   SectionHeading,
 } from "@/components/ui";
-import { applianceCategories } from "@/data/appliances";
 import { processSteps, site } from "@/data/site";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -44,9 +36,16 @@ export default function HomePage() {
       />
 
       {/* ==================================================================
+          Trust — moved directly beneath the hero. This is the credibility
+          signal, so it should be among the first things a visitor sees rather
+          than something they scroll several sections past.
+          ================================================================== */}
+      <TrustStrip />
+
+      {/* ==================================================================
           Value proposition
           ================================================================== */}
-      <Section id="after-hero" tone="charcoal" space="airy" aria-labelledby="value-prop">
+      <Section tone="charcoal" space="airy" aria-labelledby="value-prop">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
@@ -127,50 +126,6 @@ export default function HomePage() {
       </Section>
 
       {/* ==================================================================
-          Service categories
-          ================================================================== */}
-      <Section tone="charcoal" space="tight" aria-labelledby="what-we-supply">
-        <Container>
-          <SectionHeading
-            eyebrow="What we supply"
-            lead="These categories stay deliberately broad. Equipment schedules rarely stop at the obvious appliances."
-          >
-            <span id="what-we-supply">
-              Commercial appliance categories for Austin construction projects
-            </span>
-          </SectionHeading>
-
-          <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {applianceCategories.map((category, i) => (
-              <Reveal as="li" key={category.slug} delay={i * 70}>
-                <Card>
-                  <CategoryGlyph
-                    kind={category.glyph}
-                    className="h-16 w-auto sm:h-[4.5rem]"
-                  />
-                  <h3 className="mt-6 font-display text-xl">{category.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-bone-dim">
-                    {category.body}
-                  </p>
-                </Card>
-              </Reveal>
-            ))}
-          </ul>
-
-          <Reveal delay={120}>
-            <div className="mt-12">
-              <Link
-                href="/appliances"
-                className="label-caps-lg link-underline text-amber"
-              >
-                View all appliance categories
-              </Link>
-            </div>
-          </Reveal>
-        </Container>
-      </Section>
-
-      {/* ==================================================================
           Process teaser
           ================================================================== */}
       <Section tone="walnut" space="base" aria-labelledby="how-it-works">
@@ -223,28 +178,6 @@ export default function HomePage() {
           </div>
         </Container>
       </Section>
-
-      {/* ==================================================================
-          Authorized brands
-          ================================================================== */}
-      <Section tone="charcoal" space="tight" aria-labelledby="brands">
-        <Container>
-          <div id="brands">
-            <BrandGrid />
-          </div>
-        </Container>
-      </Section>
-
-      {/* ==================================================================
-          GC trust row
-          ================================================================== */}
-      <Section tone="raised" space="tight">
-        <Container>
-          <ContractorRow />
-        </Container>
-      </Section>
-
-      <ServiceArea tone="walnut" />
 
       <CtaBand />
     </PageShell>

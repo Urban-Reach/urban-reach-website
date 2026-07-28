@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { Reveal } from "@/components/motion";
-import { BrandGrid, CtaBand, ServiceArea } from "@/components/sections";
+import { BrandGrid, CtaBand } from "@/components/sections";
 import { BlueprintToReality } from "@/components/blueprint-to-reality";
 import { CategoryGlyph } from "@/components/appliance-art";
 import { Hero } from "@/components/hero";
@@ -178,7 +178,6 @@ export default function AppliancesPage() {
         </Container>
       </Section>
 
-      <ServiceArea tone="raised" />
 
       <CtaBand
         title="Send us the equipment schedule"

@@ -76,9 +76,14 @@ export function Hero({
     >
       <HeroMedia page={page} align={align} />
 
+      {/*
+        Bottom padding reserves clear space for the scroll cue. Previously the
+        cue sat close enough to the CTA row to crowd it; the copy block now ends
+        well above it so the cue reads as a separate, breathing element.
+      */}
       <Container
         className={`relative z-10 w-full ${
-          isHome ? "py-28 sm:py-32" : "pb-20 pt-36 sm:pb-24 sm:pt-40"
+          isHome ? "pb-48 pt-28 sm:pb-52 sm:pt-32" : "pb-40 pt-36 sm:pb-44 sm:pt-40"
         }`}
       >
         <div
@@ -150,6 +155,42 @@ export function Hero({
           )}
         </div>
       </Container>
+
+      {/*
+        LIGHT BRIDGE — the visual link between photograph and type.
+
+        Sits ABOVE the copy and uses `plus-lighter`, which can only ADD light.
+        That matters: it means the effect physically cannot reduce text contrast,
+        so the wordmark keeps its measured legibility while the kitchen's warm
+        lighting appears to spill across the top edge of the letterforms instead
+        of the type floating flatly on the image.
+
+        Two parts: a broad warm bloom grazing the wordmark, and a narrow
+        horizontal sheen that reads as a steel reflection catching the type.
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-20 mix-blend-plus-lighter"
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background: isHome
+              ? "radial-gradient(38% 26% at 34% 34%, rgba(201,146,47,0.30) 0%, rgba(201,146,47,0.10) 45%, transparent 74%)"
+              : "radial-gradient(34% 30% at 16% 46%, rgba(201,146,47,0.24) 0%, rgba(201,146,47,0.08) 48%, transparent 76%)",
+          }}
+        />
+        <div
+          className="absolute inset-x-0"
+          style={{
+            top: isHome ? "31%" : "44%",
+            height: isHome ? "9%" : "7%",
+            background:
+              "linear-gradient(to right, transparent 4%, rgba(238,214,166,0.14) 26%, rgba(255,247,232,0.20) 44%, rgba(238,214,166,0.10) 64%, transparent 92%)",
+            filter: "blur(6px)",
+          }}
+        />
+      </div>
 
       <ScrollCue />
     </section>
@@ -239,32 +280,45 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
         className="object-cover object-center"
       />
 
-      {/* 1. Global tint — seats the photo in the brand charcoal. */}
-      <div className="absolute inset-0 bg-charcoal/55" />
+      {/*
+        The scrim is split deliberately: the layers that cover the WHOLE frame
+        are kept light so the photograph reads strongly, and the legibility work
+        is concentrated in layer 3, which only covers the text block. Lifting the
+        global tint alone would have washed the copy out; lifting it while
+        tightening layer 3 makes the image more present AND the text no less
+        readable. Contrast is measured after any change to these numbers.
+      */}
 
-      {/* 2. Directional gradient, weighted to where the copy sits. */}
+      {/* 1. Global tint — seats the photo in the brand charcoal. Reduced from
+             0.55 so the kitchen is a present part of the hero, not a backdrop. */}
+      <div className="absolute inset-0 bg-charcoal/28" />
+
+      {/* 2. Directional gradient. Eased off through the middle of the frame,
+             where there is no copy, so the equipment stays visible. */}
       <div
         className={
           align === "center"
-            ? "absolute inset-0 bg-[linear-gradient(to_top,rgba(14,14,14,0.94)_0%,rgba(14,14,14,0.55)_38%,rgba(14,14,14,0.34)_62%,rgba(14,14,14,0.72)_100%)]"
-            : "absolute inset-0 bg-[linear-gradient(to_right,rgba(14,14,14,0.94)_0%,rgba(14,14,14,0.7)_42%,rgba(14,14,14,0.32)_78%,rgba(14,14,14,0.5)_100%)]"
+            ? "absolute inset-0 bg-[linear-gradient(to_top,rgba(14,14,14,0.9)_0%,rgba(14,14,14,0.4)_34%,rgba(14,14,14,0.14)_60%,rgba(14,14,14,0.6)_100%)]"
+            : "absolute inset-0 bg-[linear-gradient(to_right,rgba(14,14,14,0.9)_0%,rgba(14,14,14,0.58)_40%,rgba(14,14,14,0.12)_76%,rgba(14,14,14,0.34)_100%)]"
         }
       />
 
-      {/* 3. Focused scrim directly behind the text block. This is the layer that
-             guarantees legibility regardless of what the photo is doing there. */}
+      {/* 3. Focused scrim directly behind the text block — tightened and
+             strengthened to carry the legibility now that layers 1, 2 and 4 are
+             lighter. This is the layer that guarantees contrast regardless of
+             what the photograph is doing underneath. */}
       <div
         className="absolute inset-0"
         style={{
           background:
             align === "center"
-              ? "radial-gradient(58% 46% at 50% 52%, rgba(10,10,10,0.78) 0%, rgba(10,10,10,0.4) 58%, transparent 82%)"
-              : "radial-gradient(62% 55% at 26% 68%, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.42) 56%, transparent 84%)",
+              ? "radial-gradient(52% 40% at 50% 44%, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.62) 52%, rgba(8,8,8,0.22) 78%, transparent 94%)"
+              : "radial-gradient(56% 48% at 24% 60%, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.62) 50%, rgba(8,8,8,0.2) 76%, transparent 92%)",
         }}
       />
 
-      {/* 4. Vignette. */}
-      <div className="absolute inset-0 bg-[radial-gradient(122%_92%_at_50%_46%,transparent_34%,rgba(6,6,6,0.7)_100%)]" />
+      {/* 4. Vignette, eased so it frames rather than smothers. */}
+      <div className="absolute inset-0 bg-[radial-gradient(126%_96%_at_50%_46%,transparent_42%,rgba(6,6,6,0.62)_100%)]" />
 
       {/* 5. Film grain, so the gradient stack does not band on wide screens. */}
       <div

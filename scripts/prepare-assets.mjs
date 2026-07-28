@@ -311,10 +311,11 @@ async function main() {
     await sharp(SOURCES.hero)
       .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
       .resize({ width: 2000, withoutEnlargement: false })
-      // Pull the highlights down: the raw frame is much brighter on the chrome
-      // and the window wall than in the centre floor, which is what made text
-      // legibility uneven.
-      .modulate({ brightness: 0.82, saturation: 0.92 })
+      // Only a light touch. The frame is brighter on the chrome and the window
+      // wall than through the centre floor, but heavy source darkening made the
+      // photograph read as a faint backdrop. Legibility is handled by the
+      // focused scrim in hero.tsx instead, which is measured.
+      .modulate({ brightness: 0.96, saturation: 0.97 })
       .webp({ quality: 74 })
       .toFile(await out(`hero/${name}.webp`));
 
@@ -323,7 +324,7 @@ async function main() {
     const tiny = await sharp(SOURCES.hero)
       .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
       .resize({ width: 20 })
-      .modulate({ brightness: 0.82 })
+      .modulate({ brightness: 0.96 })
       .blur(1.2)
       .webp({ quality: 40 })
       .toBuffer();
