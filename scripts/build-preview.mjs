@@ -94,13 +94,13 @@ export default nextConfig;
   console.log("mail server behind it. Run `npm run dev` to exercise the form.\n");
 }
 
-/** Collect every .html file under a directory. */
-async function htmlFiles(dir) {
+/** Collect every file under a directory, recursively. */
+async function allFiles(dir) {
   const found = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
-    if (entry.isDirectory()) found.push(...(await htmlFiles(full)));
-    else if (entry.name.endsWith(".html")) found.push(full);
+    if (entry.isDirectory()) found.push(...(await allFiles(full)));
+    else found.push(full);
   }
   return found;
 }
@@ -124,9 +124,16 @@ async function tidy(outDir) {
     const full = join(outDir, entry.name);
     if (entry.isFile() && entry.name.endsWith(".txt")) {
       await rm(full, { force: true });
-    } else if (entry.isDirectory() && entry.name !== "_next" && entry.name !== "brand") {
-      const kept = await htmlFiles(full);
-      if (kept.length === 0) await rm(full, { recursive: true, force: true });
+    } else if (entry.isDirectory()) {
+      // Only remove a directory if EVERYTHING under it is an RSC payload.
+      // An earlier version removed any directory containing no .html and
+      // whitelisted `_next` and `brand` by name, which silently deleted
+      // public/hero — the entire hero photography set — from the review copy.
+      const files = await allFiles(full);
+      const onlyPayloads = files.length > 0 && files.every((f) => f.endsWith(".txt"));
+      if (files.length === 0 || onlyPayloads) {
+        await rm(full, { recursive: true, force: true });
+      }
     }
   }
 

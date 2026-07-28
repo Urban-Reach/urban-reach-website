@@ -37,10 +37,11 @@ export default function AboutPage() {
       />
 
       <Hero
-        composition="offset"
+        page="about"
+        align="left"
         eyebrow="About Urban Reach"
         headline="An appliance package supplier for general contractors in Austin"
-        lead="Urban Reach was built to do one part of a construction project properly: getting the right commercial-grade appliances specified, priced, delivered, and installed without becoming the thing that holds up a turnover."
+        lead="Urban Reach exists to do one part of a construction project exceptionally well: specifying, pricing, delivering, and installing commercial-grade appliances without delaying turnover."
         primary={{ href: "/contact", label: "Start a conversation" }}
         secondary={{ href: "/process", label: "See how we work" }}
       />
@@ -51,7 +52,7 @@ export default function AboutPage() {
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-4">
               <SectionHeading eyebrow="Our story">
-                <span id="story">A young company, deliberately focused</span>
+                <span id="story">A young company, deliberately narrow</span>
               </SectionHeading>
             </div>
 
@@ -59,26 +60,21 @@ export default function AboutPage() {
               <Reveal>
                 <div className="space-y-6 text-lg leading-relaxed text-bone-dim">
                   <p>
-                    Urban Reach is about a year old. We would rather say that
-                    plainly than dress it up, because the people we work with
-                    are going to find out anyway — and because being new is not
-                    the same as being unprepared.
+                    Urban Reach is approximately one year old. We state that
+                    plainly. Being new is not the same as being unprepared.
                   </p>
                   <p>
-                    What we chose instead of a long history is a narrow scope. We
-                    do commercial appliance fulfillment for construction
-                    projects, in one metro, and we do not pretend to be a
-                    general supplier of everything else. That focus is what lets
-                    a small team answer a specification question the same day it
-                    is asked.
+                    In place of a long history, we chose a narrow scope:
+                    commercial appliance fulfillment for construction projects,
+                    in one metro. That focus is what allows a small team to
+                    answer a specification question the same day it is asked.
                   </p>
                   <p>
-                    We work with general contractors, architects, designers, and
-                    procurement managers on multifamily developments, office
-                    buildouts, tenant improvements, and interior finish work. The
-                    conversations differ, but the job is the same one: read the
-                    schedule, source against it, and be on site when the space
-                    is ready.
+                    We work with general contractors, architects, designers,
+                    and procurement managers across multifamily developments,
+                    office buildouts, tenant improvements, and interior finish
+                    work. The conversations differ. The work does not: read the
+                    schedule, source against it, and be on site on time.
                   </p>
                 </div>
               </Reveal>
@@ -93,10 +89,10 @@ export default function AboutPage() {
           <SectionHeading
             eyebrow="Mission"
             align="center"
-            lead="Take the appliance scope off a project's critical path — completely, and without drama."
+            lead="Remove the appliance scope from a project's critical path entirely."
           >
             <span id="mission">
-              Appliances should be the least interesting part of your schedule
+              Appliances should be the least eventful part of your schedule
             </span>
           </SectionHeading>
         </Container>
@@ -107,7 +103,7 @@ export default function AboutPage() {
         <Container>
           <SectionHeading
             eyebrow="Our approach"
-            lead="Four commitments that shape how Urban Reach handles commercial appliance fulfillment."
+            lead="Four commitments that govern how we work."
           >
             <span id="approach">
               How we approach commercial appliance fulfillment
@@ -118,19 +114,19 @@ export default function AboutPage() {
             {[
               {
                 title: "Read the specification first",
-                body: "Before pricing anything, we work through the appliance schedule against the drawings — cutout dimensions, utility rough-ins, clearances, finish level. Most appliance problems on a jobsite were decided months earlier on paper.",
+                body: "Before pricing, we reconcile the appliance schedule against the drawings: cutout dimensions, utility rough-ins, clearances, finish level. Most appliance problems on site were determined months earlier, on paper.",
               },
               {
                 title: "Price so it can be defended",
-                body: "Pricing comes back itemized and legible, in a form you can hold against a budget line or put in front of an owner without translating it first.",
+                body: "Pricing returns itemized and legible — ready to set against a budget line or present to an owner without translation.",
               },
               {
                 title: "Own the whole handoff",
-                body: "Sourcing, delivery, and installation are one scope with one point of contact. There is no seam between a supplier and an installer for something to fall through.",
+                body: "Sourcing, delivery, and installation form one scope under one point of contact. There is no seam between supplier and installer.",
               },
               {
                 title: "Stay inside the metro",
-                body: "Austin and its immediate suburbs. Turning down work outside that radius is what keeps us able to commit to a delivery window inside it.",
+                body: "Austin and its immediate suburbs. Declining work beyond that radius is precisely what allows us to commit to delivery windows within it.",
               },
             ].map((item, i) => (
               <Reveal as="li" key={item.title} from="left" delay={i * 80}>
@@ -155,7 +151,8 @@ export default function AboutPage() {
             <div className="lg:col-span-4">
               <SectionHeading eyebrow="Who we work with">
                 <span id="who">
-                  General contractors first, and everyone building alongside them
+                  General contractors first, and everyone building alongside
+                  them
                 </span>
               </SectionHeading>
             </div>
@@ -163,20 +160,20 @@ export default function AboutPage() {
             <div className="lg:col-span-8">
               <Reveal>
                 <p className="text-lg leading-relaxed text-bone-dim">
-                  Urban Reach primarily partners with general contractors
+                  Urban Reach partners primarily with general contractors
                   managing commercial projects across {site.city}. We also work
                   directly with architects, designers, developers, and property
-                  owners — usually earlier in the process, while the equipment
-                  schedule is still taking shape and selections can still move
+                  owners, typically earlier in the process — while the equipment
+                  schedule is still forming and selections can still change
                   without a change order.
                 </p>
               </Reveal>
 
               <Reveal delay={120}>
                 <p className="mt-6 text-lg leading-relaxed text-bone-dim">
-                  If you are weighing whether it is too early to bring us in: it
-                  is not. The most useful conversations we have start the moment
-                  an appliance schedule exists in any form.
+                  It is never too early to involve us. The most productive
+                  conversations begin the moment an appliance schedule exists in
+                  any form.
                 </p>
               </Reveal>
             </div>
@@ -194,7 +191,7 @@ export default function AboutPage() {
 
       <CtaBand
         title="Bring us in early"
-        body="Send the appliance schedule as soon as you have one. The earlier we see it, the more room there is to align selections with the budget and the build sequence."
+        body="Send the appliance schedule as soon as one exists. The earlier we see it, the more room remains to align selections with the budget and the build sequence."
       />
     </PageShell>
   );

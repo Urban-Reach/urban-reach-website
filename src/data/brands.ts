@@ -10,10 +10,12 @@
  * from each brand's official media/dealer portal, not general web search.
  *
  * Every supplied mark is dark ink on a transparent background (measured
- * luminance 0.00–0.20), which is invisible against the #0E0E0E page. They are
- * therefore rendered on light chips in the UI. Recoloring a manufacturer's mark
- * to sit on dark would breach most dealer brand-usage guidelines; placing the
- * unmodified mark on a light field does not.
+ * luminance 0.00–0.20), which is invisible against the #0E0E0E page. Each is
+ * therefore emitted as a ONE-COLOUR REVERSED mark — the silhouette knocked out
+ * to the brand off-white — so it sits directly on the dark ground with no box
+ * behind it. This is the standard treatment for a partner row on a dark field,
+ * and most manufacturers publish reversed art for exactly this case; request
+ * theirs and confirm the treatment against their guidelines before publishing.
  */
 
 export type Brand = {
@@ -30,30 +32,30 @@ export const brands: Brand[] = [
   {
     slug: "samsung",
     name: "Samsung",
-    logo: "/brand/vendors/samsung",
-    width: 600,
-    height: 98,
+    logo: "/brand/vendors/samsung-reversed",
+    width: 640,
+    height: 104,
   },
   {
     slug: "summit",
     name: "Summit",
-    logo: "/brand/vendors/summit",
-    width: 600,
-    height: 265,
+    logo: "/brand/vendors/summit-reversed",
+    width: 640,
+    height: 283,
   },
   {
     slug: "ge-haier",
     name: "GE Appliances, a Haier company",
-    logo: "/brand/vendors/ge-haier",
-    width: 600,
-    height: 163,
+    logo: "/brand/vendors/ge-haier-reversed",
+    width: 640,
+    height: 174,
   },
   {
     slug: "fisher-paykel",
     name: "Fisher & Paykel",
-    logo: "/brand/vendors/fisher-paykel",
-    width: 600,
-    height: 98,
+    logo: "/brand/vendors/fisher-paykel-reversed",
+    width: 640,
+    height: 104,
   },
   {
     slug: "champion",
@@ -74,8 +76,8 @@ export const brands: Brand[] = [
   {
     slug: "bunn",
     name: "BUNN",
-    logo: "/brand/vendors/bunn",
-    width: 600,
-    height: 115,
+    logo: "/brand/vendors/bunn-reversed",
+    width: 640,
+    height: 122,
   },
 ];

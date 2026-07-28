@@ -38,10 +38,11 @@ export default function ProcessPage() {
       />
 
       <Hero
-        composition="anchored"
+        page="process"
+        align="left"
         eyebrow="Process"
         headline="From specification to commercial appliance installation in Austin"
-        lead="Three steps, one point of contact, and no handoff between the people who priced the appliances and the people who install them."
+        lead="Three steps, one point of contact, and no handoff between the people who price the appliances and the people who install them."
         primary={{ href: "/contact", label: "Start a conversation" }}
         secondary={{ href: "/appliances", label: "See what we supply" }}
       />
@@ -51,7 +52,7 @@ export default function ProcessPage() {
         <Container>
           <SectionHeading
             eyebrow="The work"
-            lead="Short enough to hold in your head, which is the point."
+            lead="A short, predictable sequence — by design."
           >
             <span id="steps">How a project runs with Urban Reach</span>
           </SectionHeading>
@@ -92,7 +93,7 @@ export default function ProcessPage() {
           <SectionHeading
             eyebrow="Spec to installed"
             align="center"
-            lead="The whole process, compressed into one object. Scroll to resolve it."
+            lead="The entire process, compressed into a single object. Scroll to resolve it."
           >
             <span id="resolve">What step three actually looks like</span>
           </SectionHeading>
@@ -103,7 +104,7 @@ export default function ProcessPage() {
               layout="copy-wide"
               eyebrow="Step 01 → 03"
               title="A refrigeration line item, delivered and set"
-              body="It begins as a callout with a model class, a cutout, and a utility requirement. It ends as a unit standing in a finished opening. Everything Urban Reach does happens between those two states."
+              body="It begins as a callout: a model class, a cutout, a utility requirement. It ends as a unit standing in a finished opening. Everything we do happens between those two states."
             />
 
             <BlueprintToReality
@@ -111,7 +112,7 @@ export default function ProcessPage() {
               layout="media-wide"
               eyebrow="Coordination"
               title="Sequenced to the trades working around us"
-              body="Installation is scheduled against the build, not against our calendar. On tenant improvement work in particular, that usually means fitting a narrow window after the millwork lands and before the final walkthrough."
+              body="Installation is scheduled against the build, not our calendar. On tenant improvement work that often means a narrow window after the millwork lands and before the final walkthrough."
               reverse
             />
           </div>
@@ -134,17 +135,17 @@ export default function ProcessPage() {
               <Reveal>
                 <div className="space-y-6 text-lg leading-relaxed text-bone-dim">
                   <p>
-                    Tenant improvement work rarely gives you a clean slate.
-                    Existing conditions decide what will physically fit, the
-                    schedule is compressed, and the appliance scope tends to
-                    arrive late and fully formed.
+                    Tenant improvement work rarely offers a clean slate.
+                    Existing conditions determine what will physically fit, the
+                    schedule is compressed, and the appliance scope typically
+                    arrives late and fully formed.
                   </p>
                   <p>
-                    We treat that as the normal case rather than the exception.
+                    We treat that as the standard case, not the exception.
                     Verifying against as-built conditions before ordering, and
-                    keeping delivery and installation under one scope, is what
-                    keeps a compressed TI schedule from losing days to an
-                    appliance that was never going to fit.
+                    keeping delivery and installation within one scope, is what
+                    prevents a compressed schedule from losing days to equipment
+                    that was never going to fit.
                   </p>
                 </div>
               </Reveal>
@@ -158,7 +159,7 @@ export default function ProcessPage() {
         <Container>
           <SectionHeading
             eyebrow="Getting started"
-            lead="None of it has to be final. Partial information early beats complete information late."
+            lead="None of it needs to be final. Partial information early is worth more than complete information late."
           >
             <span id="what-to-send">What is useful to send us first</span>
           </SectionHeading>
@@ -167,7 +168,7 @@ export default function ProcessPage() {
             {[
               {
                 title: "The appliance or equipment schedule",
-                body: "Whatever form it exists in — a finished schedule, a spec section, or a marked-up sheet.",
+                body: "In whatever form it exists — a finished schedule, a specification section, or a marked-up sheet.",
               },
               {
                 title: "Relevant plan sheets",
@@ -175,7 +176,7 @@ export default function ProcessPage() {
               },
               {
                 title: "The build sequence",
-                body: "When the spaces are expected to be ready, and any turnover dates we should be working back from.",
+                body: "When the spaces are expected to be ready, and the turnover dates we should work back from.",
               },
             ].map((item, i) => (
               <Reveal as="li" key={item.title} from="right" delay={i * 80}>
@@ -210,7 +211,7 @@ export default function ProcessPage() {
 
       <CtaBand
         title="Ready when your schedule is"
-        body="Send the appliance scope and we will tell you what it will cost, how long it will take, and what will not work — before it is a change order."
+        body="Send the appliance scope. We will tell you what it costs, how long it takes, and what will not work — before it becomes a change order."
       />
     </PageShell>
   );

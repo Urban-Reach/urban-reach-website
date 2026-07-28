@@ -28,6 +28,8 @@ const PUBLIC = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 const SOURCES = {
   // Urban Reach reversed mark: white artwork on a painted dark checkerboard.
   urbanReach: join(DOWNLOADS, 'Gemini_Generated_Image_gmrraigmrraigmrr.png'),
+  // Client-supplied hero photograph: a dark commercial kitchen lit warm.
+  hero: join(DOWNLOADS, 'moody kitchen.png'),
   // Vendor marks: dark ink on genuine transparent backgrounds.
   vendors: {
     samsung: join(DOWNLOADS, 'samsung logo.png'),
@@ -49,6 +51,22 @@ const KEY_HIGH = 0.95;
 const WATERMARK_CUTOFF_Y = 1600;
 
 const CHARCOAL = { r: 14, g: 14, b: 14, alpha: 1 }; // #0E0E0E
+/** Brand off-white, #F2EDE6. Reversed marks are knocked out to this. */
+const BONE = { r: 242, g: 237, b: 230 };
+
+/**
+ * General contractor marks. [slug, source, keyWhiteBackground]
+ *
+ * Only Structura arrived with a real alpha channel. Novo and Trimbuilt were
+ * supplied on solid white, so the white is keyed out to recover the shape. The
+ * files named "transparent" are NOT usable — they have a checkerboard painted
+ * into the pixels and carry an AI-generation watermark.
+ */
+const GC_SOURCES = [
+  ['structura', join(DOWNLOADS, 'structura logo.webp'), false],
+  ['novo', join(DOWNLOADS, 'novo white bg.png'), true],
+  ['trimbuilt', join(DOWNLOADS, 'trimbuilt white bg.png'), true],
+];
 
 async function out(...parts) {
   const p = join(PUBLIC, ...parts);
@@ -132,6 +150,75 @@ async function trimToAlpha(pipeline, pad = 0) {
   return sharp(cropped);
 }
 
+/**
+ * Recover an alpha channel from artwork supplied on a solid white background.
+ * Alpha is derived from how far each pixel is from white, so antialiased edges
+ * stay smooth instead of going jagged from a hard threshold.
+ */
+async function keyOutWhite(src) {
+  const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width, height, channels } = info;
+  const rgba = Buffer.alloc(width * height * 4);
+
+  for (let i = 0; i < width * height; i++) {
+    const r = data[i * channels];
+    const g = data[i * channels + 1];
+    const b = data[i * channels + 2];
+    // Distance from white, normalised. 24 is roughly where JPEG-ish noise on a
+    // white field stops and real ink begins.
+    const lightest = Math.max(r, g, b);
+    let a = (255 - lightest) / 255;
+    a = a < 0.04 ? 0 : Math.min(1, a * 3.2);
+    rgba[i * 4] = r;
+    rgba[i * 4 + 1] = g;
+    rgba[i * 4 + 2] = b;
+    rgba[i * 4 + 3] = Math.round(a * 255);
+  }
+
+  return sharp(rgba, { raw: { width, height, channels: 4 } }).png().toBuffer();
+}
+
+/**
+ * Emit a ONE-COLOUR REVERSED mark: the artwork's silhouette filled with the
+ * brand off-white, preserving the original alpha.
+ *
+ * Why reversed rather than the original colours on a light chip: the brief
+ * requires no visible box behind any logo, and every supplied mark is dark ink
+ * intended for light backgrounds — placed as-is on #0E0E0E they are invisible.
+ * A single-colour reversed version is the standard treatment for a partner row
+ * on a dark ground, and most manufacturers publish one for exactly this case.
+ *
+ * Emitted under a "-reversed" filename rather than overwriting the original.
+ * Overwriting kept the URL identical, so Next's image optimizer and the browser
+ * HTTP cache both went on serving the old dark bytes. A distinct name makes the
+ * change unmissable and cannot go stale on redeploy.
+ *
+ * PLACEHOLDER (§11): request each brand's official reversed/one-colour art from
+ * their dealer portal and confirm the treatment against their usage guidelines
+ * before publishing. This derives the reversed mark from the supplied art.
+ */
+async function emitReversed(pipeline, name) {
+  const png = await pipeline.clone().png().toBuffer();
+  const { data, info } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width, height } = info;
+  const rgba = Buffer.alloc(width * height * 4);
+
+  for (let i = 0; i < width * height; i++) {
+    rgba[i * 4] = BONE.r;
+    rgba[i * 4 + 1] = BONE.g;
+    rgba[i * 4 + 2] = BONE.b;
+    rgba[i * 4 + 3] = data[i * 4 + 3];
+  }
+
+  const out640 = sharp(rgba, { raw: { width, height, channels: 4 } }).resize({
+    width: 640,
+    fit: 'inside',
+    withoutEnlargement: false,
+  });
+  await out640.clone().png({ compressionLevel: 9 }).toFile(await out(name + '.png'));
+  await out640.clone().webp({ quality: 92 }).toFile(await out(name + '.webp'));
+}
+
 async function emit(pipeline, name, { width } = {}) {
   const base = width ? pipeline.clone().resize({ width, fit: 'inside' }) : pipeline.clone();
   await base.clone().png({ compressionLevel: 9 }).toFile(await out(name + '.png'));
@@ -195,13 +282,74 @@ async function main() {
   }
   await writeFile(join(PUBLIC, 'favicon.ico'), buildIco(icoSizes, pngs));
 
+  // ---- Hero photography ---------------------------------------------------
+  //
+  // One supplied photograph, cropped five ways so each page gets its own
+  // photographic moment rather than the same frame repeated. The source is a
+  // 1774x887 panorama of a dark commercial kitchen, so different horizontal
+  // regions genuinely read as different rooms: the range and hood line at the
+  // left, the stainless reach-ins through the centre, the prep counters and
+  // window wall at the right.
+  //
+  // Emitted at 2x the largest rendered width and slightly darkened at source,
+  // so the CSS scrim on top has less lifting to do and the text contrast does
+  // not depend on gradient stacking alone.
+  const heroCrops = {
+    // Home: the full room, centred.
+    home: { left: 0, width: 1774 },
+    // About: the range and hood line.
+    about: { left: 0, width: 1050 },
+    // Appliances: the stainless reach-ins.
+    appliances: { left: 520, width: 1050 },
+    // Process: prep counters and the window wall.
+    process: { left: 724, width: 1050 },
+    // Contact: a tighter read on the pass.
+    contact: { left: 900, width: 874 },
+  };
+
+  for (const [name, crop] of Object.entries(heroCrops)) {
+    await sharp(SOURCES.hero)
+      .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
+      .resize({ width: 2000, withoutEnlargement: false })
+      // Pull the highlights down: the raw frame is much brighter on the chrome
+      // and the window wall than in the centre floor, which is what made text
+      // legibility uneven.
+      .modulate({ brightness: 0.82, saturation: 0.92 })
+      .webp({ quality: 74 })
+      .toFile(await out(`hero/${name}.webp`));
+
+    // A tiny blurred version, inlined as the CSS placeholder so the hero never
+    // flashes flat charcoal before the photo decodes.
+    const tiny = await sharp(SOURCES.hero)
+      .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
+      .resize({ width: 20 })
+      .modulate({ brightness: 0.82 })
+      .blur(1.2)
+      .webp({ quality: 40 })
+      .toBuffer();
+    await writeFile(
+      join(PUBLIC, 'hero', `${name}.blur.txt`),
+      `data:image/webp;base64,${tiny.toString('base64')}`,
+    );
+  }
+
+  // ---- General contractor marks -------------------------------------------
+  //
+  // Structura ships with a real alpha channel. Novo and Trimbuilt were supplied
+  // only on solid white, so white is keyed out to recover the shape.
+  for (const [slug, src, keyWhite] of GC_SOURCES) {
+    let pipeline = sharp(src).ensureAlpha();
+    if (keyWhite) pipeline = sharp(await keyOutWhite(src));
+    const trimmed = await trimToAlpha(pipeline, 4);
+    await emitReversed(trimmed, `brand/gc/${slug}-reversed`);
+  }
+
   // ---- Vendor marks -------------------------------------------------------
-  // Each is dark ink on transparent (measured luminance 0.00-0.20), so they are
-  // rendered on light chips in the UI rather than recolored. Recoloring a
-  // manufacturer's mark would breach most dealer brand-usage guidelines.
+  // Each is dark ink on transparent (measured luminance 0.00-0.20), so each is
+  // emitted as a one-colour reversed mark for the dark UI. See emitReversed.
   for (const [slug, src] of Object.entries(SOURCES.vendors)) {
     const trimmed = await trimToAlpha(sharp(src).ensureAlpha(), 4);
-    await emit(trimmed, `brand/vendors/${slug}`, { width: 600 });
+    await emitReversed(trimmed, `brand/vendors/${slug}-reversed`);
   }
 
   console.log('Assets written to public/.');

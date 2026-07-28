@@ -66,6 +66,21 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${playfair.variable} ${inter.variable} h-full antialiased`}
+      /*
+        REQUIRED — do not remove. globals.css sets `scroll-behavior: smooth` on
+        <html> so the hero's scroll cue glides to the first section. Without this
+        attribute, Next.js also routes its post-navigation scroll RESET through
+        that smooth behaviour: clicking a nav link from partway down a long page
+        animated the viewport across thousands of pixels of the NEW page over
+        ~1.5s. Because sections reveal on scroll, everything in that band was
+        still at opacity 0, so the new page looked blank and broken — it read as
+        "the other pages don't work".
+
+        This attribute tells Next to reset scroll instantly on route changes
+        while leaving in-page anchor scrolling smooth.
+        https://nextjs.org/docs/messages/missing-data-scroll-behavior
+      */
+      data-scroll-behavior="smooth"
     >
       <head>
         {/*

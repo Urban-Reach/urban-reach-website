@@ -35,34 +35,46 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
       {heading && (
         <SectionHeading
           eyebrow="Authorized dealer"
-          lead={`Urban Reach is an authorized dealer for the ${countWord(brands.length)} manufacturers below, and sources beyond them whenever a project's specifications call for it.`}
+          lead={`Urban Reach is an authorized dealer for the ${countWord(brands.length)} manufacturers below, and sources beyond them whenever a specification requires it.`}
         >
-          Manufacturer partnerships, and the freedom to look past them
+          Manufacturer partnerships, and the range to look beyond them
         </SectionHeading>
       )}
 
-      <ul className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
+      {/* No chips or boxes behind the marks. Each logo is a reversed one-colour
+          asset sitting directly on the dark ground. Rows are separated by
+          hairlines instead of cards, and every mark is capped to the same
+          optical height so the grid reads evenly despite very different source
+          aspect ratios. */}
+      <ul className="mt-14 grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 sm:gap-x-14 sm:gap-y-14">
         {brands.map((brand, i) => (
-          <Reveal as="li" key={brand.slug} delay={i * 60}>
-            <div className="glow-hover flex h-28 items-center justify-center rounded-lg border border-rule bg-bone px-6 py-5 sm:h-32 sm:px-8">
-              {brand.logo ? (
-                <Image
-                  src={`${brand.logo}.webp`}
-                  alt={`${brand.name} — authorized dealer`}
-                  width={brand.width}
-                  height={brand.height}
-                  loading="lazy"
-                  sizes="(max-width: 640px) 40vw, 240px"
-                  className="max-h-full w-auto object-contain"
-                />
-              ) : (
-                /* MISSING ASSET: no Champion logo file supplied. Listed by name
-                   rather than substituted with an unofficial mark. */
-                <span className="text-center font-display text-2xl text-charcoal">
-                  {brand.name}
-                </span>
-              )}
-            </div>
+          <Reveal
+            as="li"
+            key={brand.slug}
+            delay={i * 60}
+            className="flex h-16 items-center justify-center sm:h-20"
+          >
+            {brand.logo ? (
+              <Image
+                src={`${brand.logo}.webp`}
+                alt={`${brand.name} — authorized dealer`}
+                width={brand.width}
+                height={brand.height}
+                loading="lazy"
+                sizes="(max-width: 640px) 38vw, 200px"
+                /* Constrained on BOTH axes inside a fixed cell. Capping height
+                   alone left Samsung ~2.7x wider than Summit at the same
+                   height, so the row read unevenly. */
+                className="max-h-9 w-auto max-w-[150px] object-contain opacity-80 transition-opacity duration-300 hover:opacity-100 sm:max-h-11 sm:max-w-[180px]"
+              />
+            ) : (
+              /* MISSING ASSET: no Champion logo file has been supplied. Set in
+                 the display face at the same optical weight rather than left as
+                 a blank gap or filled with a redrawn substitute. */
+              <span className="font-display text-2xl text-bone/80 sm:text-[1.75rem]">
+                {brand.name}
+              </span>
+            )}
           </Reveal>
         ))}
       </ul>
@@ -93,13 +105,18 @@ export function ContractorRow() {
       </Reveal>
 
       <Reveal delay={120}>
-        <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-14 gap-y-8 sm:gap-x-24">
-          {generalContractors.map((name) => (
-            <li
-              key={name}
-              className="font-display text-3xl tracking-wide text-bone/85 transition-colors duration-300 hover:text-amber sm:text-4xl"
-            >
-              {name}
+        <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-16 gap-y-10 sm:gap-x-24">
+          {generalContractors.map((gc) => (
+            <li key={gc.name} className="flex h-12 items-center justify-center sm:h-14">
+              <Image
+                src={`${gc.logo}.webp`}
+                alt={gc.name}
+                width={gc.width}
+                height={gc.height}
+                loading="lazy"
+                sizes="200px"
+                className="max-h-8 w-auto max-w-[150px] object-contain opacity-75 transition-opacity duration-300 hover:opacity-100 sm:max-h-10 sm:max-w-[180px]"
+              />
             </li>
           ))}
         </ul>
@@ -127,10 +144,11 @@ export function ServiceArea({ tone = "walnut" }: { tone?: "walnut" | "raised" })
           <div className="lg:col-span-7">
             <Reveal>
               <p className="text-lg leading-relaxed text-bone-dim">
-                Urban Reach works across {site.city} and the communities around
-                it. Staying inside one metro is deliberate — it is what lets us
-                hold delivery windows and put installers on site when the
-                schedule says so, rather than when a regional route allows.
+                Urban Reach works across {site.city} and the surrounding
+                communities. Remaining within one metro is deliberate. It is what
+                allows us to hold delivery windows and place installers on site
+                when the schedule requires, rather than when a regional route
+                permits.
               </p>
             </Reveal>
 
@@ -165,8 +183,8 @@ export function ServiceArea({ tone = "walnut" }: { tone?: "walnut" | "raised" })
  * private industry channels. This is a general inquiry CTA only.
  */
 export function CtaBand({
-  title = "Have an appliance schedule to price?",
-  body = "Send it over. We will review the specifications, source against them, and come back with pricing you can put in front of a client.",
+  title = "Have an equipment schedule to price?",
+  body = "Send it to us. We will review the specifications, source against them, and return pricing you can present to a client.",
 }: {
   title?: string;
   body?: string;

@@ -19,13 +19,13 @@ export const applianceCategories: ApplianceCategory[] = [
   {
     slug: "refrigeration",
     title: "Refrigeration",
-    body: "Commercial and residential-grade refrigeration for unit kitchens, break rooms, and shared amenity spaces — sized to the spec and the opening it has to fit.",
+    body: "Commercial and residential-grade refrigeration for unit kitchens, break rooms, and shared amenity spaces. Sized to the specification and the opening.",
     glyph: "refrigeration",
   },
   {
     slug: "dishwashers",
     title: "Dishwashers",
-    body: "Under-counter and commercial dishwashing equipment for multifamily units, office pantries, and tenant kitchens, matched to available utility rough-ins.",
+    body: "Under-counter and commercial dishwashing equipment for multifamily units, office pantries, and tenant kitchens. Matched to available utility rough-ins.",
     glyph: "dishwasher",
   },
   {
@@ -49,7 +49,7 @@ export const applianceCategories: ApplianceCategory[] = [
   {
     slug: "specialty",
     title: "Specialty and made-to-spec",
-    body: "If a project schedule calls for something outside these categories, we source it. Our authorized brand partnerships are the starting point, not the limit.",
+    body: "When a schedule calls for something outside these categories, we source it. Our authorized partnerships are the starting point, not the limit.",
     glyph: "specialty",
   },
 ];
@@ -69,10 +69,10 @@ export const projectTypes = [
   },
   {
     title: "Tenant improvements",
-    body: "Appliance fulfillment for tenant improvement work where the schedule is tight and the existing conditions decide what will actually fit.",
+    body: "Appliance fulfillment for tenant improvement work, where the schedule is compressed and existing conditions determine what will fit.",
   },
   {
     title: "Interior finish work",
-    body: "Appliance sourcing and installation as part of broader interior finish scopes, coordinated with the trades working around us.",
+    body: "Appliance sourcing and installation within broader interior finish scopes, coordinated with the trades working alongside us.",
   },
 ] as const;

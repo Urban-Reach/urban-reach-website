@@ -37,29 +37,49 @@ const VIEW_BOX = "0 0 400 540";
 function RealDefs({ uid }: { uid: string }) {
   return (
     <defs>
-      {/* Brushed stainless / graphite body */}
+      {/* Brushed stainless body. A COOL silver/grey ramp, lit from the upper
+          left — never flat black and never a single solid fill. */}
       <linearGradient id={`${uid}-body`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#2a2a2c" />
-        <stop offset="18%" stopColor="#3d3e42" />
-        <stop offset="42%" stopColor="#55565b" />
-        <stop offset="58%" stopColor="#4a4b50" />
-        <stop offset="82%" stopColor="#333438" />
-        <stop offset="100%" stopColor="#232326" />
+        <stop offset="0%" stopColor="#6c717a" />
+        <stop offset="10%" stopColor="#9ba1aa" />
+        <stop offset="28%" stopColor="#7b818a" />
+        <stop offset="46%" stopColor="#8c929b" />
+        <stop offset="66%" stopColor="#686d76" />
+        <stop offset="86%" stopColor="#4c5057" />
+        <stop offset="100%" stopColor="#3a3e44" />
       </linearGradient>
 
-      {/* Darker recessed surfaces */}
+      {/* Vertical brushed grain. This is what makes it read as stainless rather
+          than as a grey gradient. */}
+      <pattern id={`${uid}-grain`} width="7" height="20" patternUnits="userSpaceOnUse">
+        <rect width="7" height="20" fill="none" />
+        <line x1="1" y1="0" x2="1" y2="20" stroke="#ffffff" strokeWidth="1" opacity="0.13" />
+        <line x1="3.4" y1="0" x2="3.4" y2="20" stroke="#000000" strokeWidth="1" opacity="0.14" />
+        <line x1="5.6" y1="0" x2="5.6" y2="20" stroke="#ffffff" strokeWidth="0.7" opacity="0.07" />
+      </pattern>
+
+      {/* Amber specular catch — the reflection of the site's warm key light on
+          the steel. Deliberately warm, not a neutral studio highlight. */}
+      <linearGradient id={`${uid}-catch`} x1="0" y1="0" x2="1" y2="0.5">
+        <stop offset="0%" stopColor="#eab863" stopOpacity="0.66" />
+        <stop offset="24%" stopColor="#c9922f" stopOpacity="0.3" />
+        <stop offset="60%" stopColor="#c9922f" stopOpacity="0.07" />
+        <stop offset="100%" stopColor="#c9922f" stopOpacity="0" />
+      </linearGradient>
+
+      {/* Recessed surfaces — cool-toned, not black. */}
       <linearGradient id={`${uid}-recess`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#1b1b1d" />
-        <stop offset="50%" stopColor="#28292c" />
-        <stop offset="100%" stopColor="#171718" />
+        <stop offset="0%" stopColor="#31353b" />
+        <stop offset="50%" stopColor="#40454c" />
+        <stop offset="100%" stopColor="#262a2f" />
       </linearGradient>
 
       {/* Polished handle */}
       <linearGradient id={`${uid}-handle`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#6e7075" />
-        <stop offset="35%" stopColor="#a7a9ae" />
-        <stop offset="65%" stopColor="#78797e" />
-        <stop offset="100%" stopColor="#4d4e52" />
+        <stop offset="0%" stopColor="#787d85" />
+        <stop offset="32%" stopColor="#d8dce0" />
+        <stop offset="62%" stopColor="#9aa0a8" />
+        <stop offset="100%" stopColor="#5d626a" />
       </linearGradient>
 
       {/* Warm amber ambient spill, ties the render to the brand palette */}
@@ -177,6 +197,8 @@ export function RefrigerationReal({ uid, className }: ArtProps) {
 
       {/* Cabinet */}
       <rect x="62" y="46" width="276" height="448" rx="6" fill={`url(#${uid}-body)`} />
+      <rect x="62" y="46" width="276" height="448" rx="6" fill={`url(#${uid}-grain)`} />
+      <rect x="62" y="46" width="118" height="448" rx="6" fill={`url(#${uid}-catch)`} />
       {/* Compressor housing */}
       <rect x="62" y="46" width="276" height="58" rx="6" fill={`url(#${uid}-recess)`} />
       <rect x="250" y="58" width="76" height="36" rx="2" fill="#141416" opacity="0.85" />
@@ -197,6 +219,9 @@ export function RefrigerationReal({ uid, className }: ArtProps) {
       {/* Doors */}
       <rect x="66" y="108" width="130" height="340" rx="4" fill={`url(#${uid}-body)`} />
       <rect x="204" y="108" width="130" height="340" rx="4" fill={`url(#${uid}-body)`} />
+      <rect x="66" y="108" width="130" height="340" rx="4" fill={`url(#${uid}-grain)`} />
+      <rect x="204" y="108" width="130" height="340" rx="4" fill={`url(#${uid}-grain)`} />
+      <rect x="66" y="108" width="56" height="340" rx="4" fill={`url(#${uid}-catch)`} />
       {/* Door insets */}
       <rect x="78" y="120" width="106" height="316" rx="3" fill={`url(#${uid}-recess)`} opacity="0.55" />
       <rect x="216" y="120" width="106" height="316" rx="3" fill={`url(#${uid}-recess)`} opacity="0.55" />
@@ -220,8 +245,15 @@ export function RefrigerationReal({ uid, className }: ArtProps) {
       <rect x="84" y="494" width="9" height="16" rx="2" fill="#2b2c2f" />
       <rect x="307" y="494" width="9" height="16" rx="2" fill="#2b2c2f" />
 
-      {/* Edge definition */}
-      <rect x="62" y="46" width="276" height="448" rx="6" stroke="#5e6065" strokeWidth="1" opacity="0.5" />
+      {/* Brand plate */}
+      <rect x="86" y="404" width="58" height="18" rx="2" fill="#5a5f66" />
+      <rect x="90" y="409" width="44" height="3" fill="#c2c7cd" opacity="0.7" />
+      <rect x="90" y="415" width="28" height="2.5" fill="#9aa0a8" opacity="0.55" />
+
+      {/* Edge definition: bright hairline on the lit edge, dark on the shadow */}
+      <line x1="63" y1="52" x2="63" y2="488" stroke="#e4e8ec" strokeWidth="1.4" opacity="0.42" />
+      <line x1="337" y1="52" x2="337" y2="488" stroke="#141619" strokeWidth="1.4" opacity="0.55" />
+      <rect x="62" y="46" width="276" height="448" rx="6" stroke="#a9aeb5" strokeWidth="1" opacity="0.45" />
     </svg>
   );
 }
@@ -271,6 +303,8 @@ export function DishwasherReal({ uid, className }: ArtProps) {
 
       {/* Body */}
       <rect x="62" y="94" width="276" height="400" rx="5" fill={`url(#${uid}-body)`} />
+      <rect x="62" y="94" width="276" height="400" rx="5" fill={`url(#${uid}-grain)`} />
+      <rect x="62" y="94" width="118" height="400" rx="5" fill={`url(#${uid}-catch)`} />
 
       {/* Control fascia */}
       <rect x="62" y="94" width="276" height="46" rx="5" fill={`url(#${uid}-recess)`} />
@@ -291,6 +325,8 @@ export function DishwasherReal({ uid, className }: ArtProps) {
 
       {/* Door */}
       <rect x="62" y="140" width="276" height="306" rx="4" fill={`url(#${uid}-body)`} />
+      <rect x="62" y="140" width="276" height="306" rx="4" fill={`url(#${uid}-grain)`} />
+      <rect x="62" y="140" width="112" height="306" rx="4" fill={`url(#${uid}-catch)`} />
       <rect x="78" y="156" width="244" height="274" rx="3" fill={`url(#${uid}-recess)`} opacity="0.45" />
       {/* Specular sweep */}
       <rect x="106" y="156" width="14" height="274" fill="#ffffff" opacity="0.05" />
@@ -359,6 +395,8 @@ export function BeverageReal({ uid, className }: ArtProps) {
 
       {/* Cabinet */}
       <rect x="62" y="46" width="276" height="448" rx="6" fill={`url(#${uid}-body)`} />
+      <rect x="62" y="46" width="276" height="448" rx="6" fill={`url(#${uid}-grain)`} />
+      <rect x="62" y="46" width="110" height="448" rx="6" fill={`url(#${uid}-catch)`} />
       {/* Header panel */}
       <rect x="62" y="46" width="276" height="44" rx="6" fill={`url(#${uid}-recess)`} />
       <rect x="84" y="62" width="54" height="12" rx="2" fill="#c9922f" opacity="0.8" />
@@ -445,33 +483,62 @@ export function ApplianceGradientSprite() {
       style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
     >
       <defs>
-      {/* Brushed steel, lit from the upper left. */}
-      <linearGradient id={`${GID}-steel`} x1="0" y1="0" x2="1" y2="0.35">
-        <stop offset="0%" stopColor="#4a4c51" />
-        <stop offset="24%" stopColor="#6d6f75" />
-        <stop offset="52%" stopColor="#53555a" />
-        <stop offset="78%" stopColor="#3c3d42" />
-        <stop offset="100%" stopColor="#2b2c30" />
+      {/* Brushed stainless. A COOL metallic ramp — silver/grey, never flat black
+          and never a single solid fill. Lit from the upper left, so the left
+          face carries the highlight and the right falls into shadow. */}
+      <linearGradient id={`${GID}-steel`} x1="0" y1="0" x2="1" y2="0.28">
+        <stop offset="0%" stopColor="#6f747c" />
+        <stop offset="12%" stopColor="#9aa0a9" />
+        <stop offset="30%" stopColor="#7c828b" />
+        <stop offset="48%" stopColor="#8d939c" />
+        <stop offset="66%" stopColor="#6a6f78" />
+        <stop offset="86%" stopColor="#4e525a" />
+        <stop offset="100%" stopColor="#3c4046" />
       </linearGradient>
 
-      {/* Recessed panels and cavities. */}
+      {/* Vertical brushed-metal grain, applied as an overlay pattern over the
+          steel ramp. This is what separates "stainless" from "grey gradient". */}
+      <pattern
+        id={`${GID}-grain`}
+        width="3"
+        height="8"
+        patternUnits="userSpaceOnUse"
+      >
+        <rect width="3" height="8" fill="none" />
+        <line x1="0.4" y1="0" x2="0.4" y2="8" stroke="#ffffff" strokeWidth="0.4" opacity="0.16" />
+        <line x1="1.5" y1="0" x2="1.5" y2="8" stroke="#000000" strokeWidth="0.4" opacity="0.16" />
+        <line x1="2.4" y1="0" x2="2.4" y2="8" stroke="#ffffff" strokeWidth="0.3" opacity="0.09" />
+      </pattern>
+
+      {/* Recessed panels and cavities — cool-toned, not black. */}
       <linearGradient id={`${GID}-recess`} x1="0" y1="0" x2="1" y2="0.2">
-        <stop offset="0%" stopColor="#1f2023" />
-        <stop offset="60%" stopColor="#2c2e32" />
-        <stop offset="100%" stopColor="#191a1c" />
+        <stop offset="0%" stopColor="#33373d" />
+        <stop offset="55%" stopColor="#42474e" />
+        <stop offset="100%" stopColor="#282c31" />
       </linearGradient>
 
-      {/* Polished trim and handles. */}
+      {/* Polished trim: bar handles, hinges, brand plates. */}
       <linearGradient id={`${GID}-trim`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#8d9096" />
-        <stop offset="45%" stopColor="#c2c5ca" />
-        <stop offset="100%" stopColor="#6a6c71" />
+        <stop offset="0%" stopColor="#787d85" />
+        <stop offset="30%" stopColor="#d6dade" />
+        <stop offset="58%" stopColor="#9ca2aa" />
+        <stop offset="100%" stopColor="#5f646b" />
       </linearGradient>
 
-      {/* Amber key light spilling down the body. */}
+      {/* Amber specular catch. This is the reflection of the site's warm key
+          light on the steel — deliberately warm, never a neutral white studio
+          highlight. */}
+      <linearGradient id={`${GID}-catch`} x1="0" y1="0" x2="1" y2="0.6">
+        <stop offset="0%" stopColor="#e8b45f" stopOpacity="0.72" />
+        <stop offset="22%" stopColor="#c9922f" stopOpacity="0.34" />
+        <stop offset="55%" stopColor="#c9922f" stopOpacity="0.08" />
+        <stop offset="100%" stopColor="#c9922f" stopOpacity="0" />
+      </linearGradient>
+
+      {/* Broader amber ambient wash down the body. */}
       <linearGradient id={`${GID}-key`} x1="0.1" y1="0" x2="0.7" y2="1">
-        <stop offset="0%" stopColor="#c9922f" stopOpacity="0.5" />
-        <stop offset="45%" stopColor="#c9922f" stopOpacity="0.12" />
+        <stop offset="0%" stopColor="#c9922f" stopOpacity="0.3" />
+        <stop offset="45%" stopColor="#c9922f" stopOpacity="0.09" />
         <stop offset="100%" stopColor="#c9922f" stopOpacity="0" />
       </linearGradient>
 
@@ -484,15 +551,28 @@ export function ApplianceGradientSprite() {
 
       {/* Contact shadow. */}
       <radialGradient id={`${GID}-shadow`} cx="0.5" cy="0.5" r="0.5">
-        <stop offset="0%" stopColor="#000" stopOpacity="0.6" />
+        <stop offset="0%" stopColor="#000" stopOpacity="0.62" />
         <stop offset="100%" stopColor="#000" stopOpacity="0" />
+      </radialGradient>
+
+      {/* Warm glow grounding the unit against the dark page. */}
+      <radialGradient id={`${GID}-ground`} cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0%" stopColor="#c9922f" stopOpacity="0.3" />
+        <stop offset="100%" stopColor="#c9922f" stopOpacity="0" />
       </radialGradient>
       </defs>
     </svg>
   );
 }
 
-/** Shared body treatment: steel fill, amber key light, hairline edge. */
+/**
+ * Shared stainless body treatment, layered in the order real metal reads:
+ *   1. cool metallic ramp
+ *   2. vertical brushed grain
+ *   3. amber specular catch down the lit (left) edge
+ *   4. broad amber ambient wash
+ *   5. bright hairline on the lit edge, dark hairline on the shadow edge
+ */
 function Body({
   x,
   y,
@@ -509,7 +589,32 @@ function Body({
   return (
     <>
       <rect x={x} y={y} width={w} height={h} rx={r} fill={`url(#${GID}-steel)`} />
+      {/* Vertical brushed grain */}
+      <rect x={x} y={y} width={w} height={h} rx={r} fill={`url(#${GID}-grain)`} />
+      {/* Amber specular catch on the lit edge */}
+      <rect x={x} y={y} width={w * 0.42} height={h} rx={r} fill={`url(#${GID}-catch)`} />
+      {/* Broad ambient wash */}
       <rect x={x} y={y} width={w} height={h} rx={r} fill={`url(#${GID}-key)`} />
+      {/* Bright hairline on the lit edge */}
+      <line
+        x1={x + 0.4}
+        y1={y + r}
+        x2={x + 0.4}
+        y2={y + h - r}
+        stroke="#e2e6ea"
+        strokeWidth="0.7"
+        opacity="0.5"
+      />
+      {/* Dark hairline on the shadow edge */}
+      <line
+        x1={x + w - 0.4}
+        y1={y + r}
+        x2={x + w - 0.4}
+        y2={y + h - r}
+        stroke="#15171a"
+        strokeWidth="0.7"
+        opacity="0.6"
+      />
       <rect
         x={x}
         y={y}
@@ -517,10 +622,85 @@ function Body({
         height={h}
         rx={r}
         fill="none"
-        stroke="#83868c"
-        strokeWidth="0.6"
-        opacity="0.55"
+        stroke="#a9aeb5"
+        strokeWidth="0.55"
+        opacity="0.5"
       />
+    </>
+  );
+}
+
+/** Bar-style pull handle with a real profile: mounts, shaft, specular. */
+function BarHandle({
+  x,
+  y,
+  h,
+  w = 1.5,
+}: {
+  x: number;
+  y: number;
+  h: number;
+  w?: number;
+}) {
+  return (
+    <>
+      {/* Stand-off mounts at each end */}
+      <rect x={x - 0.35} y={y - 0.9} width={w + 0.7} height="1.5" rx="0.5" fill="#5c6169" />
+      <rect x={x - 0.35} y={y + h - 0.6} width={w + 0.7} height="1.5" rx="0.5" fill="#5c6169" />
+      {/* Shaft */}
+      <rect x={x} y={y} width={w} height={h} rx={w / 2} fill={`url(#${GID}-trim)`} />
+      {/* Warm specular running down the shaft */}
+      <rect x={x + 0.25} y={y + 1} width={w * 0.3} height={h - 2} rx={w * 0.15} fill="#f0d9a8" opacity="0.55" />
+    </>
+  );
+}
+
+/** Model / brand plate, as found on commercial equipment. */
+function BrandPlate({ x, y, w = 6, h = 2 }: { x: number; y: number; w?: number; h?: number }) {
+  return (
+    <>
+      <rect x={x} y={y} width={w} height={h} rx="0.3" fill="#5a5f66" />
+      <rect x={x + 0.4} y={y + 0.5} width={w - 0.8} height="0.4" fill="#b9bec5" opacity="0.75" />
+      <rect x={x + 0.4} y={y + 1.2} width={(w - 0.8) * 0.6} height="0.35" fill="#9aa0a8" opacity="0.6" />
+    </>
+  );
+}
+
+/** Louvred ventilation grille. */
+function VentGrille({
+  x,
+  y,
+  w,
+  rows = 4,
+}: {
+  x: number;
+  y: number;
+  w: number;
+  rows?: number;
+}) {
+  return (
+    <>
+      <rect x={x} y={y} width={w} height={rows * 1.5 + 1} rx="0.4" fill="#22262b" />
+      {Array.from({ length: rows }).map((_, i) => (
+        <g key={i}>
+          <line
+            x1={x + 0.6}
+            y1={y + 1.1 + i * 1.5}
+            x2={x + w - 0.6}
+            y2={y + 1.1 + i * 1.5}
+            stroke="#8d939b"
+            strokeWidth="0.5"
+          />
+          <line
+            x1={x + 0.6}
+            y1={y + 1.5 + i * 1.5}
+            x2={x + w - 0.6}
+            y2={y + 1.5 + i * 1.5}
+            stroke="#0f1113"
+            strokeWidth="0.35"
+          />
+        </g>
+      ))}
     </>
   );
 }
@@ -538,35 +718,53 @@ export function CategoryGlyph({
     "aria-hidden": true as const,
   };
 
-  const shadow = <ellipse cx="24" cy="46.5" rx="15" ry="2.6" fill={`url(#${GID}-shadow)`} />;
+  // Contact shadow plus a warm ground glow, so the unit sits on the dark page
+  // rather than floating on it.
+  const shadow = (
+    <>
+      <ellipse cx="24" cy="48" rx="17" ry="3.4" fill={`url(#${GID}-ground)`} />
+      <ellipse cx="24" cy="46.8" rx="14" ry="2.4" fill={`url(#${GID}-shadow)`} />
+    </>
+  );
 
   switch (kind) {
     /* --- Refrigeration: two-door reach-in -------------------------------- */
     case "refrigeration":
       return (
         <svg {...svg}>
-                    {shadow}
-          <Body x={12} y={4} w={24} h={41} />
-          {/* Compressor housing with louvre vents */}
-          <rect x="12" y="4" width="24" height="7.5" rx="3" fill={`url(#${GID}-recess)`} />
-          {[0, 1, 2].map((i) => (
-            <line key={i} x1="27" y1={6.4 + i * 1.7} x2="33.5" y2={6.4 + i * 1.7} stroke="#71747a" strokeWidth="0.55" />
+          {shadow}
+          <Body x={11} y={4} w={26} h={41} />
+          {/* Compressor housing with a louvred vent grille */}
+          <rect x="11" y="4" width="26" height="8" rx="3" fill={`url(#${GID}-recess)`} />
+          <VentGrille x={25.5} y={5.4} w={10} rows={4} />
+          {/* Digital display */}
+          <rect x="13.4" y="6.2" width="7.6" height="3.4" rx="0.5" fill="#121416" />
+          <rect x="14.2" y="7.1" width="4.2" height="1.5" fill="#c9922f" opacity="0.9" />
+          {/* Door panels, inset with brushed grain */}
+          <rect x="12.6" y="13.6" width="10.2" height="29.6" rx="1.2" fill={`url(#${GID}-recess)`} opacity="0.42" />
+          <rect x="25.2" y="13.6" width="10.2" height="29.6" rx="1.2" fill={`url(#${GID}-recess)`} opacity="0.42" />
+          <rect x="12.6" y="13.6" width="10.2" height="29.6" rx="1.2" fill={`url(#${GID}-grain)`} />
+          <rect x="25.2" y="13.6" width="10.2" height="29.6" rx="1.2" fill={`url(#${GID}-grain)`} />
+          {/* Warm catch on the lit door */}
+          <rect x="12.6" y="13.6" width="4" height="29.6" rx="1.2" fill={`url(#${GID}-catch)`} opacity="0.65" />
+          {/* Hinges, left and right stiles */}
+          {[15.4, 41].map((cy) => (
+            <g key={cy}>
+              <rect x="11.2" y={cy - 1} width="1.6" height="2" rx="0.4" fill="#6b7078" />
+              <rect x="35.2" y={cy - 1} width="1.6" height="2" rx="0.4" fill="#4c5158" />
+            </g>
           ))}
-          <circle cx="15.6" cy="7.8" r="0.85" fill="#c9922f" />
-          {/* Door panels, inset */}
-          <rect x="13.4" y="13" width="9.6" height="30.6" rx="1.4" fill={`url(#${GID}-recess)`} opacity="0.5" />
-          <rect x="25" y="13" width="9.6" height="30.6" rx="1.4" fill={`url(#${GID}-recess)`} opacity="0.5" />
-          {/* Specular streak on each door */}
-          <rect x="15.4" y="13" width="1.5" height="30.6" fill="#fff" opacity="0.07" />
-          <rect x="27" y="13" width="1.5" height="30.6" fill="#fff" opacity="0.07" />
-          {/* Vertical bar handles either side of the seam */}
-          <rect x="22" y="17" width="1.1" height="13" rx="0.55" fill={`url(#${GID}-trim)`} />
-          <rect x="24.9" y="17" width="1.1" height="13" rx="0.55" fill={`url(#${GID}-trim)`} />
+          {/* Bar-style pull handles either side of the seam */}
+          <BarHandle x={21.1} y={17} h={13} />
+          <BarHandle x={25.4} y={17} h={13} />
           {/* Door seam */}
-          <line x1="24" y1="12" x2="24" y2="43.6" stroke="#141416" strokeWidth="0.7" />
-          {/* Feet */}
-          <rect x="14.8" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
-          <rect x="31.6" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
+          <line x1="24" y1="12.6" x2="24" y2="43.2" stroke="#14171a" strokeWidth="0.8" />
+          {/* Brand plate on the lower door */}
+          <BrandPlate x={14} y={39.6} w={6.4} h={2} />
+          {/* Kick plate and adjustable feet */}
+          <rect x="11" y="43.4" width="26" height="2.6" rx="0.6" fill={`url(#${GID}-recess)`} />
+          <rect x="14.4" y="45.6" width="1.8" height="1.6" rx="0.3" fill="#41464c" />
+          <rect x="31.8" y="45.6" width="1.8" height="1.6" rx="0.3" fill="#41464c" />
         </svg>
       );
 
@@ -587,12 +785,15 @@ export function CategoryGlyph({
           ))}
           {/* Door with recessed bar handle */}
           <rect x="11.4" y="18.4" width="25.2" height="24.4" rx="1.2" fill={`url(#${GID}-recess)`} opacity="0.42" />
+          <rect x="11.4" y="18.4" width="25.2" height="24.4" rx="1.2" fill={`url(#${GID}-grain)`} />
           <rect x="14.6" y="18.4" width="2" height="24.4" fill="#fff" opacity="0.06" />
-          <rect x="15" y="20" width="18" height="1.7" rx="0.85" fill="#101113" />
-          <rect x="15.3" y="20.25" width="17.4" height="0.7" rx="0.35" fill={`url(#${GID}-trim)`} />
-          {/* Kick plate */}
+          <BarHandle x={14.6} y={19.8} h={2.2} w={19.8} />
+          {/* Brand plate */}
+          <BrandPlate x={12.4} y={38} w={6.4} h={2} />
+          {/* Kick plate with a service vent */}
           <rect x="9" y="41.4" width="30" height="3.6" rx="1" fill={`url(#${GID}-recess)`} />
-          <rect x="9" y="40" width="30" height="5" fill={`url(#${GID}-key)`} opacity="0.5" />
+          <VentGrille x={26} y={41.9} w={10} rows={2} />
+          <rect x="9" y="40" width="30" height="5" fill={`url(#${GID}-key)`} opacity="0.4" />
         </svg>
       );
 
@@ -632,7 +833,7 @@ export function CategoryGlyph({
           <path d="M18.4 11.6 L22.4 11.6 L17.2 40.2 L14.4 40.2 Z" fill="#fff" opacity="0.07" />
           <rect x="14.4" y="11.6" width="19.2" height="28.6" rx="1" fill="none" stroke="#7c7f85" strokeWidth="0.9" />
           {/* Handle and feet */}
-          <rect x="31.4" y="17" width="1.1" height="11" rx="0.55" fill={`url(#${GID}-trim)`} />
+          <BarHandle x={31.2} y={17} h={11} />
           <rect x="14.8" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
           <rect x="31.6" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
         </svg>
@@ -667,7 +868,7 @@ export function CategoryGlyph({
           <rect x="13.6" y="26.6" width="20.8" height="11.4" rx="0.8" fill={`url(#${GID}-glass)`} />
           <path d="M17 26.6 L20 26.6 L15.6 38 L13.6 38 Z" fill="#fff" opacity="0.06" />
           <rect x="13.6" y="26.6" width="20.8" height="11.4" rx="0.8" fill="none" stroke="#71747a" strokeWidth="0.6" />
-          <rect x="13.2" y="23.6" width="21.6" height="1.6" rx="0.8" fill={`url(#${GID}-trim)`} />
+          <BarHandle x={13.2} y={23.4} h={2} w={21.6} />
           <rect x="9" y="41.4" width="30" height="3.6" rx="1" fill={`url(#${GID}-recess)`} />
         </svg>
       );
@@ -704,7 +905,7 @@ export function CategoryGlyph({
           <circle cx="24" cy="27.6" r="8" fill={`url(#${GID}-glass)`} />
           <path d="M19 21 Q17 25 17.6 30 Q19 24.5 22 21.8 Z" fill="#fff" opacity="0.1" />
           {/* Latch */}
-          <rect x="33.4" y="26.4" width="1.5" height="2.4" rx="0.5" fill={`url(#${GID}-trim)`} />
+          <BarHandle x={33.2} y={25.8} h={3.6} />
           <rect x="11" y="41.4" width="26" height="3.6" rx="1" fill={`url(#${GID}-recess)`} />
         </svg>
       );

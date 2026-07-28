@@ -89,27 +89,36 @@ export const processSteps = [
   {
     number: "01",
     title: "Review project specifications",
-    body: "We start with your appliance and equipment schedule. Every unit is checked against the spec, the space it has to fit, and the timeline it has to land in — before anything is priced.",
+    body: "We begin with your appliance and equipment schedule. Each unit is verified against the specification, the opening it must occupy, and the date it must arrive — before anything is priced.",
   },
   {
     number: "02",
     title: "Source and price from manufacturer partners",
-    body: "We source commercial-grade appliances through trusted manufacturer partnerships and return clear, itemized pricing you can hold against your budget.",
+    body: "We source commercial-grade appliances through established manufacturer partnerships and return itemized pricing you can set directly against your budget.",
   },
   {
     number: "03",
     title: "Deliver and install on site",
-    body: "Delivery and installation are handled as one coordinated service, sequenced to your construction schedule so appliances arrive when the space is ready for them.",
+    body: "Delivery and installation are a single coordinated scope, sequenced to your construction schedule so equipment arrives when the space is ready to receive it.",
   },
 ] as const;
 
 /**
  * Approved "worked with" general contractors. FINAL LIST — do not add names.
  *
- * PLACEHOLDER (build prompt §11): only text/wordmark confirmation exists. The
- * spec directs a clean typographic name list until real logo files are supplied
- * by each GC. Logo images that were supplied were AI-regenerated approximations
- * carrying a generation watermark, which is not the same as the companies'
- * actual marks, so the typographic treatment stands.
+ * Each is rendered as a one-colour reversed mark (see emitReversed in
+ * scripts/prepare-assets.mjs), knocked out to the brand off-white so it sits on
+ * the dark ground with no box behind it.
+ *
+ * PLACEHOLDER (build prompt §11): these are derived from the supplied artwork,
+ * not from official reversed art. Structura arrived with a real alpha channel;
+ * Novo and Trimbuilt were supplied on solid white and had it keyed out. The
+ * files named "transparent" are unusable — a checkerboard is painted into the
+ * pixels and they carry an AI-generation watermark. Request official
+ * reversed/one-colour art from each GC before publishing.
  */
-export const generalContractors = ["Structura", "Trimbuilt", "Novo"] as const;
+export const generalContractors = [
+  { name: "Structura", logo: "/brand/gc/structura-reversed", width: 640, height: 136 },
+  { name: "Trimbuilt", logo: "/brand/gc/trimbuilt-reversed", width: 640, height: 158 },
+  { name: "Novo", logo: "/brand/gc/novo-reversed", width: 640, height: 198 },
+] as const;

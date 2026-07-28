@@ -67,8 +67,8 @@ To complete it:
 1. Save the official mark to disk (from Champion's dealer/media portal).
 2. Add the source path to `SOURCES.vendors` in `scripts/prepare-assets.mjs`.
 3. Run `npm run assets`.
-4. In `src/data/brands.ts`, set `logo: "/brand/vendors/champion"` and correct
-   `width`/`height` to the emitted dimensions.
+4. In `src/data/brands.ts`, set `logo: "/brand/vendors/champion-reversed"` and
+   correct `width`/`height` to the emitted dimensions.
 
 ### 3. Confirm vendor brand-usage guidelines
 
@@ -76,10 +76,24 @@ Before publishing, confirm how each manufacturer permits authorized dealers to
 display their marks, and re-source the art from their official dealer portals.
 The five current files came from general sources, not dealer portals.
 
-Every vendor mark is dark ink on transparent, so all of them sit on light chips.
-That is deliberate: recoloring a manufacturer's mark to survive the dark page
-would breach most dealer guidelines, whereas the unmodified mark on a light
-field does not.
+### Logo treatment — read before changing it
+
+Every supplied vendor and GC mark is dark ink intended for light backgrounds, so
+on `#0E0E0E` they are invisible. They are emitted as **one-colour reversed
+marks** — the silhouette knocked out to the brand off-white — and sit directly
+on the dark ground with no chip or box behind them. That is the standard
+treatment for a partner row on a dark field, and most manufacturers publish
+reversed art for exactly this case.
+
+Two things that will bite you:
+
+- The reversed files are named `*-reversed.webp`. An earlier pass overwrote the
+  original filenames, and because the URL was unchanged both Next's image
+  optimizer and the browser HTTP cache went on serving the old dark bytes. If
+  you regenerate logo art, **change the filename**.
+- Marks are constrained on **both** axes inside a fixed-height cell. Capping
+  height alone left Samsung roughly 2.7x wider than Summit at the same height,
+  and the row read unevenly.
 
 ---
 
@@ -179,6 +193,17 @@ composition are not**.
 If you add a page, give it a rhythm and a composition rather than copying
 another page's section stack.
 
+## Routing — do not remove `data-scroll-behavior`
+
+`<html>` in `src/app/layout.tsx` carries `data-scroll-behavior="smooth"`. It is
+load-bearing. `globals.css` sets `scroll-behavior: smooth` so the hero scroll cue
+glides to the first section, but without this attribute Next also routes its
+post-navigation scroll RESET through that smooth behaviour. Clicking a nav link
+from partway down a long page then animated the viewport across thousands of
+pixels of the new page over ~1.5s, and because sections reveal on scroll,
+everything in that band was still at opacity 0 — the new page looked blank. It
+presented as "the other pages don't work".
+
 ## Motion
 
 `src/components/motion.tsx` holds hand-rolled primitives — no animation
@@ -230,22 +255,32 @@ component body with an `<Image>` at the same aspect ratio; the motion keeps
 working unchanged.
 
 The category glyphs in the same file are **not flat icons** and should not be
-replaced with any. They carry a brushed-steel gradient, an amber key light from
-the upper left matching the appliance renders and the hero, real component
-detail (handles, louvre vents, control fascias, drum perforations) and a contact
-shadow. Their gradients are defined once per document by
+replaced with any. They read as brushed stainless: a cool silver/grey metallic
+ramp (never flat black, never a single solid fill), a vertical brushed-grain
+pattern overlay, a warm amber specular catch down the lit edge, and real
+commercial hardware — bar-style pull handles with stand-off mounts, hinges,
+control fascias with amber displays, louvred vent grilles, and model/brand
+plates. Shared `BarHandle`, `BrandPlate` and `VentGrille` helpers keep those
+details consistent. Highlights are deliberately warm, matching the site's amber
+key light rather than a neutral studio white. Their gradients are defined once per document by
 `ApplianceGradientSprite` in the root layout — per-instance defs would need
 `useId`, which would make the whole module a client component and ship every
 appliance SVG as JavaScript.
 
-**The hero media is composed, not photographed.** `HeroMedia` in `hero.tsx`
-stacks a receding blueprint plane, a warm key light with a hot core, a cool
-counter-light, depth haze, a vignette, a copy scrim and film grain. The brief
-asked for full-bleed cinematic kitchen photography; none exists, and what was
-supplied was either Pinterest-sourced (licence unclear, ruled out by §11) or a
-screen recording of another studio's site. To drop in a real photo: render an
-`<Image fill>` as the first child of the media layer and remove the blueprint
-plane. Every layer above it is already tuned to sit over a photograph.
+**Hero photography.** The client supplied one dark commercial kitchen
+photograph. `scripts/prepare-assets.mjs` crops it five ways — the range and hood
+line, the stainless reach-ins, the prep counters and window wall — so each page
+gets its own photographic moment from a single source frame, and darkens it at
+source.
+
+`HeroMedia` in `hero.tsx` then layers a five-part scrim over it: a global
+charcoal tint, a directional gradient weighted toward wherever the copy sits, a
+focused ellipse directly behind the text block, a vignette, and film grain. This
+is not decoration. The source frame is much brighter on the chrome and the
+window wall than through the centre floor, so one flat overlay either crushes
+the photo or leaves copy sitting on a highlight. Measured against the brightest
+pixel that ends up behind each block: wordmark 12.8:1, tagline 6.0:1, lead
+7.9:1 — all clear WCAG AA. **Never place hero text on the raw image.**
 
 ---
 

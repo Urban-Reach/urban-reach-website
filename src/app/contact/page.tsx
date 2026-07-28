@@ -39,10 +39,11 @@ export default function ContactPage() {
       />
 
       <Hero
-        composition="compact"
+        page="contact"
+        align="left"
         eyebrow="Contact"
         headline="Talk to a commercial appliance supplier in Austin, TX"
-        lead="Send an appliance schedule, ask a specification question, or start a conversation about an upcoming project. Inquiries reach us directly."
+        lead="Send an equipment schedule, ask a specification question, or open a conversation about an upcoming project. Inquiries reach us directly."
         primary={{ href: site.phoneHref, label: site.phone, plain: true }}
         secondary={{ href: site.emailHref, label: "Email us", plain: true }}
       />
@@ -123,8 +124,8 @@ export default function ContactPage() {
                 <div className="rounded-lg border border-rule bg-charcoal-raised p-6 sm:p-10">
                   <h2 className="font-display text-2xl">Send an inquiry</h2>
                   <p className="mt-3 leading-relaxed text-bone-dim">
-                    Fields marked with an asterisk are required. You can attach
-                    an appliance schedule or plan sheets directly.
+                    Fields marked with an asterisk are required. Equipment
+                    schedules and plan sheets can be attached directly.
                   </p>
                   <div className="mt-8">
                     <ContactForm />
@@ -153,8 +154,8 @@ export default function ContactPage() {
                 <p className="text-lg leading-relaxed text-bone-dim">
                   Urban Reach serves {site.city}, {site.stateName} and the
                   surrounding communities. If your project sits just outside
-                  this list, get in touch anyway — we would rather tell you
-                  honestly than have you guess.
+                  this list, contact us regardless — we will give you a direct
+                  answer.
                 </p>
               </Reveal>
 
@@ -185,7 +186,7 @@ export default function ContactPage() {
         <Container>
           <SectionHeading
             eyebrow="Questions"
-            lead="The things general contractors and architects ask us most often."
+            lead="What general contractors and architects ask us most often."
           >
             <span id="faq">Frequently asked questions</span>
           </SectionHeading>

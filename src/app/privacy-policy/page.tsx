@@ -42,7 +42,8 @@ export default function PrivacyPolicyPage() {
       />
 
       <Hero
-        composition="compact"
+        page="contact"
+        align="left"
         eyebrow="Privacy Policy"
         headline="How Urban Reach handles information from this website"
         lead={`Last updated ${updated}.`}

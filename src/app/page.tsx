@@ -32,21 +32,15 @@ export default function HomePage() {
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }])} />
 
       <Hero
-        eyebrow={site.tagline}
-        composition="stamp"
-        /* The H1 must still carry the page's primary phrase — "commercial
-           appliance supplier Austin TX" — so the stamped treatment sets it in
-           full rather than shortening it to a slogan. */
-        headline={
-          <>
-            A commercial appliance supplier in{" "}
-            <span className="whitespace-nowrap">Austin, TX</span>, built around
-            the construction schedule
-          </>
-        }
-        lead="Urban Reach sources, prices, delivers, and installs commercial-grade appliances for general contractors, architects, and designers building across the Austin metro."
-        primary={{ href: "/contact", label: "Start a conversation" }}
-        secondary={{ href: "/appliances", label: "See what we supply" }}
+        page="home"
+        align="center"
+        /* Wordmark and tagline sit inside one H1 so the page keeps a single
+           heading that still carries "commercial appliance" and "Austin". The
+           exact primary phrase appears in the title tag and in the lead below. */
+        wordmark={{ name: site.name, tagline: site.tagline }}
+        lead="We supply and install commercial-grade appliances for construction projects across the Austin metro. One partner, from the equipment schedule to the finished install."
+        primary={{ href: "/contact", label: "Start a project" }}
+        secondary={{ href: "/appliances", label: "See our work" }}
       />
 
       {/* ==================================================================
@@ -58,7 +52,7 @@ export default function HomePage() {
             <div className="lg:col-span-5">
               <SectionHeading eyebrow="Why Urban Reach">
                 <span id="value-prop">
-                  Appliance fulfillment that behaves like part of your project
+                  Appliance fulfillment that operates as part of your project
                   team
                 </span>
               </SectionHeading>
@@ -67,10 +61,10 @@ export default function HomePage() {
             <div className="lg:col-span-7">
               <Reveal>
                 <p className="text-lg leading-relaxed text-bone-dim">
-                  Appliances are usually the last thing specified and the first
-                  thing to hold up a turnover. Urban Reach exists to take that
-                  risk off the critical path — reading the schedule properly,
-                  sourcing against it, and showing up when the space is ready.
+                  Appliances are specified last and delay turnover first.
+                  Urban Reach removes that risk from the critical path. We read
+                  the schedule closely, source against it, and arrive when the
+                  space is ready.
                 </p>
               </Reveal>
 
@@ -78,15 +72,15 @@ export default function HomePage() {
                 {[
                   {
                     title: "Built for commercial scale",
-                    body: "Unit-count packages for multifamily and full-floor office work, not one-off retail orders.",
+                    body: "Unit-count packages for multifamily developments and full-floor office work. Built for volume, not retail quantities.",
                   },
                   {
                     title: "Sourcing and install together",
-                    body: "One partner from purchase order through on-site installation, so nothing falls between vendors.",
+                    body: "A single partner from purchase order through installation. No handoff between vendors, and no gap for a detail to fall through.",
                   },
                   {
-                    title: "One metro, properly covered",
-                    body: "Austin and its immediate suburbs — close enough to hold a delivery window.",
+                    title: "One metro, covered properly",
+                    body: "Austin and its immediate suburbs. Close enough to commit to a delivery window and keep it.",
                   },
                 ].map((item, i) => (
                   <Reveal key={item.title} delay={i * 90}>
@@ -114,10 +108,10 @@ export default function HomePage() {
           <SectionHeading
             eyebrow="From spec to installed"
             align="center"
-            lead="Every unit we supply starts as a line on an equipment schedule. Scroll to watch one resolve."
+            lead="Every unit we supply begins as a line on an equipment schedule. Scroll to see one resolve."
           >
             <span id="spec-to-installed">
-              We read the drawing, then we install the appliance
+              From specification to installed equipment
             </span>
           </SectionHeading>
 
@@ -126,7 +120,7 @@ export default function HomePage() {
               kind="refrigeration"
               eyebrow="Refrigeration"
               title="From a spec line to a unit on site"
-              body="A refrigeration callout on an equipment schedule carries a cutout, a utility rough-in, and a finish expectation. We match all three before anything is ordered, so the unit that arrives fits the opening that was actually framed."
+              body="A refrigeration callout carries three constraints: a cutout, a utility rough-in, and a finish standard. We reconcile all three before anything is ordered, so the unit that arrives fits the opening that was built."
             />
           </div>
         </Container>
@@ -139,7 +133,7 @@ export default function HomePage() {
         <Container>
           <SectionHeading
             eyebrow="What we supply"
-            lead="Categories stay broad on purpose — project schedules rarely stop at the obvious appliances."
+            lead="These categories stay deliberately broad. Equipment schedules rarely stop at the obvious appliances."
           >
             <span id="what-we-supply">
               Commercial appliance categories for Austin construction projects
@@ -185,10 +179,10 @@ export default function HomePage() {
             <div className="lg:col-span-5">
               <SectionHeading
                 eyebrow="How it works"
-                lead="Three steps, start to finish, with one point of contact throughout."
+                lead="A short, predictable sequence from specification through installation."
               >
                 <span id="how-it-works">
-                  A process short enough to hold in your head
+                  Three steps, one point of contact
                 </span>
               </SectionHeading>
 

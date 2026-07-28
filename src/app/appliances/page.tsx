@@ -45,10 +45,11 @@ export default function AppliancesPage() {
       />
 
       <Hero
-        composition="editorial"
+        page="appliances"
+        align="left"
         eyebrow="Appliances"
         headline="Commercial appliance categories for Austin construction projects"
-        lead="Urban Reach supplies commercial-grade appliances for multifamily, office, and tenant improvement work across the Austin metro — sourced through authorized manufacturer partnerships and installed by the same team that priced them."
+        lead="We supply commercial-grade appliances for multifamily, office, and tenant improvement work across the Austin metro — sourced through authorized manufacturer partnerships and installed by the same team that priced them."
         primary={{ href: "/contact", label: "Send a schedule" }}
         secondary={{ href: "/process", label: "See how we work" }}
       />
@@ -58,7 +59,7 @@ export default function AppliancesPage() {
         <Container>
           <SectionHeading
             eyebrow="Categories"
-            lead="Kept broad on purpose. A final category list is not the point — matching what a specific project schedule actually calls for is."
+            lead="Deliberately broad. What matters is not the category list but matching what a specific equipment schedule calls for."
           >
             <span id="categories">What Urban Reach sources and installs</span>
           </SectionHeading>
@@ -88,7 +89,7 @@ export default function AppliancesPage() {
           <SectionHeading
             eyebrow="Spec to installed"
             align="center"
-            lead="Two more units, resolving the same way every appliance we supply does."
+            lead="Two further units, resolving the way every appliance we supply does."
           >
             <span id="spec-resolve">
               Every unit starts as a line on an equipment schedule
@@ -101,7 +102,7 @@ export default function AppliancesPage() {
               layout="media-wide"
               eyebrow="Dishwashers"
               title="Specified around the rough-in that already exists"
-              body="Under-counter dishwashing equipment is decided by the utility rough-in and the cabinet opening far more than by the model line. We check both against the drawings before sourcing, which is why our units tend to go in once."
+              body="Under-counter dishwashing equipment is determined by the utility rough-in and the cabinet opening far more than by the model line. We verify both against the drawings before sourcing. Our units go in once."
             />
 
             <BlueprintToReality
@@ -109,7 +110,7 @@ export default function AppliancesPage() {
               layout="copy-wide"
               eyebrow="Beverage equipment"
               title="Amenity equipment that matches the finish level"
-              body="Beverage coolers and brewers sit in the most visible parts of an office floor. We source to the finish standard of the surrounding space, not just to the equipment schedule's minimum."
+              body="Beverage coolers and brewers occupy the most visible parts of an office floor. We source to the finish standard of the surrounding space, not to the schedule's minimum."
               reverse
             />
           </div>
@@ -126,21 +127,21 @@ export default function AppliancesPage() {
           <Reveal delay={160}>
             <div className="mt-12 max-w-2xl space-y-4 leading-relaxed text-bone-dim">
               <p>
-                Those relationships cover a wide span on purpose. Samsung, GE/Haier,
-                and Fisher &amp; Paykel carry the residential-grade specifications
-                that multifamily unit packages are usually written to. Summit
-                handles the compact and ADA-height cases that tight floor plans
-                force. Champion covers commercial dishwashing, and BUNN covers
-                beverage service on office amenity floors.
+                These relationships span the range deliberately. Samsung,
+                GE/Haier, and Fisher &amp; Paykel carry the residential-grade
+                specifications most multifamily unit packages are written to.
+                Summit covers the compact and ADA-height cases that constrained
+                floor plans require. Champion handles commercial dishwashing.
+                BUNN handles beverage service on office amenity floors.
               </p>
               <p>
                 {/* The Samsung long-tail phrase still appears in crawlable body
                     copy, but as one relationship among several rather than as
                     the page's identity. */}
-                Urban Reach is an authorized Samsung commercial appliance dealer
-                in {site.city}, and an authorized dealer for each of the other
-                brands above. When a specification points somewhere else
-                entirely, we source it rather than talk you out of it.
+                Urban Reach is an authorized Samsung commercial appliance
+                dealer in {site.city}, and an authorized dealer for each of the
+                brands above. When a specification calls for a manufacturer
+                outside that list, we source it.
               </p>
             </div>
           </Reveal>
@@ -152,7 +153,7 @@ export default function AppliancesPage() {
         <Container>
           <SectionHeading
             eyebrow="Project types"
-            lead="The same scope of work, shaped differently by what is being built."
+            lead="The same scope of work, shaped by what is being built."
           >
             <span id="project-types">
               A multifamily and office buildout appliance supplier
@@ -180,7 +181,7 @@ export default function AppliancesPage() {
       <ServiceArea tone="raised" />
 
       <CtaBand
-        title="Send us the appliance schedule"
+        title="Send us the equipment schedule"
         body="Share the equipment schedule for your project and we will source against it, price it clearly, and tell you what will not fit before it becomes a problem."
       />
     </PageShell>
