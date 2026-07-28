@@ -26,11 +26,24 @@ export const site = {
   stateName: "Texas",
   country: "US",
 
-  // Confirmed service area. Do NOT broaden to statewide or national.
+  /**
+   * Confirmed service area. Do NOT broaden to statewide or national.
+   *
+   * Georgetown was added at the client's direction after the original brief.
+   * It is the largest nearby city not already listed (~100k), sits directly
+   * north of Round Rock, and the metro is officially designated the
+   * "Austin–Round Rock–Georgetown, TX" MSA — so it reads as a natural part of
+   * the same service radius rather than a reach.
+   *
+   * Anything referencing this list is generated from it. If a city is added or
+   * removed, check src/data/faq.ts and src/lib/seo.ts, which also name the
+   * cities in prose for search snippets.
+   */
   serviceArea: [
     "Austin",
-    "Pflugerville",
     "Round Rock",
+    "Georgetown",
+    "Pflugerville",
     "Cedar Park",
     "Bee Cave",
   ] as const,
@@ -48,6 +61,18 @@ export const site = {
    */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://urbanreachtx.com",
 } as const;
+
+/**
+ * "Austin, Round Rock, Georgetown, Pflugerville, Cedar Park, and Bee Cave"
+ *
+ * Use this anywhere the service area is written as prose, so headings and body
+ * copy stay in sync with `site.serviceArea` automatically.
+ */
+export function serviceAreaSentence() {
+  const cities = [...site.serviceArea];
+  const last = cities.pop();
+  return `${cities.join(", ")}, and ${last}`;
+}
 
 export const nav = [
   { href: "/", label: "Home" },

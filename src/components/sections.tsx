@@ -8,6 +8,14 @@ import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui"
 /* Authorized brand grid                                                      */
 /* -------------------------------------------------------------------------- */
 
+/** Small counts read better spelled out in body copy than as numerals. */
+function countWord(n: number) {
+  return (
+    ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n] ??
+    String(n)
+  );
+}
+
 /**
  * Every supplied manufacturer mark is dark ink on transparent, so each sits on
  * a light chip. Recoloring a manufacturer's mark to survive a dark background
@@ -20,12 +28,16 @@ import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui"
 export function BrandGrid({ heading = true }: { heading?: boolean }) {
   return (
     <>
+      {/* Deliberately brand-neutral. Urban Reach holds six authorized dealer
+          relationships and sources beyond them, so no single manufacturer
+          should headline this section or stand in for the whole roster.
+          The count is derived from `brands` so it cannot go stale. */}
       {heading && (
         <SectionHeading
           eyebrow="Authorized dealer"
-          lead={`Urban Reach is an authorized dealer for the manufacturers below, and sources additional brands as a project's specifications require.`}
+          lead={`Urban Reach is an authorized dealer for the ${countWord(brands.length)} manufacturers below, and sources beyond them whenever a project's specifications call for it.`}
         >
-          An authorized Samsung commercial appliance dealer serving Austin
+          Manufacturer partnerships, and the freedom to look past them
         </SectionHeading>
       )}
 

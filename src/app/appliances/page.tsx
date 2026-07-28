@@ -21,8 +21,14 @@ export const metadata: Metadata = pageMetadata("appliances");
 /**
  * Appliances.
  *
- * Primary phrase: "Samsung commercial appliance dealer Austin".
- * Secondary: "multifamily appliance supplier", "office buildout appliance supplier".
+ * Primary phrase: "commercial appliance dealer Austin".
+ * Secondary: "Samsung commercial appliance dealer Austin" (H3 + body),
+ * "multifamily appliance supplier", "office buildout appliance supplier".
+ *
+ * Samsung is targeted as a supporting phrase, NOT as the page's headline. Urban
+ * Reach holds six authorized dealer relationships and sources beyond them; a
+ * Samsung-led title and H1 misrepresented the business as single-brand. Keep
+ * any one manufacturer subordinate to the roster here.
  *
  * The Samsung dealer claim is confirmed but stays Austin-scoped (§7) — it must
  * never be broadened to statewide or Texas-wide.
@@ -112,12 +118,25 @@ export default function AppliancesPage() {
           </div>
 
           <Reveal delay={160}>
-            <p className="mt-12 max-w-2xl leading-relaxed text-bone-dim">
-              Urban Reach is an authorized Samsung commercial appliance dealer
-              serving {site.city} and the surrounding suburbs. Beyond these core
-              partner brands, we source additional manufacturers as needed to
-              meet a project&rsquo;s specific requirements.
-            </p>
+            <div className="mt-12 max-w-2xl space-y-4 leading-relaxed text-bone-dim">
+              <p>
+                Those relationships cover a wide span on purpose. Samsung, GE/Haier,
+                and Fisher &amp; Paykel carry the residential-grade specifications
+                that multifamily unit packages are usually written to. Summit
+                handles the compact and ADA-height cases that tight floor plans
+                force. Champion covers commercial dishwashing, and BUNN covers
+                beverage service on office amenity floors.
+              </p>
+              <p>
+                {/* The Samsung long-tail phrase still appears in crawlable body
+                    copy, but as one relationship among several rather than as
+                    the page's identity. */}
+                Urban Reach is an authorized Samsung commercial appliance dealer
+                in {site.city}, and an authorized dealer for each of the other
+                brands above. When a specification points somewhere else
+                entirely, we source it rather than talk you out of it.
+              </p>
+            </div>
           </Reveal>
         </Container>
       </Section>

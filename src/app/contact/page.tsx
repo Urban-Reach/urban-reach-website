@@ -10,7 +10,7 @@ import {
   Section,
   SectionHeading,
 } from "@/components/ui";
-import { site } from "@/data/site";
+import { serviceAreaSentence, site } from "@/data/site";
 import { breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("contact");
@@ -138,10 +138,9 @@ export default function ContactPage() {
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeading eyebrow="Where we work">
-                <span id="areas">
-                  Serving Austin, Pflugerville, Round Rock, Cedar Park, and Bee
-                  Cave
-                </span>
+                {/* Generated from site.serviceArea so it can never drift out
+                    of sync with the city list shown below it. */}
+                <span id="areas">Serving {serviceAreaSentence()}</span>
               </SectionHeading>
             </div>
 

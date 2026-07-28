@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BrandMark } from "@/components/brand-mark";
-import { nav, site } from "@/data/site";
+import { nav, serviceAreaSentence, site } from "@/data/site";
 
 /**
  * Site footer.
@@ -104,8 +104,7 @@ export function SiteFooter() {
         <div className="mt-14 border-t border-rule pt-8">
           <p className="text-xs leading-relaxed text-bone-dim">
             <span className="label-caps text-bone">Service area — </span>
-            Serving {site.serviceArea.slice(0, -1).join(", ")}, and{" "}
-            {site.serviceArea[site.serviceArea.length - 1]}, {site.stateName}.
+            Serving {serviceAreaSentence()}, {site.stateName}.
           </p>
           <p className="mt-4 text-xs text-bone-dim">
             © {new Date().getFullYear()} {site.name}. All rights reserved.

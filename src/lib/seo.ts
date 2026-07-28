@@ -30,10 +30,13 @@ export const PAGE_SEO = {
   },
   appliances: {
     path: "/appliances",
-    primary: "Samsung commercial appliance dealer Austin",
-    title: "Samsung Commercial Appliance Dealer in Austin | Urban Reach",
+    // The Samsung long-tail is still targeted, but through an H3 and body copy
+    // rather than the title and H1. Urban Reach holds six dealer relationships,
+    // and leading with one manufacturer made the page read as Samsung-only.
+    primary: "commercial appliance dealer Austin",
+    title: "Commercial Appliance Dealer in Austin, TX | Urban Reach",
     description:
-      "An authorized Samsung commercial appliance dealer in Austin. Refrigeration, dishwashers, and beverage equipment for multifamily and office buildouts.",
+      "Authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, and BUNN. Refrigeration, dishwashers, and beverage equipment across Austin.",
   },
   process: {
     path: "/process",
@@ -47,7 +50,7 @@ export const PAGE_SEO = {
     primary: "commercial appliance supplier Austin service area",
     title: "Contact Urban Reach | Appliance Supplier in Austin, TX",
     description:
-      "Contact Urban Reach for commercial appliance sourcing and installation in Austin, Pflugerville, Round Rock, Cedar Park, and Bee Cave. (737) 381-6621.",
+      "Contact Urban Reach for commercial appliance sourcing and installation in Austin, Round Rock, Georgetown, Pflugerville, Cedar Park, and Bee Cave.",
   },
   privacy: {
     path: "/privacy-policy",

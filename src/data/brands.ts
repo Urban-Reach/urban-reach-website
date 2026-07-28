@@ -58,11 +58,15 @@ export const brands: Brand[] = [
   {
     slug: "champion",
     name: "Champion",
-    // MISSING ASSET: no Champion logo file has been supplied. The brand is a
-    // confirmed authorized relationship, so it is listed by name rather than
-    // omitted or filled with a substitute mark. Drop the prepared file at
-    // public/brand/vendors/champion.{png,webp} and set this to
-    // "/brand/vendors/champion" to complete the grid.
+    // MISSING ASSET: the Champion mark was shown in conversation but never
+    // supplied as a file, so there is nothing on disk to process. The brand is
+    // a confirmed authorized relationship, so it is listed by name rather than
+    // omitted or filled with a redrawn substitute.
+    //
+    // TO COMPLETE: save the official Champion logo to disk, add its path to
+    // SOURCES.vendors in scripts/prepare-assets.mjs, run
+    // `node scripts/prepare-assets.mjs`, then set logo to
+    // "/brand/vendors/champion" and correct width/height to the emitted size.
     logo: null,
     width: 600,
     height: 160,
