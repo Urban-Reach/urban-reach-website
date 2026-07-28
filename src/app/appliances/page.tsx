@@ -4,13 +4,14 @@ import { Reveal } from "@/components/motion";
 import { BrandGrid, CtaBand, ServiceArea } from "@/components/sections";
 import { BlueprintToReality } from "@/components/blueprint-to-reality";
 import { CategoryGlyph } from "@/components/appliance-art";
-import { PageHero } from "@/components/page-hero";
+import { Hero } from "@/components/hero";
 import {
   Card,
   Container,
   JsonLd,
   Section,
   SectionHeading,
+  PageShell,
 } from "@/components/ui";
 import { applianceCategories, projectTypes } from "@/data/appliances";
 import { site } from "@/data/site";
@@ -35,7 +36,7 @@ export const metadata: Metadata = pageMetadata("appliances");
  */
 export default function AppliancesPage() {
   return (
-    <>
+    <PageShell rhythm="appliances">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
@@ -43,14 +44,17 @@ export default function AppliancesPage() {
         ])}
       />
 
-      <PageHero
+      <Hero
+        composition="editorial"
         eyebrow="Appliances"
-        title="Commercial appliance categories for Austin construction projects"
+        headline="Commercial appliance categories for Austin construction projects"
         lead="Urban Reach supplies commercial-grade appliances for multifamily, office, and tenant improvement work across the Austin metro — sourced through authorized manufacturer partnerships and installed by the same team that priced them."
+        primary={{ href: "/contact", label: "Send a schedule" }}
+        secondary={{ href: "/process", label: "See how we work" }}
       />
 
       {/* Categories */}
-      <Section tone="charcoal" aria-labelledby="categories">
+      <Section id="after-hero" space="tight" tone="charcoal" aria-labelledby="categories">
         <Container>
           <SectionHeading
             eyebrow="Categories"
@@ -61,11 +65,11 @@ export default function AppliancesPage() {
 
           <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {applianceCategories.map((category, i) => (
-              <Reveal as="li" key={category.slug} delay={i * 70}>
+              <Reveal as="li" key={category.slug} from="rise" delay={i * 70}>
                 <Card>
                   <CategoryGlyph
                     kind={category.glyph}
-                    className="h-10 w-10 text-amber"
+                    className="h-16 w-auto sm:h-[4.5rem]"
                   />
                   <h3 className="mt-6 font-display text-xl">{category.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-bone-dim">
@@ -79,7 +83,7 @@ export default function AppliancesPage() {
       </Section>
 
       {/* Blueprint to reality — second and third instances */}
-      <Section tone="raised" aria-labelledby="spec-resolve">
+      <Section space="base" tone="raised" aria-labelledby="spec-resolve">
         <Container>
           <SectionHeading
             eyebrow="Spec to installed"
@@ -94,6 +98,7 @@ export default function AppliancesPage() {
           <div className="mt-20 space-y-24 lg:space-y-32">
             <BlueprintToReality
               kind="dishwasher"
+              layout="media-wide"
               eyebrow="Dishwashers"
               title="Specified around the rough-in that already exists"
               body="Under-counter dishwashing equipment is decided by the utility rough-in and the cabinet opening far more than by the model line. We check both against the drawings before sourcing, which is why our units tend to go in once."
@@ -101,6 +106,7 @@ export default function AppliancesPage() {
 
             <BlueprintToReality
               kind="beverage"
+              layout="copy-wide"
               eyebrow="Beverage equipment"
               title="Amenity equipment that matches the finish level"
               body="Beverage coolers and brewers sit in the most visible parts of an office floor. We source to the finish standard of the surrounding space, not just to the equipment schedule's minimum."
@@ -111,7 +117,7 @@ export default function AppliancesPage() {
       </Section>
 
       {/* Authorized brands */}
-      <Section tone="charcoal" aria-labelledby="dealer">
+      <Section space="tight" tone="charcoal" aria-labelledby="dealer">
         <Container>
           <div id="dealer">
             <BrandGrid />
@@ -142,7 +148,7 @@ export default function AppliancesPage() {
       </Section>
 
       {/* Project types — secondary phrase targets */}
-      <Section tone="walnut" aria-labelledby="project-types">
+      <Section space="airy" tone="walnut" aria-labelledby="project-types">
         <Container>
           <SectionHeading
             eyebrow="Project types"
@@ -177,6 +183,6 @@ export default function AppliancesPage() {
         title="Send us the appliance schedule"
         body="Share the equipment schedule for your project and we will source against it, price it clearly, and tell you what will not fit before it becomes a problem."
       />
-    </>
+    </PageShell>
   );
 }

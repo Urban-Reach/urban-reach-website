@@ -27,7 +27,14 @@
   --font-display: var(--font-playfair), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
+  /* Four distinct easings. Reusing one curve everywhere is a large part of why
+     a site reads as templated — the motion signature becomes identical from
+     page to page. Each page picks one as its default via a data-rhythm
+     attribute (see the Rhythm section below). */
   --ease-out-quiet: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-long: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-crisp: cubic-bezier(0.33, 0.9, 0.28, 1);
+  --ease-in-out-slow: cubic-bezier(0.65, 0.02, 0.28, 1);
 }
 
 @layer base {
@@ -103,15 +110,91 @@
    pins these same elements to their resolved state. Keep the two in sync: if
    you add a new animated start state here, add its override there. */
 
+/* ==========================================================================
+   Per-page rhythm
+   Each page sets data-rhythm on <main>. That drives section padding, reveal
+   distance, duration and easing, so Home / About / Appliances / Process each
+   have their own pace instead of four pages sharing one set of numbers.
+   Colour and type are untouched by this — only spacing and motion.
+   ========================================================================== */
+
+[data-rhythm] {
+  --section-y: 5rem;
+  --section-y-lg: 7rem;
+  --reveal-shift: 18px;
+  --reveal-duration: 0.7s;
+  --reveal-ease: var(--ease-out-quiet);
+}
+
+/* Home — brisk and confident, tight vertical pace. */
+[data-rhythm="home"] {
+  --section-y: 5rem;
+  --section-y-lg: 7rem;
+  --reveal-shift: 16px;
+  --reveal-duration: 0.62s;
+  --reveal-ease: var(--ease-out-crisp);
+}
+
+/* About — slowest and most spacious; it is the reading page. */
+[data-rhythm="about"] {
+  --section-y: 6rem;
+  --section-y-lg: 9.5rem;
+  --reveal-shift: 26px;
+  --reveal-duration: 0.95s;
+  --reveal-ease: var(--ease-out-long);
+}
+
+/* Appliances — catalogue cadence: denser sections, shorter travel. */
+[data-rhythm="appliances"] {
+  --section-y: 4.5rem;
+  --section-y-lg: 6rem;
+  --reveal-shift: 12px;
+  --reveal-duration: 0.5s;
+  --reveal-ease: var(--ease-out-crisp);
+}
+
+/* Process — deliberate, step-by-step; longest settle. */
+[data-rhythm="process"] {
+  --section-y: 5.5rem;
+  --section-y-lg: 8.5rem;
+  --reveal-shift: 32px;
+  --reveal-duration: 1.05s;
+  --reveal-ease: var(--ease-in-out-slow);
+}
+
+/* Contact — steady and businesslike. */
+[data-rhythm="contact"] {
+  --section-y: 5rem;
+  --section-y-lg: 7.5rem;
+  --reveal-shift: 20px;
+  --reveal-duration: 0.75s;
+  --reveal-ease: var(--ease-out-quiet);
+}
+
 @media (prefers-reduced-motion: no-preference) {
-  /* Fade + slide-up on section entry. */
+  /* Fade + slide-up on section entry. Distance, duration and easing all come
+     from the page's rhythm, so no two pages animate identically. */
   [data-reveal] {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(var(--reveal-shift, 18px));
     transition:
-      opacity 0.7s var(--ease-out-quiet),
-      transform 0.7s var(--ease-out-quiet);
+      opacity var(--reveal-duration, 0.7s) var(--reveal-ease, var(--ease-out-quiet)),
+      transform var(--reveal-duration, 0.7s) var(--reveal-ease, var(--ease-out-quiet));
     transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* Sideways reveal, for alternating editorial rows. */
+  [data-reveal="left"] {
+    transform: translate3d(calc(var(--reveal-shift, 18px) * -1.4), 0, 0);
+  }
+
+  [data-reveal="right"] {
+    transform: translate3d(calc(var(--reveal-shift, 18px) * 1.4), 0, 0);
+  }
+
+  /* Scale-in, for feature media. */
+  [data-reveal="rise"] {
+    transform: translate3d(0, calc(var(--reveal-shift, 18px) * 1.5), 0) scale(0.985);
   }
 
   [data-reveal][data-revealed="true"] {
@@ -130,6 +213,137 @@
   [data-draw][data-revealed="true"] path,
   [data-draw][data-revealed="true"] line {
     stroke-dashoffset: 0;
+  }
+}
+
+/* ==========================================================================
+   Blueprint to reality — scroll-driven, off the main thread
+   ==========================================================================
+   This effect previously ran through React: a scroll listener recomputed
+   progress, called setState every frame, and the layers carried
+   `transition: clip-path 120ms`. Two problems, one of them serious:
+
+     1. Every frame re-rendered both appliance SVGs (~120 elements) — real work
+        on a mid-range phone.
+     2. The 120ms transition meant the visual ALWAYS trailed the scroll by
+        120ms, and each frame restarted the interpolation. That is what "laggy"
+        actually was: latency built into the design, not dropped frames.
+
+   Now the whole thing is a CSS scroll-driven animation on a view() timeline.
+   No JS, no React re-render, no transition, and the browser runs it off the
+   main thread. Scrolling and the artwork are locked together.
+
+   The range values are derived, not guessed. For an element of height h in a
+   viewport of height v, the `cover` range spans v + h, and the element's centre
+   sits at v - p(v + h) + h/2. Solving for a centre of 0.95v (blueprint fully
+   legible, ~60% of the object on screen) and 0.42v (resolved, comfortably
+   centred) gives p ≈ 0.21 and p ≈ 0.55. Those hold within a percentage point
+   across phone and desktop viewports, which is why fixed percentages are safe
+   here. `cover` is used rather than `entry` because `entry` never completes for
+   an element taller than the viewport (short landscape phones). */
+
+@keyframes b2r-resolve {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0% 0);
+  }
+}
+
+@keyframes b2r-linework-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes b2r-edge-fade {
+  0% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    [data-b2r-scope] {
+      view-timeline-name: --b2r;
+      view-timeline-axis: block;
+    }
+
+    [data-b2r-real],
+    [data-b2r-edge] {
+      animation: b2r-resolve linear both;
+      animation-timeline: --b2r;
+      animation-range: cover 21% cover 55%;
+    }
+
+    /* The edge highlight shares the clip animation, so its bottom border sits
+       exactly on the wipe line for free — no separate position maths. */
+    [data-b2r-edge] {
+      animation:
+        b2r-resolve linear both,
+        b2r-edge-fade linear both;
+      animation-timeline: --b2r, --b2r;
+      animation-range: cover 21% cover 55%, cover 21% cover 55%;
+    }
+
+    /* Linework clears a little ahead of the wipe finishing, so the two layers
+       are never both faint at once. */
+    [data-b2r-line] {
+      animation: b2r-linework-out linear both;
+      animation-timeline: --b2r;
+      animation-range: cover 26% cover 45%;
+    }
+  }
+
+  /* Browsers without scroll-driven animations fall back to a rAF loop that
+     writes these custom properties directly to the element — still no React
+     re-render and still no transition. See useB2RFallback in motion.tsx. */
+  @supports not (animation-timeline: view()) {
+    [data-b2r-real],
+    [data-b2r-edge] {
+      clip-path: inset(0 0 calc(100% - var(--b2r-p, 0) * 100%) 0);
+    }
+
+    [data-b2r-line] {
+      opacity: clamp(0, calc((0.7 - var(--b2r-p, 0)) / 0.55), 1);
+    }
+
+    [data-b2r-edge] {
+      opacity: var(--b2r-edge-opacity, 0);
+    }
+  }
+}
+
+/* Scroll cue arrow: a slow, small drift. Deliberately not a bounce — elastic
+   easing is exactly the template tell the brief rules out. */
+@keyframes scroll-cue-drift {
+  0%,
+  100% {
+    transform: translateY(-2px);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(3px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-cue-arrow {
+    animation: scroll-cue-drift 2.8s var(--ease-in-out-slow) infinite;
   }
 }
 
@@ -226,18 +440,17 @@
     transition: none !important;
   }
 
-  [data-parallax] {
-    transform: none !important;
-  }
-
-  /* Blueprint-to-reality resolves fully: line art hidden, appliance shown. */
-  [data-b2r-line] {
+  /* Blueprint-to-reality resolves fully: line art hidden, appliance shown,
+     wipe edge absent. */
+  [data-b2r-line],
+  [data-b2r-edge] {
     opacity: 0 !important;
   }
 
   [data-b2r-real] {
     opacity: 1 !important;
     clip-path: none !important;
+    animation: none !important;
   }
 
   *,

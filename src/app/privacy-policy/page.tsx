@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { PageHero } from "@/components/page-hero";
-import { Container, JsonLd, Section } from "@/components/ui";
+import { Hero } from "@/components/hero";
+import { Container, JsonLd, PageShell, Section } from "@/components/ui";
 import { site } from "@/data/site";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
   const updated = "July 27, 2026";
 
   return (
-    <>
+    <PageShell rhythm="contact">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
@@ -41,9 +41,10 @@ export default function PrivacyPolicyPage() {
         ])}
       />
 
-      <PageHero
+      <Hero
+        composition="compact"
         eyebrow="Privacy Policy"
-        title="How Urban Reach handles information from this website"
+        headline="How Urban Reach handles information from this website"
         lead={`Last updated ${updated}.`}
       />
 
@@ -191,6 +192,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </Container>
       </Section>
-    </>
+    </PageShell>
   );
 }

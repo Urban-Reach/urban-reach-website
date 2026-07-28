@@ -119,10 +119,13 @@ export function SiteHeader() {
           </ul>
         </nav>
 
+        {/* Plain text, not a bordered pill. The reference layout keeps all
+            button weight out of the nav so the hero's single primary CTA is the
+            only filled element on the first screen. */}
         <div className="hidden lg:block">
           <a
             href={site.phoneHref}
-            className="label-caps-lg glow-hover rounded-full border border-rule px-6 py-3 text-bone transition-colors hover:text-amber"
+            className="label-caps-lg link-underline text-bone transition-colors duration-300 hover:text-amber"
           >
             {site.phone}
           </a>

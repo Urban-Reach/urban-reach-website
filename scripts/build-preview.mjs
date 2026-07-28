@@ -22,7 +22,7 @@
  * exercise the form.
  */
 
-import { chmod, cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { chmod, cp, mkdir, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -43,11 +43,10 @@ async function main() {
       await cp(join(ROOT, entry), join(WORK, entry), { recursive: true });
     }
   }
-  // Share node_modules rather than reinstalling.
-  await cp(join(ROOT, "node_modules"), join(WORK, "node_modules"), {
-    recursive: true,
-    verbatimSymlinks: true,
-  });
+  // Symlink node_modules rather than copying it. Copying works but leaves tens
+  // of thousands of files that the cleanup step then fails to remove
+  // (ENOTEMPTY, from nested symlinks in dependency bin folders).
+  await symlink(join(ROOT, "node_modules"), join(WORK, "node_modules"), "dir");
 
   // Route handlers cannot be statically exported without force-static, and
   // none of these mean anything when browsing from the filesystem:

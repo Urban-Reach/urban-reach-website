@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { useScrollProgress } from "@/components/motion";
+import { useB2RFallback } from "@/components/motion";
 import {
   BeverageLine,
   BeverageReal,
@@ -18,15 +18,16 @@ import {
  * finished unit as the user scrolls. Spec drawing to installed equipment,
  * object by object, which is literally what the business does.
  *
- * Implementation notes:
- *  - Scroll-LINKED, never autoplay. Progress comes from the element's position
- *    in the viewport, so the user drives it and can hold it mid-resolve.
- *  - The crossfade is a clip-path wipe on the resolved layer plus an opacity
- *    fade on the linework — cheap, compositor-friendly, no layout thrash.
- *  - prefers-reduced-motion resolves to the finished state immediately, with
- *    no observers attached and no scroll listener registered.
+ * The animation itself lives entirely in CSS (see the blueprint-to-reality
+ * block in globals.css) driven by a `view()` scroll timeline, so it runs off
+ * the main thread with no JS and no React re-render. This component only lays
+ * the layers out; `useB2RFallback` is a no-op except on browsers that lack
+ * scroll-driven animations.
  *
- * SCOPE (build prompt §5): one appliance, isolated. Never a room or interior.
+ * SCOPE (build prompt §5): one appliance, isolated on a plain ground. Never a
+ * room, a kitchen layout, or an interior. Urban Reach sources and installs
+ * appliances; it does not design or build spaces, and the artwork must not
+ * imply otherwise.
  */
 
 const APPLIANCES = {
@@ -58,73 +59,64 @@ export function BlueprintToReality({
   title,
   body,
   reverse = false,
+  /** Lets a page shift the balance of the two columns for its own composition. */
+  layout = "even",
 }: {
   kind: ApplianceKind;
   eyebrow: string;
   title: string;
   body: string;
-  /** Alternate the media/copy order down the page. */
   reverse?: boolean;
+  layout?: "even" | "media-wide" | "copy-wide";
 }) {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>();
+  const scopeRef = useB2RFallback<HTMLDivElement>();
   const uid = useId().replace(/:/g, "");
   const { Line, Real, label, alt } = APPLIANCES[kind];
 
-  // Linework holds until the wipe is underway, then clears before it completes,
-  // so the two layers are never both faint at the same time.
-  //
-  // Under prefers-reduced-motion these values stay at their progress-0 state,
-  // and the reduced-motion block in globals.css overrides them with the
-  // resolved end state instead. That keeps the fallback in one place.
-  const lineOpacity = 1 - Math.min(1, Math.max(0, (progress - 0.15) / 0.55));
-  const wipe = progress * 100;
+  const columns = {
+    even: "lg:grid-cols-2",
+    "media-wide": "lg:grid-cols-[1.15fr_1fr]",
+    "copy-wide": "lg:grid-cols-[1fr_1.25fr]",
+  }[layout];
 
   return (
     <div
-      className={`grid items-center gap-10 lg:grid-cols-2 lg:gap-20 ${
+      className={`grid items-center gap-10 ${columns} lg:gap-20 ${
         reverse ? "lg:[&>*:first-child]:order-2" : ""
       }`}
     >
-      {/* Media */}
-      <div ref={ref} className="relative mx-auto w-full max-w-[340px]">
+      {/* Media. data-b2r-scope defines the view() timeline the layers below
+          attach to, so the animation is scoped per instance. */}
+      <div
+        ref={scopeRef}
+        data-b2r-scope=""
+        className="relative mx-auto w-full max-w-[340px]"
+      >
         {/* Plain dark ground with a faint blueprint field — deliberately not a
             rendered room. */}
         <div className="blueprint-grid-fine absolute inset-0 rounded-lg opacity-60" />
-        <div className="absolute inset-0 rounded-lg bg-radial from-amber/[0.07] to-transparent" />
+        <div className="absolute inset-0 rounded-lg bg-[radial-gradient(circle_at_50%_38%,rgba(201,146,47,0.09),transparent_68%)]" />
 
         <div className="relative aspect-[400/540] w-full" role="img" aria-label={alt}>
-          {/* Resolved layer, revealed by a vertical wipe */}
-          <div
-            data-b2r-real=""
-            className="absolute inset-0"
-            style={{
-              clipPath: `inset(0 0 ${100 - wipe}% 0)`,
-              transition: "clip-path 120ms linear",
-            }}
-          >
+          {/* Resolved layer, revealed by a vertical wipe. */}
+          <div data-b2r-real="" className="absolute inset-0">
             <Real uid={`${uid}-real`} className="h-full w-full" />
           </div>
 
-          {/* Linework layer, fading out as the wipe passes */}
-          <div
-            data-b2r-line=""
-            className="absolute inset-0"
-            style={{ opacity: lineOpacity, transition: "opacity 120ms linear" }}
-          >
+          {/* Linework layer, clearing just ahead of the wipe. */}
+          <div data-b2r-line="" className="absolute inset-0">
             <Line uid={`${uid}-line`} className="h-full w-full" />
           </div>
 
-          {/* The resolving edge itself — a thin amber scan line. Absent at
-              progress 0, so reduced-motion users never see it. */}
-          {progress > 0.02 && progress < 0.99 && (
-            <div
-              className="pointer-events-none absolute inset-x-0 h-px bg-amber"
-              style={{
-                top: `${wipe}%`,
-                boxShadow: "0 0 14px 1px var(--color-amber)",
-              }}
-            />
-          )}
+          {/* The resolving edge. Shares the wipe's clip animation, so its
+              bottom border lands exactly on the clip line without any
+              separate position calculation. */}
+          <div
+            data-b2r-edge=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 border-b border-amber"
+            style={{ boxShadow: "0 1px 16px -1px var(--color-amber)" }}
+          />
         </div>
 
         <p className="label-caps mt-5 text-center text-bone-dim">{label}</p>

@@ -400,79 +400,341 @@ export function BeverageReal({ uid, className }: ArtProps) {
   );
 }
 
+
 /* ========================================================================== */
-/* Category glyphs — small line-art marks for the /appliances grid            */
+/* Category glyphs — small appliance marks for the category grids             */
 /* ========================================================================== */
 
-const GLYPH = {
-  stroke: "currentColor",
-  strokeWidth: 1.4,
-  fill: "none",
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-};
+/**
+ * These were flat single-colour outlines, which read as stock template icons
+ * rather than as part of a premium brand. Rebuilt with actual material:
+ *
+ *   - a brushed-steel gradient body instead of a flat silhouette
+ *   - a warm amber key light from the upper left, matching the light direction
+ *     used in the hero and in the full appliance renders
+ *   - real component detail — handles, louvre vents, control panels, seams —
+ *     drawn at the scale it would appear on the actual unit
+ *   - a soft contact shadow grounding the object against the dark background
+ *
+ * Restrained on purpose: legible at 40px, no outlines thicker than they need
+ * to be, and no decorative flourish. The reference point is editorial
+ * construction photography, not an icon set.
+ *
+ * Gradient ids are namespaced per instance because SVG ids are document-global.
+ */
+
+type GlyphProps = { className?: string };
+
+/** Namespace for the shared glyph gradient ids. */
+const GID = "ur-glyph";
+
+/**
+ * The glyph gradients are defined ONCE per document rather than per instance.
+ *
+ * Per-instance defs would need a unique id, which means useId, which would make
+ * this whole module a client component and ship every appliance SVG as
+ * JavaScript. Rendering the gradients once in the root layout keeps the glyphs
+ * as server components and avoids repeating identical <linearGradient> blocks
+ * for every card on the page.
+ */
+export function ApplianceGradientSprite() {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
+    >
+      <defs>
+      {/* Brushed steel, lit from the upper left. */}
+      <linearGradient id={`${GID}-steel`} x1="0" y1="0" x2="1" y2="0.35">
+        <stop offset="0%" stopColor="#4a4c51" />
+        <stop offset="24%" stopColor="#6d6f75" />
+        <stop offset="52%" stopColor="#53555a" />
+        <stop offset="78%" stopColor="#3c3d42" />
+        <stop offset="100%" stopColor="#2b2c30" />
+      </linearGradient>
+
+      {/* Recessed panels and cavities. */}
+      <linearGradient id={`${GID}-recess`} x1="0" y1="0" x2="1" y2="0.2">
+        <stop offset="0%" stopColor="#1f2023" />
+        <stop offset="60%" stopColor="#2c2e32" />
+        <stop offset="100%" stopColor="#191a1c" />
+      </linearGradient>
+
+      {/* Polished trim and handles. */}
+      <linearGradient id={`${GID}-trim`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#8d9096" />
+        <stop offset="45%" stopColor="#c2c5ca" />
+        <stop offset="100%" stopColor="#6a6c71" />
+      </linearGradient>
+
+      {/* Amber key light spilling down the body. */}
+      <linearGradient id={`${GID}-key`} x1="0.1" y1="0" x2="0.7" y2="1">
+        <stop offset="0%" stopColor="#c9922f" stopOpacity="0.5" />
+        <stop offset="45%" stopColor="#c9922f" stopOpacity="0.12" />
+        <stop offset="100%" stopColor="#c9922f" stopOpacity="0" />
+      </linearGradient>
+
+      {/* Glass, for the door fronts. */}
+      <linearGradient id={`${GID}-glass`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#9fb0b9" stopOpacity="0.3" />
+        <stop offset="50%" stopColor="#d3dade" stopOpacity="0.1" />
+        <stop offset="100%" stopColor="#5d6a72" stopOpacity="0.28" />
+      </linearGradient>
+
+      {/* Contact shadow. */}
+      <radialGradient id={`${GID}-shadow`} cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0%" stopColor="#000" stopOpacity="0.6" />
+        <stop offset="100%" stopColor="#000" stopOpacity="0" />
+      </radialGradient>
+      </defs>
+    </svg>
+  );
+}
+
+/** Shared body treatment: steel fill, amber key light, hairline edge. */
+function Body({
+  x,
+  y,
+  w,
+  h,
+  r = 3,
+}: {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  r?: number;
+}) {
+  return (
+    <>
+      <rect x={x} y={y} width={w} height={h} rx={r} fill={`url(#${GID}-steel)`} />
+      <rect x={x} y={y} width={w} height={h} rx={r} fill={`url(#${GID}-key)`} />
+      <rect
+        x={x}
+        y={y}
+        width={w}
+        height={h}
+        rx={r}
+        fill="none"
+        stroke="#83868c"
+        strokeWidth="0.6"
+        opacity="0.55"
+      />
+    </>
+  );
+}
 
 export function CategoryGlyph({
   kind,
   className,
 }: {
   kind: string;
-  className?: string;
-}) {
-  const common = { viewBox: "0 0 48 48", className, "aria-hidden": true as const };
+} & GlyphProps) {
+  const svg = {
+    viewBox: "0 0 48 52",
+    className,
+    fill: "none",
+    "aria-hidden": true as const,
+  };
+
+  const shadow = <ellipse cx="24" cy="46.5" rx="15" ry="2.6" fill={`url(#${GID}-shadow)`} />;
 
   switch (kind) {
+    /* --- Refrigeration: two-door reach-in -------------------------------- */
     case "refrigeration":
       return (
-        <svg {...common}>
-          <rect x="13" y="5" width="22" height="38" rx="2.5" {...GLYPH} />
-          <line x1="13" y1="19" x2="35" y2="19" {...GLYPH} />
-          <line x1="18" y1="11" x2="18" y2="15" {...GLYPH} />
-          <line x1="18" y1="24" x2="18" y2="30" {...GLYPH} />
+        <svg {...svg}>
+                    {shadow}
+          <Body x={12} y={4} w={24} h={41} />
+          {/* Compressor housing with louvre vents */}
+          <rect x="12" y="4" width="24" height="7.5" rx="3" fill={`url(#${GID}-recess)`} />
+          {[0, 1, 2].map((i) => (
+            <line key={i} x1="27" y1={6.4 + i * 1.7} x2="33.5" y2={6.4 + i * 1.7} stroke="#71747a" strokeWidth="0.55" />
+          ))}
+          <circle cx="15.6" cy="7.8" r="0.85" fill="#c9922f" />
+          {/* Door panels, inset */}
+          <rect x="13.4" y="13" width="9.6" height="30.6" rx="1.4" fill={`url(#${GID}-recess)`} opacity="0.5" />
+          <rect x="25" y="13" width="9.6" height="30.6" rx="1.4" fill={`url(#${GID}-recess)`} opacity="0.5" />
+          {/* Specular streak on each door */}
+          <rect x="15.4" y="13" width="1.5" height="30.6" fill="#fff" opacity="0.07" />
+          <rect x="27" y="13" width="1.5" height="30.6" fill="#fff" opacity="0.07" />
+          {/* Vertical bar handles either side of the seam */}
+          <rect x="22" y="17" width="1.1" height="13" rx="0.55" fill={`url(#${GID}-trim)`} />
+          <rect x="24.9" y="17" width="1.1" height="13" rx="0.55" fill={`url(#${GID}-trim)`} />
+          {/* Door seam */}
+          <line x1="24" y1="12" x2="24" y2="43.6" stroke="#141416" strokeWidth="0.7" />
+          {/* Feet */}
+          <rect x="14.8" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
+          <rect x="31.6" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
         </svg>
       );
+
+    /* --- Dishwasher: under-counter -------------------------------------- */
     case "dishwasher":
       return (
-        <svg {...common}>
-          <rect x="9" y="7" width="30" height="34" rx="2.5" {...GLYPH} />
-          <line x1="9" y1="15" x2="39" y2="15" {...GLYPH} />
-          <circle cx="31" cy="11" r="1.6" {...GLYPH} />
-          <circle cx="14" cy="28" r="7" {...GLYPH} />
+        <svg {...svg}>
+                    {shadow}
+          {/* Counter datum only — an install reference, not a room */}
+          <line x1="7" y1="6" x2="41" y2="6" stroke="#c9922f" strokeWidth="0.6" strokeDasharray="2 2.4" opacity="0.4" />
+          <Body x={9} y={10} w={30} h={35} />
+          {/* Control fascia with a lit display */}
+          <rect x="9" y="10" width="30" height="6" rx="3" fill={`url(#${GID}-recess)`} />
+          <rect x="12" y="11.9" width="7.5" height="2.3" rx="0.5" fill="#0f1011" />
+          <rect x="12.7" y="12.5" width="4" height="1.1" fill="#c9922f" opacity="0.9" />
+          {[0, 1, 2].map((i) => (
+            <circle key={i} cx={28 + i * 3.4} cy="13" r="0.85" fill="#1b1c1e" stroke="#787b81" strokeWidth="0.45" />
+          ))}
+          {/* Door with recessed bar handle */}
+          <rect x="11.4" y="18.4" width="25.2" height="24.4" rx="1.2" fill={`url(#${GID}-recess)`} opacity="0.42" />
+          <rect x="14.6" y="18.4" width="2" height="24.4" fill="#fff" opacity="0.06" />
+          <rect x="15" y="20" width="18" height="1.7" rx="0.85" fill="#101113" />
+          <rect x="15.3" y="20.25" width="17.4" height="0.7" rx="0.35" fill={`url(#${GID}-trim)`} />
+          {/* Kick plate */}
+          <rect x="9" y="41.4" width="30" height="3.6" rx="1" fill={`url(#${GID}-recess)`} />
+          <rect x="9" y="40" width="30" height="5" fill={`url(#${GID}-key)`} opacity="0.5" />
         </svg>
       );
+
+    /* --- Beverage: glass-door cooler ------------------------------------ */
     case "beverage":
       return (
-        <svg {...common}>
-          <rect x="13" y="5" width="22" height="38" rx="2.5" {...GLYPH} />
-          <line x1="17" y1="17" x2="31" y2="17" {...GLYPH} />
-          <line x1="17" y1="26" x2="31" y2="26" {...GLYPH} />
-          <line x1="17" y1="35" x2="31" y2="35" {...GLYPH} />
+        <svg {...svg}>
+                    {shadow}
+          <Body x={12} y={4} w={24} h={41} />
+          {/* Header panel with a lit badge */}
+          <rect x="12" y="4" width="24" height="5.6" rx="2.8" fill={`url(#${GID}-recess)`} />
+          <rect x="15" y="6" width="5.4" height="1.6" rx="0.4" fill="#c9922f" opacity="0.85" />
+          {/* Lit cavity behind glass */}
+          <rect x="14.4" y="11.6" width="19.2" height="28.6" rx="1" fill="#141414" />
+          <rect x="15.4" y="12.4" width="17.2" height="1" rx="0.5" fill="#c9922f" opacity="0.85" />
+          <rect x="15.4" y="13.4" width="17.2" height="9" fill={`url(#${GID}-key)`} />
+          {/* Shelves with stock silhouettes */}
+          {[0, 1, 2].map((i) => (
+            <g key={i}>
+              <rect x="15.4" y={21 + i * 6.4} width="17.2" height="0.9" fill="#585a5f" />
+              {[0, 1, 2, 3, 4].map((c) => (
+                <rect
+                  key={c}
+                  x={16.3 + c * 3.3}
+                  y={17.6 + i * 6.4}
+                  width="2.1"
+                  height="3.4"
+                  rx="0.6"
+                  fill="#3a3b3f"
+                  opacity={0.85 - i * 0.14}
+                />
+              ))}
+            </g>
+          ))}
+          {/* Glass, frame, reflection */}
+          <rect x="14.4" y="11.6" width="19.2" height="28.6" rx="1" fill={`url(#${GID}-glass)`} />
+          <path d="M18.4 11.6 L22.4 11.6 L17.2 40.2 L14.4 40.2 Z" fill="#fff" opacity="0.07" />
+          <rect x="14.4" y="11.6" width="19.2" height="28.6" rx="1" fill="none" stroke="#7c7f85" strokeWidth="0.9" />
+          {/* Handle and feet */}
+          <rect x="31.4" y="17" width="1.1" height="11" rx="0.55" fill={`url(#${GID}-trim)`} />
+          <rect x="14.8" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
+          <rect x="31.6" y="45" width="1.6" height="1.6" fill="#2a2b2e" />
         </svg>
       );
+
+    /* --- Cooking: range with oven --------------------------------------- */
     case "cooking":
       return (
-        <svg {...common}>
-          <rect x="8" y="10" width="32" height="28" rx="2.5" {...GLYPH} />
-          <line x1="8" y1="19" x2="40" y2="19" {...GLYPH} />
-          <circle cx="15" cy="14.5" r="1.4" {...GLYPH} />
-          <circle cx="22" cy="14.5" r="1.4" {...GLYPH} />
-          <rect x="14" y="24" width="20" height="9" rx="1.5" {...GLYPH} />
+        <svg {...svg}>
+                    {shadow}
+          <Body x={9} y={9} w={30} h={36} />
+          {/* Cooktop surface with burners */}
+          <rect x="9" y="9" width="30" height="7" rx="2.5" fill={`url(#${GID}-recess)`} />
+          {[
+            [16, 12.5],
+            [23, 12.5],
+            [30, 12.5],
+          ].map(([cx, cy], i) => (
+            <g key={i}>
+              <circle cx={cx} cy={cy} r="2.5" fill="#17181a" stroke="#6c6f74" strokeWidth="0.5" />
+              <circle cx={cx} cy={cy} r="1.2" fill="#c9922f" opacity={i === 1 ? 0.85 : 0.25} />
+            </g>
+          ))}
+          {/* Control knobs */}
+          <rect x="9" y="16" width="30" height="4.4" rx="1" fill={`url(#${GID}-recess)`} opacity="0.7" />
+          {[0, 1, 2, 3].map((i) => (
+            <circle key={i} cx={13 + i * 5.6} cy="18.2" r="1" fill="#1b1c1e" stroke="#83868c" strokeWidth="0.45" />
+          ))}
+          {/* Oven door with glass window and bar handle */}
+          <rect x="11.2" y="23" width="25.6" height="18.4" rx="1.2" fill={`url(#${GID}-recess)`} opacity="0.5" />
+          <rect x="13.6" y="26.6" width="20.8" height="11.4" rx="0.8" fill="#101112" />
+          <rect x="13.6" y="26.6" width="20.8" height="11.4" rx="0.8" fill={`url(#${GID}-glass)`} />
+          <path d="M17 26.6 L20 26.6 L15.6 38 L13.6 38 Z" fill="#fff" opacity="0.06" />
+          <rect x="13.6" y="26.6" width="20.8" height="11.4" rx="0.8" fill="none" stroke="#71747a" strokeWidth="0.6" />
+          <rect x="13.2" y="23.6" width="21.6" height="1.6" rx="0.8" fill={`url(#${GID}-trim)`} />
+          <rect x="9" y="41.4" width="30" height="3.6" rx="1" fill={`url(#${GID}-recess)`} />
         </svg>
       );
+
+    /* --- Laundry: front-load ------------------------------------------- */
     case "laundry":
       return (
-        <svg {...common}>
-          <rect x="10" y="6" width="28" height="36" rx="2.5" {...GLYPH} />
-          <circle cx="24" cy="27" r="9" {...GLYPH} />
-          <circle cx="24" cy="27" r="4" {...GLYPH} />
-          <line x1="15" y1="13" x2="21" y2="13" {...GLYPH} />
+        <svg {...svg}>
+                    {shadow}
+          <Body x={11} y={5} w={26} h={40} />
+          {/* Fascia with dial and display */}
+          <rect x="11" y="5" width="26" height="7.4" rx="2.6" fill={`url(#${GID}-recess)`} />
+          <circle cx="16.4" cy="8.7" r="2.2" fill="#1b1c1e" stroke="#8d9096" strokeWidth="0.55" />
+          <line x1="16.4" y1="8.7" x2="16.4" y2="7" stroke="#c9922f" strokeWidth="0.7" />
+          <rect x="22" y="7.4" width="11.4" height="2.6" rx="0.5" fill="#0f1011" />
+          <rect x="22.7" y="8" width="4.6" height="1.3" fill="#c9922f" opacity="0.85" />
+          {/* Porthole door: outer bezel, glass, drum behind */}
+          <circle cx="24" cy="27.6" r="10.4" fill={`url(#${GID}-recess)`} />
+          <circle cx="24" cy="27.6" r="10.4" fill="none" stroke="#83868c" strokeWidth="0.8" opacity="0.8" />
+          <circle cx="24" cy="27.6" r="8" fill="#111213" />
+          {/* Drum perforations */}
+          {[0, 1, 2, 3, 4, 5].map((i) => {
+            const a = (i / 6) * Math.PI * 2;
+            return (
+              <circle
+                key={i}
+                cx={24 + Math.cos(a) * 4.6}
+                cy={27.6 + Math.sin(a) * 4.6}
+                r="0.7"
+                fill="#3c3d41"
+              />
+            );
+          })}
+          <circle cx="24" cy="27.6" r="8" fill={`url(#${GID}-glass)`} />
+          <path d="M19 21 Q17 25 17.6 30 Q19 24.5 22 21.8 Z" fill="#fff" opacity="0.1" />
+          {/* Latch */}
+          <rect x="33.4" y="26.4" width="1.5" height="2.4" rx="0.5" fill={`url(#${GID}-trim)`} />
+          <rect x="11" y="41.4" width="26" height="3.6" rx="1" fill={`url(#${GID}-recess)`} />
         </svg>
       );
+
+    /* --- Specialty: made-to-spec --------------------------------------- */
     default:
       return (
-        <svg {...common}>
-          <path d="M24 5 L40 14 v20 L24 43 L8 34 V14 Z" {...GLYPH} />
-          <path d="M24 24 L40 14 M24 24 L8 14 M24 24 v19" {...GLYPH} />
+        <svg {...svg}>
+                    {shadow}
+          {/* A cased opening with a unit dropping in — "sourced to the spec" */}
+          <path
+            d="M9 15 L24 7 L39 15 L39 40 L24 44.5 L9 40 Z"
+            fill={`url(#${GID}-steel)`}
+          />
+          <path d="M9 15 L24 7 L39 15 L39 40 L24 44.5 L9 40 Z" fill={`url(#${GID}-key)`} />
+          <path
+            d="M9 15 L24 7 L39 15 L39 40 L24 44.5 L9 40 Z"
+            fill="none"
+            stroke="#83868c"
+            strokeWidth="0.7"
+            opacity="0.6"
+          />
+          {/* Interior faces, to give the form real volume */}
+          <path d="M9 15 L24 22.5 L24 44.5 L9 40 Z" fill="#000" opacity="0.3" />
+          <path d="M24 22.5 L39 15 L39 40 L24 44.5 Z" fill="#000" opacity="0.14" />
+          <path d="M9 15 L24 22.5 L39 15" fill="none" stroke="#9a9da3" strokeWidth="0.7" opacity="0.75" />
+          <line x1="24" y1="22.5" x2="24" y2="44.5" stroke="#9a9da3" strokeWidth="0.55" opacity="0.5" />
+          {/* Amber spec tick, tying it to the blueprint language */}
+          <line x1="24" y1="7" x2="24" y2="3" stroke="#c9922f" strokeWidth="0.7" strokeDasharray="1.6 1.6" />
+          <circle cx="24" cy="22.5" r="1.5" fill="#c9922f" opacity="0.85" />
         </svg>
       );
   }

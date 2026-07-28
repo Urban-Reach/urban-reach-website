@@ -158,6 +158,27 @@ Profile for NAP consistency.
 
 ---
 
+## Page composition — read before adding a page
+
+`Hero` and `PageShell` exist so the site reads as one design language while each
+page stays a distinct chapter. Colour and type are shared; **pace and
+composition are not**.
+
+- `PageShell rhythm="…"` selects the page's spacing and motion scale from the
+  `[data-rhythm]` block in `globals.css` — section padding, reveal distance,
+  duration and easing. Four different easing curves are defined; reusing one
+  everywhere is a large part of what made the pages feel templated.
+- `Hero composition="…"` picks the hero arrangement (`stamp`, `offset`,
+  `editorial`, `anchored`, `compact`), which also moves the key light so each
+  hero catches it from a different angle.
+- `Section space="tight | base | airy"` steps off the page's base rhythm for
+  local contrast. Pages use different sequences of these.
+- `Reveal from="left | right | rise"` varies the arrival direction per page.
+- Column splits differ per page (4/8, 5/7, 6/6) and Process flips the order.
+
+If you add a page, give it a rhythm and a composition rather than copying
+another page's section stack.
+
 ## Motion
 
 `src/components/motion.tsx` holds hand-rolled primitives — no animation
@@ -169,6 +190,21 @@ from amber technical linework into the finished unit, driven by scroll position
 rather than a timer. It is scoped to **one isolated appliance, never a room or
 interior** — Urban Reach installs appliances, it does not build spaces, and the
 artwork must not imply otherwise.
+
+**It is a CSS scroll-driven animation on a `view()` timeline, not JavaScript.**
+Do not reintroduce a scroll handler for it. The original version called
+`setState` on every scroll frame — re-rendering ~120 SVG elements per frame —
+and put `transition: clip-path 120ms` on the layers, which meant the artwork
+permanently trailed the scroll by 120ms and every frame restarted the
+interpolation. That latency *was* the reported lag; it was not dropped frames.
+Now the browser runs it off the main thread: measured at 6× CPU throttle,
+median frame 8.3ms, p95 10.4ms, **zero frames over 32ms and zero long tasks**.
+`useB2RFallback` covers browsers without scroll-driven animations by writing a
+CSS custom property straight to the element — still no React re-render, still
+no transition.
+
+The `cover 21% .. 55%` animation range in `globals.css` is derived, not guessed;
+the comment there shows the working.
 
 Accessibility and robustness:
 
@@ -192,6 +228,24 @@ The appliance "reality" states are in-house vector renders in
 `src/components/appliance-art.tsx`. To swap in a real photo, replace the `Real`
 component body with an `<Image>` at the same aspect ratio; the motion keeps
 working unchanged.
+
+The category glyphs in the same file are **not flat icons** and should not be
+replaced with any. They carry a brushed-steel gradient, an amber key light from
+the upper left matching the appliance renders and the hero, real component
+detail (handles, louvre vents, control fascias, drum perforations) and a contact
+shadow. Their gradients are defined once per document by
+`ApplianceGradientSprite` in the root layout — per-instance defs would need
+`useId`, which would make the whole module a client component and ship every
+appliance SVG as JavaScript.
+
+**The hero media is composed, not photographed.** `HeroMedia` in `hero.tsx`
+stacks a receding blueprint plane, a warm key light with a hot core, a cool
+counter-light, depth haze, a vignette, a copy scrim and film grain. The brief
+asked for full-bleed cinematic kitchen photography; none exists, and what was
+supplied was either Pinterest-sourced (licence unclear, ruled out by §11) or a
+screen recording of another studio's site. To drop in a real photo: render an
+`<Image fill>` as the first child of the media layer and remove the blueprint
+plane. Every layer above it is already tuned to sit over a photograph.
 
 ---
 

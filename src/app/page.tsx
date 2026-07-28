@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import { Parallax, Reveal } from "@/components/motion";
+import { Reveal } from "@/components/motion";
+import { Hero } from "@/components/hero";
 import {
   BrandGrid,
   ContractorRow,
@@ -15,6 +16,7 @@ import {
   Card,
   Container,
   JsonLd,
+  PageShell,
   Section,
   SectionHeading,
 } from "@/components/ui";
@@ -26,67 +28,31 @@ export const metadata: Metadata = pageMetadata("home");
 
 export default function HomePage() {
   return (
-    <>
+    <PageShell rhythm="home">
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }])} />
 
-      {/* ==================================================================
-          Hero
-          PLACEHOLDER (§11): the blueprint field below stands in for real
-          jobsite photography, which does not exist yet. It is sized and
-          positioned so a real image can drop straight into this container.
-          ================================================================== */}
-      <section className="relative overflow-hidden border-b border-rule">
-        <Parallax speed={0.1} className="absolute inset-0 -top-24 h-[130%]">
-          <div className="blueprint-grid h-full w-full" />
-        </Parallax>
-
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_28%_38%,rgba(201,146,47,0.16),transparent_62%)]"
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-charcoal"
-          aria-hidden="true"
-        />
-
-        <Container className="relative py-28 sm:py-36 lg:py-44">
-          <div className="max-w-4xl">
-            <Reveal>
-              <p className="label-caps-lg text-amber">{site.tagline}</p>
-            </Reveal>
-
-            <Reveal delay={110}>
-              <h1 className="mt-8 text-[2.5rem] leading-[1.08] sm:text-6xl lg:text-7xl">
-                A commercial appliance supplier in Austin, TX built around the
-                construction schedule
-              </h1>
-            </Reveal>
-
-            <Reveal delay={200}>
-              <p className="mt-8 max-w-2xl text-lg leading-relaxed text-bone-dim sm:text-xl">
-                Urban Reach sources, prices, delivers, and installs
-                commercial-grade appliances for general contractors, architects,
-                and designers building across the Austin metro. One partner from
-                the appliance schedule to the finished install.
-              </p>
-            </Reveal>
-
-            <Reveal delay={280}>
-              <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-                <ButtonLink href="/contact">Start a conversation</ButtonLink>
-                <ButtonLink href="/appliances" variant="ghost">
-                  See what we supply
-                </ButtonLink>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
+      <Hero
+        eyebrow={site.tagline}
+        composition="stamp"
+        /* The H1 must still carry the page's primary phrase — "commercial
+           appliance supplier Austin TX" — so the stamped treatment sets it in
+           full rather than shortening it to a slogan. */
+        headline={
+          <>
+            A commercial appliance supplier in{" "}
+            <span className="whitespace-nowrap">Austin, TX</span>, built around
+            the construction schedule
+          </>
+        }
+        lead="Urban Reach sources, prices, delivers, and installs commercial-grade appliances for general contractors, architects, and designers building across the Austin metro."
+        primary={{ href: "/contact", label: "Start a conversation" }}
+        secondary={{ href: "/appliances", label: "See what we supply" }}
+      />
 
       {/* ==================================================================
           Value proposition
           ================================================================== */}
-      <Section tone="charcoal" aria-labelledby="value-prop">
+      <Section id="after-hero" tone="charcoal" space="airy" aria-labelledby="value-prop">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
@@ -143,7 +109,7 @@ export default function HomePage() {
       {/* ==================================================================
           Blueprint to reality — signature motion
           ================================================================== */}
-      <Section tone="raised" aria-labelledby="spec-to-installed">
+      <Section tone="raised" space="base" aria-labelledby="spec-to-installed">
         <Container>
           <SectionHeading
             eyebrow="From spec to installed"
@@ -169,7 +135,7 @@ export default function HomePage() {
       {/* ==================================================================
           Service categories
           ================================================================== */}
-      <Section tone="charcoal" aria-labelledby="what-we-supply">
+      <Section tone="charcoal" space="tight" aria-labelledby="what-we-supply">
         <Container>
           <SectionHeading
             eyebrow="What we supply"
@@ -186,7 +152,7 @@ export default function HomePage() {
                 <Card>
                   <CategoryGlyph
                     kind={category.glyph}
-                    className="h-10 w-10 text-amber"
+                    className="h-16 w-auto sm:h-[4.5rem]"
                   />
                   <h3 className="mt-6 font-display text-xl">{category.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-bone-dim">
@@ -213,7 +179,7 @@ export default function HomePage() {
       {/* ==================================================================
           Process teaser
           ================================================================== */}
-      <Section tone="walnut" aria-labelledby="how-it-works">
+      <Section tone="walnut" space="base" aria-labelledby="how-it-works">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
@@ -267,7 +233,7 @@ export default function HomePage() {
       {/* ==================================================================
           Authorized brands
           ================================================================== */}
-      <Section tone="charcoal" aria-labelledby="brands">
+      <Section tone="charcoal" space="tight" aria-labelledby="brands">
         <Container>
           <div id="brands">
             <BrandGrid />
@@ -278,7 +244,7 @@ export default function HomePage() {
       {/* ==================================================================
           GC trust row
           ================================================================== */}
-      <Section tone="raised">
+      <Section tone="raised" space="tight">
         <Container>
           <ContractorRow />
         </Container>
@@ -287,6 +253,6 @@ export default function HomePage() {
       <ServiceArea tone="walnut" />
 
       <CtaBand />
-    </>
+    </PageShell>
   );
 }

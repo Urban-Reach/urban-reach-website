@@ -180,6 +180,7 @@ export function Reveal({
   children,
   as: Tag = "div",
   delay = 0,
+  from,
   className,
   ...rest
 }: {
@@ -187,6 +188,12 @@ export function Reveal({
   as?: ElementType;
   /** Stagger in ms. Keep small; long chains read as a template effect. */
   delay?: number;
+  /**
+   * Direction the element arrives from. Pages use different values so the
+   * motion signature is not identical everywhere — see the [data-reveal]
+   * variants in globals.css.
+   */
+  from?: "up" | "left" | "right" | "rise";
   className?: string;
 } & Record<string, unknown>) {
   const [ref, revealed] = useRevealOnce<HTMLElement>();
@@ -194,7 +201,7 @@ export function Reveal({
   return (
     <Tag
       ref={ref}
-      data-reveal=""
+      data-reveal={from && from !== "up" ? from : ""}
       data-revealed={revealed ? "true" : "false"}
       className={className}
       style={delay ? ({ "--reveal-delay": `${delay}ms` } as object) : undefined}
@@ -202,57 +209,6 @@ export function Reveal({
     >
       {children}
     </Tag>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Parallax — slow background drift                                            */
-/* -------------------------------------------------------------------------- */
-
-export function Parallax({
-  children,
-  speed = 0.14,
-  className,
-}: {
-  children: ReactNode;
-  /** Fraction of scroll distance. Small values only — this should be felt, not seen. */
-  speed?: number;
-  className?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
-
-    let visible = false;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting;
-      },
-      { rootMargin: "20% 0px" },
-    );
-    io.observe(el);
-
-    const unsubscribe = subscribeToScroll(() => {
-      if (!visible) return;
-      const rect = el.getBoundingClientRect();
-      const viewportCentre = window.innerHeight / 2;
-      const elementCentre = rect.top + rect.height / 2;
-      const offset = (elementCentre - viewportCentre) * -speed;
-      el.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
-    });
-
-    return () => {
-      io.disconnect();
-      unsubscribe();
-    };
-  }, [speed]);
-
-  return (
-    <div ref={ref} data-parallax="" className={className} aria-hidden="true">
-      {children}
-    </div>
   );
 }
 
@@ -297,52 +253,71 @@ export function DrawRule({
 }
 
 /* -------------------------------------------------------------------------- */
-/* useScrollProgress — 0..1 progress of an element through the viewport        */
+/* useB2RFallback — legacy path for the blueprint-to-reality effect            */
 /* -------------------------------------------------------------------------- */
 
 /**
- * Drives the blueprint-to-reality transformation. Returns scroll-linked
- * progress, never a timer — the transformation only advances when the user
- * scrolls, so it reads as controlled rather than as an autoplaying animation.
+ * The blueprint-to-reality effect is a CSS scroll-driven animation on a `view()`
+ * timeline (see globals.css). Where that is supported it runs off the main
+ * thread with no JavaScript at all, and this hook attaches nothing.
+ *
+ * This is only the fallback for browsers without scroll-driven animations. Two
+ * rules it deliberately follows, both of which the previous React-state version
+ * broke:
+ *
+ *   - It writes a CSS custom property straight to the element instead of
+ *     calling setState. Per-frame setState re-rendered both appliance SVGs
+ *     (~120 elements) on every scroll frame.
+ *   - Nothing it touches carries a CSS transition. The old version had
+ *     `transition: clip-path 120ms`, which meant the artwork permanently
+ *     trailed the scroll by 120ms and every frame restarted the interpolation.
+ *     That latency was the "lag" — not dropped frames.
  */
-export function useScrollProgress<T extends HTMLElement>() {
+export function useB2RFallback<T extends HTMLElement>() {
   const ref = useRef<T>(null);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
-    // Under reduced motion the CSS in globals.css already forces the resolved
-    // end state — line art hidden, appliance shown unclipped — so no observer
-    // or scroll listener is attached at all and progress stays at 0.
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
 
-    const compute = () => {
+    // Reduced motion is resolved in CSS, and where view() timelines exist the
+    // browser drives the whole thing. Either way, attach nothing.
+    if (prefersReducedMotion()) return;
+    if (
+      typeof CSS !== "undefined" &&
+      CSS.supports?.("animation-timeline: view()")
+    ) {
+      return;
+    }
+
+    const write = () => {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Track the element's CENTRE, not its top edge. Tracking the top makes
-      // the object start resolving while only a sliver of it is on screen —
-      // the viewer misses the blueprint state entirely. Measured from the
-      // centre, roughly 60% of the object is visible before anything moves,
-      // and it finishes fully resolved near the middle of the viewport.
+      // Same mapping as the CSS `cover 21% .. 55%` range: track the element's
+      // CENTRE rather than its top edge, so roughly 60% of the object is
+      // visible before anything moves and it finishes resolved near the middle
+      // of the viewport.
       const centre = rect.top + rect.height / 2;
       const start = vh * 0.95;
       const end = vh * 0.42;
-      const raw = (start - centre) / (start - end);
-      setProgress(Math.min(1, Math.max(0, raw)));
+      const p = Math.min(1, Math.max(0, (start - centre) / (start - end)));
+
+      el.style.setProperty("--b2r-p", p.toFixed(4));
+      // Matches the b2r-edge-fade keyframes: present through the middle of the
+      // wipe, absent at both ends.
+      const edge = p <= 0 || p >= 1 ? 0 : Math.min(1, Math.min(p, 1 - p) / 0.12);
+      el.style.setProperty("--b2r-edge-opacity", edge.toFixed(3));
     };
 
-    // Deliberately NOT gated on an IntersectionObserver "is visible" flag.
-    // Skipping the computation while off-screen leaves progress frozen at
-    // whatever it was when the element last happened to be visible, so an
-    // element scrolled far past still reports itself as unresolved. The clamp
-    // above already yields the correct end value from position alone, and with
-    // only a couple of instances per page the extra rect read per scroll frame
-    // is not worth the stale state.
-    const ro = new ResizeObserver(compute);
+    // Not gated on an IntersectionObserver "is visible" flag: skipping the
+    // computation while off-screen freezes the value at whatever it was when
+    // the element was last visible, leaving something scrolled far past still
+    // reporting itself unresolved. The clamp above already yields the correct
+    // end value from position alone.
+    const ro = new ResizeObserver(write);
     ro.observe(el);
-
-    const unsubscribe = subscribeToScroll(compute);
+    const unsubscribe = subscribeToScroll(write);
 
     return () => {
       ro.disconnect();
@@ -350,5 +325,5 @@ export function useScrollProgress<T extends HTMLElement>() {
     };
   }, []);
 
-  return { ref, progress };
+  return ref;
 }

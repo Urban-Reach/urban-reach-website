@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
+import { ApplianceGradientSprite } from "@/components/appliance-art";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/ui";
@@ -95,10 +96,12 @@ export default function RootLayout({
           Skip to content
         </a>
 
+        {/* Appliance glyph gradients, defined once for the whole document so
+            the glyphs stay server components. See appliance-art.tsx. */}
+        <ApplianceGradientSprite />
+
         <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
+        {children}
         <SiteFooter />
       </body>
     </html>

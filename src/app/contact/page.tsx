@@ -3,12 +3,13 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion";
 import { ContactForm } from "@/components/contact-form";
 import { FaqList } from "@/components/faq-list";
-import { PageHero } from "@/components/page-hero";
+import { Hero } from "@/components/hero";
 import {
   Container,
   JsonLd,
   Section,
   SectionHeading,
+  PageShell,
 } from "@/components/ui";
 import { serviceAreaSentence, site } from "@/data/site";
 import { breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo";
@@ -26,7 +27,7 @@ export const metadata: Metadata = pageMetadata("contact");
  */
 export default function ContactPage() {
   return (
-    <>
+    <PageShell rhythm="contact">
       <JsonLd
         data={[
           breadcrumbJsonLd([
@@ -37,14 +38,17 @@ export default function ContactPage() {
         ]}
       />
 
-      <PageHero
+      <Hero
+        composition="compact"
         eyebrow="Contact"
-        title="Talk to a commercial appliance supplier in Austin, TX"
+        headline="Talk to a commercial appliance supplier in Austin, TX"
         lead="Send an appliance schedule, ask a specification question, or start a conversation about an upcoming project. Inquiries reach us directly."
+        primary={{ href: site.phoneHref, label: site.phone, plain: true }}
+        secondary={{ href: site.emailHref, label: "Email us", plain: true }}
       />
 
       {/* Form + details */}
-      <Section tone="charcoal" aria-labelledby="get-in-touch">
+      <Section id="after-hero" space="base" tone="charcoal" aria-labelledby="get-in-touch">
         <Container>
           <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">
             {/* Details */}
@@ -133,7 +137,7 @@ export default function ContactPage() {
       </Section>
 
       {/* Service area — text only, no map embed */}
-      <Section tone="walnut" aria-labelledby="areas">
+      <Section space="tight" tone="walnut" aria-labelledby="areas">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
@@ -177,7 +181,7 @@ export default function ContactPage() {
       </Section>
 
       {/* FAQ */}
-      <Section tone="charcoal" aria-labelledby="faq">
+      <Section space="airy" tone="charcoal" aria-labelledby="faq">
         <Container>
           <SectionHeading
             eyebrow="Questions"
@@ -189,6 +193,6 @@ export default function ContactPage() {
           <FaqList />
         </Container>
       </Section>
-    </>
+    </PageShell>
   );
 }

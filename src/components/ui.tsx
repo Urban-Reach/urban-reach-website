@@ -20,15 +20,38 @@ export function Container({
   );
 }
 
+/**
+ * Every page wraps its content in this. `rhythm` selects the page's spacing and
+ * motion scale from the [data-rhythm] block in globals.css, which is what stops
+ * the pages reading as four copies of one template — colour and type stay
+ * identical, pace does not.
+ */
+export function PageShell({
+  rhythm,
+  children,
+}: {
+  rhythm: "home" | "about" | "appliances" | "process" | "contact";
+  children: ReactNode;
+}) {
+  return (
+    <main id="main" data-rhythm={rhythm} className="flex-1">
+      {children}
+    </main>
+  );
+}
+
 export function Section({
   children,
   tone = "charcoal",
+  /** `tight` and `airy` step off the page's base rhythm for local contrast. */
+  space = "base",
   className = "",
   ...rest
 }: {
   children: ReactNode;
   /** Alternating section grounds create the vertical rhythm. */
   tone?: "charcoal" | "raised" | "walnut";
+  space?: "tight" | "base" | "airy";
   className?: string;
 } & React.ComponentPropsWithoutRef<"section">) {
   const tones = {
@@ -37,11 +60,16 @@ export function Section({
     walnut: "bg-walnut",
   };
 
+  // Padding derives from the page's rhythm variables rather than a fixed
+  // py-20/py-28 everywhere, so section spacing differs page to page.
+  const spacing = {
+    tight: "py-[calc(var(--section-y)*0.7)] sm:py-[calc(var(--section-y-lg)*0.62)]",
+    base: "py-[var(--section-y)] sm:py-[var(--section-y-lg)]",
+    airy: "py-[calc(var(--section-y)*1.35)] sm:py-[calc(var(--section-y-lg)*1.3)]",
+  };
+
   return (
-    <section
-      className={`py-20 sm:py-28 ${tones[tone]} ${className}`}
-      {...rest}
-    >
+    <section className={`${spacing[space]} ${tones[tone]} ${className}`} {...rest}>
       {children}
     </section>
   );

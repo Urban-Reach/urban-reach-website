@@ -8,8 +8,9 @@ import {
   JsonLd,
   Section,
   SectionHeading,
+  PageShell,
 } from "@/components/ui";
-import { PageHero } from "@/components/page-hero";
+import { Hero } from "@/components/hero";
 import { site } from "@/data/site";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -27,7 +28,7 @@ export const metadata: Metadata = pageMetadata("about");
  */
 export default function AboutPage() {
   return (
-    <>
+    <PageShell rhythm="about">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
@@ -35,23 +36,26 @@ export default function AboutPage() {
         ])}
       />
 
-      <PageHero
+      <Hero
+        composition="offset"
         eyebrow="About Urban Reach"
-        title="An appliance package supplier for general contractors in Austin"
+        headline="An appliance package supplier for general contractors in Austin"
         lead="Urban Reach was built to do one part of a construction project properly: getting the right commercial-grade appliances specified, priced, delivered, and installed without becoming the thing that holds up a turnover."
+        primary={{ href: "/contact", label: "Start a conversation" }}
+        secondary={{ href: "/process", label: "See how we work" }}
       />
 
       {/* Story */}
-      <Section tone="charcoal" aria-labelledby="story">
+      <Section id="after-hero" space="airy" tone="charcoal" aria-labelledby="story">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-4">
               <SectionHeading eyebrow="Our story">
                 <span id="story">A young company, deliberately focused</span>
               </SectionHeading>
             </div>
 
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-8">
               <Reveal>
                 <div className="space-y-6 text-lg leading-relaxed text-bone-dim">
                   <p>
@@ -84,7 +88,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Mission */}
-      <Section tone="walnut" aria-labelledby="mission">
+      <Section space="base" tone="walnut" aria-labelledby="mission">
         <Container>
           <SectionHeading
             eyebrow="Mission"
@@ -99,7 +103,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Approach */}
-      <Section tone="charcoal" aria-labelledby="approach">
+      <Section space="airy" tone="charcoal" aria-labelledby="approach">
         <Container>
           <SectionHeading
             eyebrow="Our approach"
@@ -129,7 +133,7 @@ export default function AboutPage() {
                 body: "Austin and its immediate suburbs. Turning down work outside that radius is what keeps us able to commit to a delivery window inside it.",
               },
             ].map((item, i) => (
-              <Reveal as="li" key={item.title} delay={i * 80}>
+              <Reveal as="li" key={item.title} from="left" delay={i * 80}>
                 <Card>
                   <h3 className="font-display text-xl leading-snug">
                     {item.title}
@@ -145,10 +149,10 @@ export default function AboutPage() {
       </Section>
 
       {/* Who we work with */}
-      <Section tone="raised" aria-labelledby="who">
+      <Section space="tight" tone="raised" aria-labelledby="who">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-4">
               <SectionHeading eyebrow="Who we work with">
                 <span id="who">
                   General contractors first, and everyone building alongside them
@@ -156,7 +160,7 @@ export default function AboutPage() {
               </SectionHeading>
             </div>
 
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-8">
               <Reveal>
                 <p className="text-lg leading-relaxed text-bone-dim">
                   Urban Reach primarily partners with general contractors
@@ -180,7 +184,7 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <Section tone="charcoal">
+      <Section space="tight" tone="charcoal">
         <Container>
           <ContractorRow />
         </Container>
@@ -192,6 +196,6 @@ export default function AboutPage() {
         title="Bring us in early"
         body="Send the appliance schedule as soon as you have one. The earlier we see it, the more room there is to align selections with the budget and the build sequence."
       />
-    </>
+    </PageShell>
   );
 }

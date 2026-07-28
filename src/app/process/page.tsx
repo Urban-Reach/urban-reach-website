@@ -3,13 +3,14 @@ import type { Metadata } from "next";
 import { DrawRule, Reveal } from "@/components/motion";
 import { CtaBand, ServiceArea } from "@/components/sections";
 import { BlueprintToReality } from "@/components/blueprint-to-reality";
-import { PageHero } from "@/components/page-hero";
+import { Hero } from "@/components/hero";
 import {
   Card,
   Container,
   JsonLd,
   Section,
   SectionHeading,
+  PageShell,
 } from "@/components/ui";
 import { processSteps, site } from "@/data/site";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
@@ -28,7 +29,7 @@ export const metadata: Metadata = pageMetadata("process");
  */
 export default function ProcessPage() {
   return (
-    <>
+    <PageShell rhythm="process">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
@@ -36,14 +37,17 @@ export default function ProcessPage() {
         ])}
       />
 
-      <PageHero
+      <Hero
+        composition="anchored"
         eyebrow="Process"
-        title="From specification to commercial appliance installation in Austin"
+        headline="From specification to commercial appliance installation in Austin"
         lead="Three steps, one point of contact, and no handoff between the people who priced the appliances and the people who install them."
+        primary={{ href: "/contact", label: "Start a conversation" }}
+        secondary={{ href: "/appliances", label: "See what we supply" }}
       />
 
       {/* Steps */}
-      <Section tone="charcoal" aria-labelledby="steps">
+      <Section id="after-hero" space="base" tone="charcoal" aria-labelledby="steps">
         <Container>
           <SectionHeading
             eyebrow="The work"
@@ -54,7 +58,7 @@ export default function ProcessPage() {
 
           <ol className="mt-16 space-y-5">
             {processSteps.map((step, i) => (
-              <Reveal as="li" key={step.number} delay={i * 90}>
+              <Reveal as="li" key={step.number} from="right" delay={i * 90}>
                 <Card className="sm:p-10">
                   <div className="grid gap-6 sm:grid-cols-12 sm:gap-10">
                     <div className="sm:col-span-3">
@@ -83,7 +87,7 @@ export default function ProcessPage() {
       </Section>
 
       {/* Blueprint to reality — the showcase instance */}
-      <Section tone="raised" aria-labelledby="resolve">
+      <Section space="airy" tone="raised" aria-labelledby="resolve">
         <Container>
           <SectionHeading
             eyebrow="Spec to installed"
@@ -96,6 +100,7 @@ export default function ProcessPage() {
           <div className="mt-20 space-y-24 lg:space-y-32">
             <BlueprintToReality
               kind="refrigeration"
+              layout="copy-wide"
               eyebrow="Step 01 → 03"
               title="A refrigeration line item, delivered and set"
               body="It begins as a callout with a model class, a cutout, and a utility requirement. It ends as a unit standing in a finished opening. Everything Urban Reach does happens between those two states."
@@ -103,6 +108,7 @@ export default function ProcessPage() {
 
             <BlueprintToReality
               kind="dishwasher"
+              layout="media-wide"
               eyebrow="Coordination"
               title="Sequenced to the trades working around us"
               body="Installation is scheduled against the build, not against our calendar. On tenant improvement work in particular, that usually means fitting a narrow window after the millwork lands and before the final walkthrough."
@@ -113,10 +119,10 @@ export default function ProcessPage() {
       </Section>
 
       {/* Tenant improvement — secondary phrase */}
-      <Section tone="walnut" aria-labelledby="ti">
+      <Section space="tight" tone="walnut" aria-labelledby="ti">
         <Container>
-          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-5">
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 lg:[&>*:first-child]:order-2">
+            <div className="lg:col-span-6">
               <SectionHeading eyebrow="Tenant improvements">
                 <span id="ti">
                   Tenant improvement appliance fulfillment, on a tight window
@@ -124,7 +130,7 @@ export default function ProcessPage() {
               </SectionHeading>
             </div>
 
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-6">
               <Reveal>
                 <div className="space-y-6 text-lg leading-relaxed text-bone-dim">
                   <p>
@@ -148,7 +154,7 @@ export default function ProcessPage() {
       </Section>
 
       {/* What to send */}
-      <Section tone="charcoal" aria-labelledby="what-to-send">
+      <Section space="base" tone="charcoal" aria-labelledby="what-to-send">
         <Container>
           <SectionHeading
             eyebrow="Getting started"
@@ -172,7 +178,7 @@ export default function ProcessPage() {
                 body: "When the spaces are expected to be ready, and any turnover dates we should be working back from.",
               },
             ].map((item, i) => (
-              <Reveal as="li" key={item.title} delay={i * 80}>
+              <Reveal as="li" key={item.title} from="right" delay={i * 80}>
                 <Card>
                   <h3 className="font-display text-lg leading-snug">
                     {item.title}
@@ -206,6 +212,6 @@ export default function ProcessPage() {
         title="Ready when your schedule is"
         body="Send the appliance scope and we will tell you what it will cost, how long it will take, and what will not work — before it is a change order."
       />
-    </>
+    </PageShell>
   );
 }
