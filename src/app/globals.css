@@ -1,26 +1,251 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   Urban Reach design system
+   Palette is locked by the brand spec. Verified WCAG 2.1 AA contrast:
+     #F2EDE6 on #0E0E0E ....... 16.6:1
+     #F2EDE6 on #141414 ....... 16.1:1
+     #F2EDE6 on #211A15 ....... 14.7:1
+     #C9922F on #0E0E0E ........ 7.0:1  (safe for body-size text, not just accents)
+     #C9922F on #211A15 ........ 6.2:1
+     #0E0E0E on #C9922F ........ 7.0:1  (filled amber button)
+   No pure black (#000) and no stark white (#FFF) anywhere.
+   ========================================================================== */
+
+@theme {
+  --color-charcoal: #0e0e0e;
+  --color-charcoal-raised: #141414;
+  --color-walnut: #211a15;
+  --color-amber: #c9922f;
+  --color-bone: #f2ede6;
+
+  /* Muted text step. 9.9:1 on charcoal — still clears AA for body copy. */
+  --color-bone-dim: #b8b0a6;
+  /* Hairline rules. Decorative only, never load-bearing for meaning. */
+  --color-rule: #2b2620;
+
+  --font-display: var(--font-playfair), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-quiet: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-charcoal);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-charcoal);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, on-brand focus ring. Never remove without a replacement. */
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-amber);
+    color: var(--color-charcoal);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Refined all-caps label treatment used for eyebrows, nav and buttons. */
+  .label-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .label-caps-lg {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
+
+/* ==========================================================================
+   Motion
+   Every scroll-driven effect below is opt-in via a data attribute that JS sets
+   only after checking prefers-reduced-motion. The reduced-motion block at the
+   bottom is the belt-and-braces static fallback.
+   ========================================================================== */
+
+/* Animated start states are gated on prefers-reduced-motion: no-preference, so
+   the reduced-motion fallback is pure CSS and applies from the very first
+   paint — no JS, no hydration dependency, no flash.
+
+   The JS-disabled fallback is the <noscript> override in the root layout, which
+   pins these same elements to their resolved state. Keep the two in sync: if
+   you add a new animated start state here, add its override there. */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Fade + slide-up on section entry. */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s var(--ease-out-quiet),
+      transform 0.7s var(--ease-out-quiet);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal][data-revealed="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Amber rule that draws itself in. */
+  [data-draw] path,
+  [data-draw] line {
+    stroke-dasharray: var(--draw-length, 1000);
+    stroke-dashoffset: var(--draw-length, 1000);
+    transition: stroke-dashoffset 1.1s var(--ease-out-quiet);
+  }
+
+  [data-draw][data-revealed="true"] path,
+  [data-draw][data-revealed="true"] line {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Soft amber glow on interactive surfaces. */
+.glow-hover {
+  transition:
+    border-color 0.35s var(--ease-out-quiet),
+    box-shadow 0.35s var(--ease-out-quiet),
+    background-color 0.35s var(--ease-out-quiet);
+}
+
+.glow-hover:hover,
+.glow-hover:focus-visible {
+  border-color: color-mix(in srgb, var(--color-amber) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-amber) 18%, transparent),
+    0 8px 40px -12px color-mix(in srgb, var(--color-amber) 30%, transparent);
+}
+
+/* Understated underline that grows from the left on hover. */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 1px;
+  width: 100%;
+  background-color: var(--color-amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-quiet);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after,
+.link-underline[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Blueprint grid used behind hero and section breaks in place of photography.
+   PLACEHOLDER: this stands in for real jobsite imagery (build prompt §11). */
+.blueprint-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-amber) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-amber) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+}
+
+.blueprint-grid-fine {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-amber) 4%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-amber) 4%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 14px 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Pin every scroll-driven state to its resolved end state. The inline script
+     already withholds .motion-ready here; these rules are the backstop. */
+  [data-reveal],
+  [data-reveal][data-revealed="true"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  [data-draw] path,
+  [data-draw] line {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+
+  [data-parallax] {
+    transform: none !important;
+  }
+
+  /* Blueprint-to-reality resolves fully: line art hidden, appliance shown. */
+  [data-b2r-line] {
+    opacity: 0 !important;
+  }
+
+  [data-b2r-real] {
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
