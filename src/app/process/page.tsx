@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { DrawRule, Reveal } from "@/components/motion";
 import { CtaBand } from "@/components/sections";
@@ -15,6 +16,13 @@ import { processSteps, site } from "@/data/site";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("process");
+
+/** One photo per step, in processSteps order. */
+const stepPhotos = [
+  { src: "/photos/process-1-review.webp", alt: "An equipment schedule and floor plan for a commercial kitchen laid out on a desk" },
+  { src: "/photos/process-2-source.webp", alt: "Commercial appliances staged in wholesale crates in a warehouse" },
+  { src: "/photos/process-3-deliver.webp", alt: "An installer setting a commercial range into a finished kitchen opening" },
+] as const;
 
 /**
  * Process.
@@ -59,7 +67,7 @@ export default function ProcessPage() {
           <ol className="mt-16 space-y-5">
             {processSteps.map((step, i) => (
               <Reveal as="li" key={step.number} from="right" delay={i * 90}>
-                <Card className="sm:p-10">
+                <Card className="overflow-hidden sm:p-10">
                   <div className="grid gap-6 sm:grid-cols-12 sm:gap-10">
                     <div className="sm:col-span-3">
                       <span
@@ -79,6 +87,19 @@ export default function ProcessPage() {
                       </p>
                     </div>
                   </div>
+
+                  {stepPhotos[i] && (
+                    <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden rounded-md">
+                      <Image
+                        src={stepPhotos[i].src}
+                        alt={stepPhotos[i].alt}
+                        fill
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, 700px"
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
                 </Card>
               </Reveal>
             ))}

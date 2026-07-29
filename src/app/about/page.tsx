@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 import { Reveal } from "@/components/motion";
@@ -54,6 +55,19 @@ export default function AboutPage() {
               <SectionHeading eyebrow="Our story">
                 <span id="story">A young company, deliberately narrow</span>
               </SectionHeading>
+
+              <Reveal delay={80}>
+                <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden rounded-md">
+                  <Image
+                    src="/photos/about-1-install.webp"
+                    alt="An installer setting a stainless commercial refrigeration unit into place"
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 1024px) 100vw, 380px"
+                    className="object-cover"
+                  />
+                </div>
+              </Reveal>
             </div>
 
             <div className="lg:col-span-8">
@@ -144,6 +158,19 @@ export default function AboutPage() {
                   them
                 </span>
               </SectionHeading>
+
+              <Reveal delay={80}>
+                <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden rounded-md">
+                  <Image
+                    src="/photos/about-2-shipment.webp"
+                    alt="Commercial appliances staged and wrapped on a delivery truck at dusk"
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 1024px) 100vw, 380px"
+                    className="object-cover"
+                  />
+                </div>
+              </Reveal>
             </div>
 
             <div className="lg:col-span-8">
