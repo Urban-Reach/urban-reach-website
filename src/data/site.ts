@@ -119,6 +119,6 @@ export const processSteps = [
  */
 export const generalContractors = [
   { name: "Structura", logo: "/brand/gc/structura-reversed", width: 640, height: 136 },
-  { name: "Trimbuilt", logo: "/brand/gc/trimbuilt-reversed", width: 640, height: 158 },
+  { name: "Trimbuilt", logo: "/brand/gc/trimbuilt-reversed", width: 640, height: 146 },
   { name: "Novo", logo: "/brand/gc/novo-reversed", width: 640, height: 198 },
 ] as const;

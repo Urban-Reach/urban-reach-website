@@ -30,16 +30,20 @@ const SOURCES = {
   urbanReach: join(DOWNLOADS, 'Gemini_Generated_Image_gmrraigmrraigmrr.png'),
   // Client-supplied hero photograph: a dark commercial kitchen lit warm.
   hero: join(DOWNLOADS, 'moody kitchen.png'),
-  // Vendor marks: dark ink on genuine transparent backgrounds.
-  vendors: {
-    samsung: join(DOWNLOADS, 'samsung logo.png'),
-    summit: join(DOWNLOADS, 'summit logo.png'),
-    'ge-haier': join(DOWNLOADS, 'ge haier logo.png'),
-    'fisher-paykel': join(DOWNLOADS, 'fisher paykal logo.webp'),
-    bunn: join(DOWNLOADS, 'bunn logo.webp'),
-    // MISSING ASSET: Champion. No logo file was supplied. Add the path here and
-    // add the matching entry to src/data/brands.ts once the file arrives.
-  },
+  // Vendor marks. [slug, source, keyWhiteBackground] — same shape as
+  // GC_SOURCES below. Samsung/Summit/GE-Haier/Fisher & Paykel/BUNN arrived with
+  // genuine alpha. Champion arrived only on solid white (a 2560x940 source,
+  // chosen over a supplied 320x320 transparent alternative because the mark is
+  // flat, simple artwork — keying out white loses nothing here and the extra
+  // resolution matters more), so it is keyed the same way Novo/Trimbuilt are.
+  vendors: [
+    ['samsung', join(DOWNLOADS, 'samsung logo.png'), false],
+    ['summit', join(DOWNLOADS, 'summit logo.png'), false],
+    ['ge-haier', join(DOWNLOADS, 'ge haier logo.png'), false],
+    ['fisher-paykel', join(DOWNLOADS, 'fisher paykal logo.webp'), false],
+    ['bunn', join(DOWNLOADS, 'bunn logo.webp'), false],
+    ['champion', join(DOWNLOADS, '709814-Champion_Logo-scaled.jpg'), true],
+  ],
 };
 
 // Luminance key tuned to the measured histogram of the supplied file:
@@ -65,7 +69,9 @@ const BONE = { r: 242, g: 237, b: 230 };
 const GC_SOURCES = [
   ['structura', join(DOWNLOADS, 'structura logo.webp'), false],
   ['novo', join(DOWNLOADS, 'novo white bg.png'), true],
-  ['trimbuilt', join(DOWNLOADS, 'trimbuilt white bg.png'), true],
+  // Replaced with a higher-resolution supplied file (800x200 vs. the earlier
+  // 200x200 crop) — same white-bg treatment.
+  ['trimbuilt', join(DOWNLOADS, '1611603050077.jpeg'), true],
 ];
 
 async function out(...parts) {
@@ -346,10 +352,13 @@ async function main() {
   }
 
   // ---- Vendor marks -------------------------------------------------------
-  // Each is dark ink on transparent (measured luminance 0.00-0.20), so each is
-  // emitted as a one-colour reversed mark for the dark UI. See emitReversed.
-  for (const [slug, src] of Object.entries(SOURCES.vendors)) {
-    const trimmed = await trimToAlpha(sharp(src).ensureAlpha(), 4);
+  // Each is dark ink on either a genuine transparent background or solid
+  // white, so each is emitted as a one-colour reversed mark for the dark UI.
+  // See emitReversed.
+  for (const [slug, src, keyWhite] of SOURCES.vendors) {
+    let pipeline = sharp(src).ensureAlpha();
+    if (keyWhite) pipeline = sharp(await keyOutWhite(src));
+    const trimmed = await trimToAlpha(pipeline, 4);
     await emitReversed(trimmed, `brand/vendors/${slug}-reversed`);
   }
 

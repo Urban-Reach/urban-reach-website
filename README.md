@@ -38,43 +38,32 @@ the preview — there's no mail server behind it.
 
 ## Before this can go live
 
-Three things are outstanding. The first two are blocking.
+### Contact form — configured for local dev, not committed
 
-### 1. Wire up the contact form (blocking)
+The form posts to `/api/contact`, which sends through Resend. `RESEND_API_KEY`
+and `CONTACT_FROM` live in `.env.local` (gitignored — never commit that file).
+Anyone cloning fresh needs their own copy; see
+[SETTING-UP-THE-CONTACT-FORM.md](SETTING-UP-THE-CONTACT-FORM.md) for a
+non-technical walkthrough, or `.env.example` for the short version.
 
-The form posts to `/api/contact`, which sends through Resend. Until
-`RESEND_API_KEY` and `CONTACT_FROM` are set, valid submissions return a 500 and
-the visitor is told to email `info@urbanreachtx.com` directly.
-
-**[SETTING-UP-THE-CONTACT-FORM.md](SETTING-UP-THE-CONTACT-FORM.md) is a
-step-by-step walkthrough written for a non-technical reader** — hand that to the
-client. `.env.example` is the short version for a developer.
+Currently sending from `onboarding@resend.dev` (Resend's shared sender), which
+only delivers to the address that owns the Resend account and is more likely to
+be filtered as spam. Once `urbanreachtx.com` is verified as a sending domain in
+Resend, switch `CONTACT_FROM` to an address on that domain — see the setup doc,
+Part 2.
 
 Resend was chosen over Formspree because the form accepts **file attachments**
 (appliance schedules, spec sections, plan sheets) — Formspree puts uploads
 behind a paid plan. Keeping it server-side also means the API key never reaches
 the browser and the honeypot is validated where a bot cannot skip it.
 
-### 2. Supply the missing Champion logo (blocking for the brand grid)
+### Remaining before launch
 
-Champion is a confirmed authorized brand. The mark was shown in conversation but
-never supplied as a file, so there was nothing on disk to process and the grid
-renders it as a typographic name cell while the other five show real marks. It
-was not redrawn, for the same reason the GC logos weren't — see below.
-
-To complete it:
-
-1. Save the official mark to disk (from Champion's dealer/media portal).
-2. Add the source path to `SOURCES.vendors` in `scripts/prepare-assets.mjs`.
-3. Run `npm run assets`.
-4. In `src/data/brands.ts`, set `logo: "/brand/vendors/champion-reversed"` and
-   correct `width`/`height` to the emitted dimensions.
-
-### 3. Confirm vendor brand-usage guidelines
-
-Before publishing, confirm how each manufacturer permits authorized dealers to
-display their marks, and re-source the art from their official dealer portals.
-The five current files came from general sources, not dealer portals.
+Confirm how each manufacturer permits authorized dealers to display their
+marks, and re-source the art from their official dealer portals. The six
+current vendor files (Samsung, Summit, GE/Haier, Fisher & Paykel, Champion,
+BUNN) and all three GC files (Structura, Trimbuilt, Novo) came from general
+sources, not dealer/media portals.
 
 ### Logo treatment — read before changing it
 

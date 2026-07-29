@@ -60,18 +60,9 @@ export const brands: Brand[] = [
   {
     slug: "champion",
     name: "Champion",
-    // MISSING ASSET: the Champion mark was shown in conversation but never
-    // supplied as a file, so there is nothing on disk to process. The brand is
-    // a confirmed authorized relationship, so it is listed by name rather than
-    // omitted or filled with a redrawn substitute.
-    //
-    // TO COMPLETE: save the official Champion logo to disk, add its path to
-    // SOURCES.vendors in scripts/prepare-assets.mjs, run
-    // `node scripts/prepare-assets.mjs`, then set logo to
-    // "/brand/vendors/champion" and correct width/height to the emitted size.
-    logo: null,
-    width: 600,
-    height: 160,
+    logo: "/brand/vendors/champion-reversed",
+    width: 640,
+    height: 235,
   },
   {
     slug: "bunn",
