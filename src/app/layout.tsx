@@ -98,6 +98,9 @@ export default function RootLayout({
             [data-b2r-real]{opacity:1 !important;clip-path:none !important}
             [data-traverse-line]{stroke-dasharray:none !important;stroke-dashoffset:0 !important}
             [data-traverse-node]{opacity:1 !important}
+            [data-seam-line]{stroke-dasharray:none !important;stroke-dashoffset:0 !important;stroke-opacity:1 !important}
+            [data-seam-from]{opacity:0 !important}
+            [data-seam-to]{opacity:1 !important}
           `}</style>
         </noscript>
       </head>

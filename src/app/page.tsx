@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion";
 import { Hero } from "@/components/hero";
 import { CtaBand, TrustStrip } from "@/components/sections";
+import { Seam } from "@/components/seam";
 import {
   ButtonLink,
   Card,
@@ -66,15 +67,15 @@ export default function HomePage() {
                 </p>
               </Reveal>
 
-              <div className="mt-12 grid gap-5 sm:grid-cols-3">
+              {/* Two cards, not three. "Sourcing and install together" used to
+                  sit here; it is now the signature section below, which states it
+                  far better than a card can. Saying it in both places was the
+                  repetition this site has been repeatedly pulled up on. */}
+              <div className="mt-12 grid gap-5 sm:grid-cols-2">
                 {[
                   {
                     title: "Built for commercial scale",
                     body: "Unit-count packages for multifamily developments and full-floor office work. Built for volume, not retail quantities.",
-                  },
-                  {
-                    title: "Sourcing and install together",
-                    body: "A single partner from purchase order through installation. No handoff between vendors, and no gap for a detail to fall through.",
                   },
                   {
                     title: "One metro, covered properly",
@@ -98,12 +99,34 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* A signature homepage animation belongs here. The first attempt — an
-          equipment schedule resolving row by row — was removed: it put example
-          model numbers on a public page, and it illustrated how Urban Reach
-          matches a specification, which is not information to hand competitors.
-          Left empty on purpose until a replacement concept is agreed. Do not
-          fill it with a reordered section from elsewhere. */}
+      {/* ==================================================================
+          Signature animation — the seam
+
+          The homepage's own treatment. /appliances resolves a product and
+          /contact draws a place; this resolves a relationship, so the three
+          share no visual language.
+
+          Centred rather than set beside the heading, because the composition is
+          horizontal and symmetrical — the gap has to close in the middle of the
+          reader's attention, not off to one side.
+          ================================================================== */}
+      <Section tone="raised" space="base" aria-labelledby="no-handoff">
+        <Container>
+          <div className="mx-auto max-w-3xl text-center">
+            <SectionHeading
+              align="center"
+              eyebrow="One partner"
+              lead="Appliance work is usually split between a vendor who sells and a contractor who installs. Urban Reach is both, so nothing is passed across a boundary and nothing waits at one."
+            >
+              <span id="no-handoff">No handoff, and no gap to fall through</span>
+            </SectionHeading>
+          </div>
+
+          <div className="mx-auto mt-16 max-w-3xl">
+            <Seam />
+          </div>
+        </Container>
+      </Section>
 
       {/* ==================================================================
           Process teaser
