@@ -129,7 +129,9 @@ export default function AppliancesPage() {
           </div>
 
           <Reveal delay={160}>
-            <div className="mt-12 max-w-2xl space-y-4 leading-relaxed text-bone-dim">
+            {/* Centred to match the heading and the logo row above it — the
+                three blocks are one section, so they share one alignment. */}
+            <div className="mx-auto mt-12 max-w-2xl space-y-4 text-center leading-relaxed text-bone-dim">
               <p>
                 These relationships span the range deliberately. Samsung,
                 GE/Haier, and Fisher &amp; Paykel carry the residential-grade

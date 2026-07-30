@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { Reveal } from "@/components/motion";
+import { Reveal, ScrollCue } from "@/components/motion";
 import { Container } from "@/components/ui";
 
 /**
@@ -17,20 +17,38 @@ import { Container } from "@/components/ui";
  * swapped.
  *
  * PHOTOGRAPHY
- * The supplied photograph is a dark commercial kitchen lit warm, cropped five
- * ways in scripts/prepare-assets.mjs — the range and hood line, the stainless
- * reach-ins, the prep counters and window wall. The source frame is much
- * brighter on the chrome and the window wall than in the centre floor, so the
- * crops are darkened at source AND every hero carries a scrim beneath the text
- * block. Text is never placed directly on the raw image.
+ * Each page has its OWN photograph, prepared by scripts/prepare-assets.mjs: the
+ * commercial kitchen on the homepage, an unfinished building on About, a
+ * warehouse aisle of stainless fronts on Appliances, a night loading dock on
+ * Process, a finished apartment kitchen at blue hour on Contact. All five were
+ * previously crops of one panorama, which read as the same room repositioned.
+ *
+ * Every frame is darkened slightly at source AND carries a scrim beneath the
+ * text block. Text is never placed directly on the raw image.
  */
 
 type Page = "home" | "about" | "appliances" | "process" | "contact";
 
 /**
- * Inline blur placeholders, read at build time. Keeps the hero from flashing
- * flat charcoal before a ~145KB photo decodes, without shipping a separate
- * request for a 20px image.
+ * Hero photography, resolved at build time from public/hero/manifest.json.
+ *
+ * Filenames carry a content hash (`about.d8d658db.webp`), so replacing a
+ * photograph changes the URL. Without that, swapping the images left every
+ * browser and CDN that had already cached `/_next/image?url=/hero/about.webp`
+ * serving the previous picture indefinitely — which is exactly what happened.
+ * Never hard-code `/hero/<page>.webp` here again.
+ */
+function heroFile(page: Page) {
+  const manifest = JSON.parse(
+    readFileSync(join(process.cwd(), "public", "hero", "manifest.json"), "utf8"),
+  ) as Record<Page, string>;
+  return `/hero/${manifest[page]}`;
+}
+
+/**
+ * Inline blur placeholder, read at build time. Keeps the hero from flashing flat
+ * charcoal before a ~145KB photo decodes, without shipping a separate request
+ * for a 20px image.
  */
 function blurFor(page: Page) {
   try {
@@ -274,7 +292,7 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
   return (
     <div aria-hidden="true" className="absolute inset-0 -z-10">
       <Image
-        src={`/hero/${page}.webp`}
+        src={heroFile(page)}
         alt=""
         fill
         priority={page === "home"}
@@ -336,32 +354,6 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
 
       {/* Hard edge into the next section. */}
       <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--color-charcoal))]" />
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Scroll cue                                                                 */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Small circular scroll indicator. A real link to the first section, so it is
- * keyboard reachable and does something useful rather than being decorative.
- */
-function ScrollCue() {
-  return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-8 z-10 flex justify-center sm:bottom-10">
-      <a href="#after-hero" className="pointer-events-auto group flex flex-col items-center gap-3">
-        <span className="label-caps text-bone-dim transition-colors duration-300 group-hover:text-amber">
-          Scroll
-        </span>
-        <span className="relative flex h-11 w-11 items-center justify-center rounded-full border border-bone/25 bg-charcoal/35 backdrop-blur-sm transition-colors duration-300 group-hover:border-amber">
-          <span aria-hidden="true" className="scroll-cue-arrow text-base leading-none text-amber">
-            ↓
-          </span>
-        </span>
-        <span className="sr-only">Skip to page content</span>
-      </a>
     </div>
   );
 }

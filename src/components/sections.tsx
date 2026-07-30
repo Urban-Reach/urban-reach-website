@@ -16,6 +16,96 @@ function countWord(n: number) {
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/* Shared logo row                                                            */
+/* -------------------------------------------------------------------------- */
+
+type Mark = {
+  readonly name: string;
+  readonly logo: string | null;
+  readonly width: number;
+  readonly height: number;
+  readonly opticalScale: number;
+};
+
+/**
+ * The ONE place logo sizing is decided.
+ *
+ * Both the homepage trust strip and the Appliances dealer grid render through
+ * this, so the two cannot drift apart — they previously carried separate size
+ * caps and the same six marks came out at different proportions in each.
+ *
+ * Two things make a row of mismatched marks read as even:
+ *
+ *  1. Per-mark optical scaling. Each height is `--mark-h * opticalScale`, a
+ *     tempered equal-area factor stored alongside the asset (see brands.ts).
+ *     Equal height alone made Samsung dominate at 2.8x the area of Summit.
+ *  2. `max-w-none`. Tailwind preflight applies `img { max-width: 100% }`, and
+ *     inside a flex row that percentage resolves against each item's share of
+ *     the line — which silently width-bound the wide marks and undid the
+ *     scaling. Releasing it lets height drive width, as it must.
+ *
+ * Layout is a fixed grid below xl and a nowrap flex row at xl. Free-flowing
+ * `flex-wrap` is deliberately not used: at intermediate widths it put five
+ * marks on one line and orphaned BUNN alone on a second. Fixed tracks break
+ * 3 + 3, then 2 + 2 + 2.
+ *
+ * The --mark-h ladders below are measured, not guessed: at every breakpoint the
+ * widest mark in each row fits its track (or, at xl, the whole row fits the
+ * 1216px content box alongside its gaps) with margin to spare. Raising them
+ * means re-measuring.
+ */
+const MARK_HEIGHTS = {
+  /* Three marks and a full row to themselves, so these run appreciably larger
+     than the manufacturer row — up to 62px against 46px. */
+  gc: "[--mark-h:34px] sm:[--mark-h:44px] md:[--mark-h:50px] lg:[--mark-h:56px] xl:[--mark-h:62px]",
+  vendor: "[--mark-h:30px] sm:[--mark-h:34px] md:[--mark-h:40px] xl:[--mark-h:46px]",
+} as const;
+
+function LogoRow({
+  marks,
+  variant,
+  altSuffix = "",
+}: {
+  marks: readonly Mark[];
+  variant: "gc" | "vendor";
+  /** Appended to each alt, e.g. " — authorized dealer". */
+  altSuffix?: string;
+}) {
+  return (
+    <ul
+      className={`mt-10 grid grid-cols-2 items-center justify-items-center gap-x-8 gap-y-10 md:grid-cols-3 md:gap-x-10 xl:flex xl:flex-nowrap xl:justify-center xl:gap-x-6 ${MARK_HEIGHTS[variant]}`}
+    >
+      {marks.map((mark, i) => (
+        <Reveal
+          as="li"
+          key={mark.name}
+          delay={i * 60}
+          className="flex h-16 shrink-0 items-center"
+        >
+          {mark.logo ? (
+            <Image
+              src={`${mark.logo}.webp`}
+              alt={`${mark.name}${altSuffix}`}
+              width={mark.width}
+              height={mark.height}
+              loading="lazy"
+              sizes="(max-width: 640px) 45vw, 250px"
+              style={{ height: `calc(var(--mark-h) * ${mark.opticalScale})` }}
+              className="w-auto max-w-none object-contain opacity-75 transition-opacity duration-300 hover:opacity-100"
+            />
+          ) : (
+            /* MISSING ASSET: no logo file supplied for this brand. Set in the
+               display face at a comparable optical weight rather than left as a
+               blank gap or filled with a redrawn substitute. */
+            <span className="font-display text-xl text-bone/70">{mark.name}</span>
+          )}
+        </Reveal>
+      ))}
+    </ul>
+  );
+}
+
 /**
  * Every supplied manufacturer mark is dark ink on transparent, so each sits on
  * a light chip. Recoloring a manufacturer's mark to survive a dark background
@@ -31,9 +121,13 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
       {/* Deliberately brand-neutral. Urban Reach holds six authorized dealer
           relationships and sources beyond them, so no single manufacturer
           should headline this section or stand in for the whole roster.
-          The count is derived from `brands` so it cannot go stale. */}
+          The count is derived from `brands` so it cannot go stale.
+
+          Centred, because the logo row beneath it is centred. Left-aligned copy
+          above a centred row read as two unrelated blocks. */}
       {heading && (
         <SectionHeading
+          align="center"
           eyebrow="Authorized dealer"
           lead={`Urban Reach is an authorized dealer for the ${countWord(brands.length)} manufacturers below, and sources beyond them whenever a specification requires it.`}
         >
@@ -42,42 +136,10 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
       )}
 
       {/* No chips or boxes behind the marks. Each logo is a reversed one-colour
-          asset sitting directly on the dark ground. Rows are separated by
-          hairlines instead of cards, and every mark is capped to the same
-          optical height so the grid reads evenly despite very different source
-          aspect ratios. */}
-      <ul className="mt-14 grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 sm:gap-x-14 sm:gap-y-14">
-        {brands.map((brand, i) => (
-          <Reveal
-            as="li"
-            key={brand.slug}
-            delay={i * 60}
-            className="flex h-16 items-center justify-center sm:h-20"
-          >
-            {brand.logo ? (
-              <Image
-                src={`${brand.logo}.webp`}
-                alt={`${brand.name} — authorized dealer`}
-                width={brand.width}
-                height={brand.height}
-                loading="lazy"
-                sizes="(max-width: 640px) 38vw, 200px"
-                /* Constrained on BOTH axes inside a fixed cell. Capping height
-                   alone left Samsung ~2.7x wider than Summit at the same
-                   height, so the row read unevenly. */
-                className="max-h-9 w-auto max-w-[150px] object-contain opacity-80 transition-opacity duration-300 hover:opacity-100 sm:max-h-11 sm:max-w-[180px]"
-              />
-            ) : (
-              /* MISSING ASSET: no Champion logo file has been supplied. Set in
-                 the display face at the same optical weight rather than left as
-                 a blank gap or filled with a redrawn substitute. */
-              <span className="font-display text-2xl text-bone/80 sm:text-[1.75rem]">
-                {brand.name}
-              </span>
-            )}
-          </Reveal>
-        ))}
-      </ul>
+          asset sitting directly on the dark ground. Sizing comes from the shared
+          LogoRow above, so this row and the homepage trust strip are guaranteed
+          to match. */}
+      <LogoRow marks={brands} variant="vendor" altSuffix=" — authorized dealer" />
     </>
   );
 }
@@ -98,36 +160,6 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
  * Used on the homepage only.
  */
 export function TrustStrip() {
-  /* Both rows share one treatment so they read as a pair: centred label above a
-     centred row of marks, identical sizing and hover behaviour. The GC row comes
-     first — those are the clients, which is the stronger opening signal.
-
-     Sizing is driven by HEIGHT: a fixed h-10 with `w-auto`, so every mark lands
-     at exactly the same 40px optical height and only its width varies. That is
-     how logo rows are normally set, and it is what makes six very different
-     source aspect ratios read as one even row.
-
-     `max-w-none` is load-bearing. Tailwind's preflight applies
-     `img { max-width: 100% }`, and inside a flex row that percentage resolves
-     against the share of the line each item gets — which silently width-bound
-     the wide marks and rendered Samsung at 29px next to Summit at 40px. Height
-     caps alone could not fix that; the width cap had to be released.
-
-     Wrapping is a GRID below xl and a nowrap FLEX row at xl. At xl the six marks
-     sum to ~1050px, which fits the 1216px content box alongside the gaps, so one
-     line is guaranteed. Below xl the sum exceeds the container, and free-flowing
-     `flex-wrap` there put five marks on one line and left BUNN alone on a second
-     — the exact bug being fixed. Fixed grid tracks make an orphan impossible: the
-     row breaks 3 + 3, then 2 + 2 + 2. Note `xl:max-w-none` is only applied in
-     flex mode; in grid mode the track keeps the widest marks in bounds.
-     Re-measure before raising the heights or widening the xl gap. */
-  /* One shared row treatment, so the two sections read as a matched pair. */
-  const rowClasses =
-    "mt-10 grid grid-cols-2 items-center justify-items-center gap-x-8 gap-y-9 md:grid-cols-3 md:gap-x-10 xl:flex xl:flex-nowrap xl:justify-center xl:gap-x-6";
-
-  const markClasses =
-    "h-7 w-auto max-w-full object-contain opacity-75 transition-opacity duration-300 hover:opacity-100 sm:h-9 xl:h-10 xl:max-w-none";
-
   return (
     // id="after-hero" is the scroll cue's target: it must sit on whichever
     // section comes first below the hero.
@@ -138,61 +170,22 @@ export function TrustStrip() {
           partners
         </h2>
 
-        {/* Working with — general contractors */}
+        {/* Both rows share one treatment so they read as a pair: a centred label
+            above a centred row, same hover, same sizing rules. The GC row comes
+            first — those are the clients, which is the stronger opening signal.
+            The GC marks run larger because there are only three of them. */}
         <Reveal>
           <p className="label-caps text-center text-bone-dim">Working with</p>
         </Reveal>
+        <LogoRow marks={generalContractors} variant="gc" />
 
-        <Reveal delay={90}>
-          <ul className={rowClasses}>
-            {generalContractors.map((gc) => (
-              <li key={gc.name} className="flex h-12 items-center">
-                <Image
-                  src={`${gc.logo}.webp`}
-                  alt={gc.name}
-                  width={gc.width}
-                  height={gc.height}
-                  loading="lazy"
-                  sizes="(max-width: 640px) 40vw, 220px"
-                  className={markClasses}
-                />
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-
-        {/* Authorized dealer for — manufacturers */}
         <div className="mt-16 border-t border-rule pt-16">
           <Reveal>
             <p className="label-caps text-center text-bone-dim">
               Authorized dealer for
             </p>
           </Reveal>
-
-          <Reveal delay={90}>
-            <ul className={rowClasses}>
-              {brands.map((brand) => (
-                <li key={brand.slug} className="flex h-12 shrink-0 items-center">
-                  {brand.logo ? (
-                    <Image
-                      src={`${brand.logo}.webp`}
-                      alt={brand.name}
-                      width={brand.width}
-                      height={brand.height}
-                      loading="lazy"
-                      sizes="(max-width: 640px) 40vw, 180px"
-                      className={markClasses}
-                    />
-                  ) : (
-                    /* MISSING ASSET: no logo file supplied for this brand. */
-                    <span className="font-display text-xl text-bone/70">
-                      {brand.name}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+          <LogoRow marks={brands} variant="vendor" />
         </div>
       </Container>
     </Section>

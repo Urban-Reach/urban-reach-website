@@ -1,4 +1,19 @@
-# Background image audit — what's duplicated, and what to generate
+# Background image audit — DONE
+
+> **Status: all four images have been generated, installed and verified.**
+> Home keeps the original kitchen; About, Appliances, Process and Contact each
+> have their own photograph. Every page now has a distinct background.
+>
+> This file is kept as the record of what each image is for and the prompt that
+> made it, so any one of them can be regenerated later without starting from
+> scratch. The originals live in your Downloads folder as `hero-about.png`,
+> `hero-appliances.png`, `hero-process.png` and `hero-contact.png` — keep them.
+>
+> The audit and prompts below are unchanged from when they were written.
+
+---
+
+## Original audit — what was duplicated, and what to generate
 
 ## The audit result
 

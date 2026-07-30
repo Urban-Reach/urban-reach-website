@@ -32,7 +32,7 @@ export default function ContactPage() {
         data={[
           breadcrumbJsonLd([
             { name: "Home", path: "/" },
-            { name: "Contact", path: "/contact" },
+            { name: "Contact & FAQs", path: "/contact" },
           ]),
           faqJsonLd(),
         ]}
@@ -41,7 +41,7 @@ export default function ContactPage() {
       <Hero
         page="contact"
         align="left"
-        eyebrow="Contact"
+        eyebrow="Contact & FAQs"
         headline="Talk to a commercial appliance supplier in Austin, TX"
         lead="Send an equipment schedule, ask a specification question, or open a conversation about an upcoming project. Inquiries reach us directly."
         primary={{ href: site.phoneHref, label: site.phone, plain: true }}

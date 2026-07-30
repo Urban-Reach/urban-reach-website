@@ -79,7 +79,7 @@ export const nav = [
   { href: "/about", label: "About" },
   { href: "/appliances", label: "Appliances" },
   { href: "/process", label: "Process" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Contact & FAQs" },
 ] as const;
 
 /**
@@ -117,8 +117,15 @@ export const processSteps = [
  * pixels and they carry an AI-generation watermark. Request official
  * reversed/one-colour art from each GC before publishing.
  */
+/**
+ * `opticalScale` works exactly as it does on `brands` in src/data/brands.ts —
+ * a tempered equal-area normalisation, `(width / height) ** -0.4` divided by the
+ * largest result, so no mark in the row dominates. See that file for the full
+ * reasoning. These three are much closer in proportion than the manufacturer
+ * marks, so the factors barely differ.
+ */
 export const generalContractors = [
-  { name: "Structura", logo: "/brand/gc/structura-reversed", width: 640, height: 136 },
-  { name: "Trimbuilt", logo: "/brand/gc/trimbuilt-reversed", width: 640, height: 146 },
-  { name: "Novo", logo: "/brand/gc/novo-reversed", width: 640, height: 198 },
+  { name: "Structura", logo: "/brand/gc/structura-reversed", width: 640, height: 136, opticalScale: 0.86 },
+  { name: "Trimbuilt", logo: "/brand/gc/trimbuilt-reversed", width: 640, height: 146, opticalScale: 0.89 },
+  { name: "Novo", logo: "/brand/gc/novo-reversed", width: 640, height: 198, opticalScale: 1 },
 ] as const;

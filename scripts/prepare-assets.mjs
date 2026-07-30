@@ -16,7 +16,8 @@
  */
 
 import sharp from 'sharp';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -328,6 +329,16 @@ async function main() {
     contact: { left: 900, width: 874 },
   };
 
+  // Filenames carry a content hash, and a manifest maps page -> filename.
+  //
+  // This is not premature optimisation, it is a bug fix. These files were
+  // previously emitted at a fixed path, so replacing the photography changed the
+  // bytes without changing the URL — and every browser and CDN that had already
+  // cached `/_next/image?url=/hero/about.webp` went on serving the OLD picture
+  // indefinitely. It cost real time to diagnose, twice. A hash in the name makes
+  // a byte change a URL change, so a stale hero is now impossible.
+  const manifest = {};
+
   for (const [name, crop] of Object.entries(heroCrops)) {
     // A dedicated photograph wins over the shared panorama crop. `cover` at the
     // hero's own 3:2 frame rather than `extract`, because a supplied image will
@@ -340,14 +351,19 @@ async function main() {
             .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
             .resize({ width: 2000, withoutEnlargement: false });
 
-    await framed()
+    const full = await framed()
       // Only a light touch. The frame is brighter on the chrome and the window
       // wall than through the centre floor, but heavy source darkening made the
       // photograph read as a faint backdrop. Legibility is handled by the
       // focused scrim in hero.tsx instead, which is measured.
       .modulate({ brightness: 0.96, saturation: 0.97 })
       .webp({ quality: 74 })
-      .toFile(await out(`hero/${name}.webp`));
+      .toBuffer();
+
+    const hash = createHash('sha1').update(full).digest('hex').slice(0, 8);
+    const file = `${name}.${hash}.webp`;
+    manifest[name] = file;
+    await writeFile(await out(`hero/${file}`), full);
 
     // A tiny blurred version, inlined as the CSS placeholder so the hero never
     // flashes flat charcoal before the photo decodes.
@@ -362,6 +378,18 @@ async function main() {
       `data:image/webp;base64,${tiny.toString('base64')}`,
     );
   }
+
+  // Sweep out superseded hashes, so the folder holds exactly one file per page
+  // rather than accumulating every crop ever generated.
+  const keep = new Set(Object.values(manifest));
+  for (const f of await readdir(join(PUBLIC, 'hero'))) {
+    if (f.endsWith('.webp') && !keep.has(f)) await rm(join(PUBLIC, 'hero', f));
+  }
+
+  await writeFile(
+    join(PUBLIC, 'hero', 'manifest.json'),
+    JSON.stringify(manifest, null, 2) + '\n',
+  );
 
   // ---- General contractor marks -------------------------------------------
   //

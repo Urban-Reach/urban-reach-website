@@ -26,6 +26,27 @@ export type Brand = {
   /** Intrinsic dimensions of the prepared asset, for layout stability (CLS). */
   width: number;
   height: number;
+  /**
+   * Optical size factor, 0–1, multiplied against the row's --mark-h.
+   *
+   * Rendering every mark at one shared HEIGHT does not make a row look even,
+   * because these six have wildly different proportions. Samsung is 6.2:1 and
+   * Summit is 2.3:1, so at equal height Samsung covered 2.8x the area and
+   * visibly dominated while Summit, GE and Champion read as undersized.
+   *
+   * These factors are a tempered equal-area normalisation:
+   *
+   *   scale = (width / height) ** -0.4, then divided by the largest result
+   *
+   * A full equal-area pass (exponent -0.5) over-corrects — it inflates the
+   * stacked marks that carry a descriptor line ("APPLIANCE", "a Haier company")
+   * until they tower over the plain wordmarks. -0.4 lands the area spread at
+   * 1.22x across all six, against 2.76x at equal height.
+   *
+   * Recompute these if a logo asset is ever replaced at a different aspect
+   * ratio. Do not hand-tune them individually.
+   */
+  opticalScale: number;
 };
 
 export const brands: Brand[] = [
@@ -35,6 +56,7 @@ export const brands: Brand[] = [
     logo: "/brand/vendors/samsung-reversed",
     width: 640,
     height: 104,
+    opticalScale: 0.67,
   },
   {
     slug: "summit",
@@ -42,6 +64,7 @@ export const brands: Brand[] = [
     logo: "/brand/vendors/summit-reversed",
     width: 640,
     height: 283,
+    opticalScale: 1,
   },
   {
     slug: "ge-haier",
@@ -49,6 +72,7 @@ export const brands: Brand[] = [
     logo: "/brand/vendors/ge-haier-reversed",
     width: 640,
     height: 174,
+    opticalScale: 0.82,
   },
   {
     slug: "fisher-paykel",
@@ -56,6 +80,7 @@ export const brands: Brand[] = [
     logo: "/brand/vendors/fisher-paykel-reversed",
     width: 640,
     height: 104,
+    opticalScale: 0.67,
   },
   {
     slug: "champion",
@@ -63,6 +88,7 @@ export const brands: Brand[] = [
     logo: "/brand/vendors/champion-reversed",
     width: 640,
     height: 235,
+    opticalScale: 0.93,
   },
   {
     slug: "bunn",
@@ -70,5 +96,6 @@ export const brands: Brand[] = [
     logo: "/brand/vendors/bunn-reversed",
     width: 640,
     height: 122,
+    opticalScale: 0.71,
   },
 ];

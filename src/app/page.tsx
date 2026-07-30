@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion";
 import { Hero } from "@/components/hero";
 import { CtaBand, TrustStrip } from "@/components/sections";
-import { BlueprintToReality } from "@/components/blueprint-to-reality";
 import {
   ButtonLink,
   Card,
@@ -99,53 +98,10 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* ==================================================================
-          Blueprint to reality — signature motion
-          ================================================================== */}
-      <Section tone="raised" space="base" aria-labelledby="spec-to-installed">
-        <Container>
-          <SectionHeading
-            eyebrow="From spec to installed"
-            align="center"
-            lead="Every unit we supply begins as a line on an equipment schedule. Scroll to see one resolve."
-          >
-            <span id="spec-to-installed">
-              From specification to installed equipment
-            </span>
-          </SectionHeading>
-
-          {/* Three instances, not one. The treatment previously appeared only on
-              refrigeration here, which read as a one-off flourish tied to a
-              single product rather than as how we handle every line on a
-              schedule. Each uses a different layout and side so the series does
-              not feel like the same block repeated. */}
-          <div className="mt-20 space-y-24 lg:space-y-32">
-            <BlueprintToReality
-              kind="refrigeration"
-              eyebrow="Refrigeration"
-              title="From a spec line to a unit on site"
-              body="A refrigeration callout carries three constraints: a cutout, a utility rough-in, and a finish standard. We reconcile all three before anything is ordered, so the unit that arrives fits the opening that was built."
-            />
-
-            <BlueprintToReality
-              kind="dishwasher"
-              layout="media-wide"
-              eyebrow="Dishwashers"
-              title="Built around the rough-in that already exists"
-              body="Under-counter dishwashing equipment is decided by the utility rough-in and the cabinet opening, not the model line. We check both against the drawings before sourcing."
-              reverse
-            />
-
-            <BlueprintToReality
-              kind="beverage"
-              layout="copy-wide"
-              eyebrow="Beverage equipment"
-              title="Amenity equipment that matches the finish level"
-              body="Brewers and beverage coolers sit in the most visible part of an office floor. We source to the finish standard of the space around them."
-            />
-          </div>
-        </Container>
-      </Section>
+      {/* The "spec line to unit" animation used to sit here. It now lives only
+          on /appliances, where it belongs to the product content it illustrates.
+          A distinct homepage signature treatment is to follow; this space is
+          deliberately left empty rather than filled with a stand-in. */}
 
       {/* ==================================================================
           Process teaser

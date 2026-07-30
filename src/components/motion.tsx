@@ -327,3 +327,63 @@ export function useB2RFallback<T extends HTMLElement>() {
 
   return ref;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Scroll cue                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The "Scroll" label and arrow at the foot of every hero.
+ *
+ * It is absolutely positioned inside the hero, so it does eventually leave with
+ * it — but the hero is a full viewport tall, which meant the cue sat there fully
+ * opaque through the first ~620px of scrolling. By then the reader is plainly
+ * already scrolling and the prompt has become an instruction they are being
+ * given after the fact.
+ *
+ * So it fades on the scroll itself: full strength at rest, gone by 18% of a
+ * viewport. Rendered client-side against the shared scroll loop rather than as a
+ * CSS `animation-timeline: scroll()`, because scroll-driven CSS animations are
+ * still missing in Safari and this is a visible affordance rather than a
+ * flourish — degrading to "never disappears" is exactly the bug being fixed.
+ *
+ * Opacity is written straight to the node instead of held in state: this runs on
+ * every scroll frame, and a setState per frame would re-render the subtree ~60
+ * times a second for one style property.
+ */
+export function ScrollCue() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    return subscribeToScroll(() => {
+      const end = window.innerHeight * 0.18;
+      const opacity = Math.max(0, 1 - window.scrollY / end);
+      el.style.opacity = String(opacity);
+      // Fully faded means fully gone: an invisible cue must not stay clickable,
+      // and it must not be announced to a screen reader either.
+      el.style.visibility = opacity === 0 ? "hidden" : "visible";
+    });
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="pointer-events-none absolute inset-x-0 bottom-8 z-10 flex justify-center transition-opacity duration-150 sm:bottom-10"
+    >
+      <a href="#after-hero" className="pointer-events-auto group flex flex-col items-center gap-3">
+        <span className="label-caps text-bone-dim transition-colors duration-300 group-hover:text-amber">
+          Scroll
+        </span>
+        <span className="relative flex h-11 w-11 items-center justify-center rounded-full border border-bone/25 bg-charcoal/35 backdrop-blur-sm transition-colors duration-300 group-hover:border-amber">
+          <span aria-hidden="true" className="scroll-cue-arrow text-base leading-none text-amber">
+            ↓
+          </span>
+        </span>
+        <span className="sr-only">Skip to page content</span>
+      </a>
+    </div>
+  );
+}
