@@ -96,6 +96,8 @@ export default function RootLayout({
             [data-draw] path,[data-draw] line{stroke-dasharray:none !important;stroke-dashoffset:0 !important}
             [data-b2r-line]{opacity:0 !important}
             [data-b2r-real]{opacity:1 !important;clip-path:none !important}
+            [data-schedule-cell],[data-schedule-model]{opacity:1 !important;letter-spacing:normal !important}
+            [data-schedule-row]::after{transform:none !important}
           `}</style>
         </noscript>
       </head>

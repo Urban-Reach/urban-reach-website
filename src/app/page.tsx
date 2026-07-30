@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion";
 import { Hero } from "@/components/hero";
 import { CtaBand, TrustStrip } from "@/components/sections";
+import { ScheduleResolve } from "@/components/schedule-resolve";
 import {
   ButtonLink,
   Card,
@@ -98,10 +99,39 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* The "spec line to unit" animation used to sit here. It now lives only
-          on /appliances, where it belongs to the product content it illustrates.
-          A distinct homepage signature treatment is to follow; this space is
-          deliberately left empty rather than filled with a stand-in. */}
+      {/* ==================================================================
+          Signature animation — the schedule resolves
+
+          The homepage's own treatment, deliberately not the spec-to-unit
+          animation, which now belongs to /appliances. That one is about the
+          equipment; this one is about the document, which is the more
+          persuasive thing to say here: a contractor sends a description, and
+          Urban Reach returns the exact model that satisfies it.
+
+          Narrow rather than full-width. The schedule sits in a column beside a
+          short heading so it reads as a document on a desk rather than as a
+          hero graphic — the restraint is the point.
+          ================================================================== */}
+      <Section tone="raised" space="base" aria-labelledby="schedule-resolves">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+            <div className="lg:col-span-5">
+              <SectionHeading
+                eyebrow="From spec to model"
+                lead="A schedule arrives with a description and a tag. What goes back is the exact model that satisfies it, checked against the rough-in and the opening before anything is ordered."
+              >
+                <span id="schedule-resolves">
+                  You describe it. We return the model number.
+                </span>
+              </SectionHeading>
+            </div>
+
+            <div className="lg:col-span-7">
+              <ScheduleResolve />
+            </div>
+          </div>
+        </Container>
+      </Section>
 
       {/* ==================================================================
           Process teaser
