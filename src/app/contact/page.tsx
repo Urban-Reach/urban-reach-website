@@ -4,6 +4,7 @@ import { Reveal } from "@/components/motion";
 import { ContactForm } from "@/components/contact-form";
 import { FaqList } from "@/components/faq-list";
 import { Hero } from "@/components/hero";
+import { ServiceAreaTraverse } from "@/components/service-area-traverse";
 import {
   Container,
   JsonLd,
@@ -159,7 +160,20 @@ export default function ContactPage() {
                 </p>
               </Reveal>
 
-              <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-rule bg-rule sm:grid-cols-3">
+              {/* Two presentations of the same six cities, one shown at a
+                  time.
+
+                  The traverse needs width to work. Squeezed into a phone-width
+                  column its labels render at about 10.5px — too small for what
+                  is primary content on this page, and no amount of scaling fixes
+                  it without the long labels clipping or colliding. So below sm
+                  the plain list stays, which is legible at any width, and the
+                  drawing takes over from sm up where it has room to breathe.
+
+                  Only one is ever displayed, so the duplicated city names are
+                  not announced twice; the SVG is a single labelled image to a
+                  screen reader regardless. */}
+              <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-rule bg-rule sm:hidden">
                 {site.serviceArea.map((city, i) => (
                   <Reveal
                     as="li"
@@ -176,6 +190,10 @@ export default function ContactPage() {
                   </Reveal>
                 ))}
               </ul>
+
+              <div className="mt-10 hidden rounded-lg border border-rule px-5 py-6 sm:block sm:px-7 sm:py-8">
+                <ServiceAreaTraverse />
+              </div>
             </div>
           </div>
         </Container>

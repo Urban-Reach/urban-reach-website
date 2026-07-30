@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion";
 import { Hero } from "@/components/hero";
 import { CtaBand, TrustStrip } from "@/components/sections";
-import { ScheduleResolve } from "@/components/schedule-resolve";
 import {
   ButtonLink,
   Card,
@@ -99,39 +98,12 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* ==================================================================
-          Signature animation — the schedule resolves
-
-          The homepage's own treatment, deliberately not the spec-to-unit
-          animation, which now belongs to /appliances. That one is about the
-          equipment; this one is about the document, which is the more
-          persuasive thing to say here: a contractor sends a description, and
-          Urban Reach returns the exact model that satisfies it.
-
-          Narrow rather than full-width. The schedule sits in a column beside a
-          short heading so it reads as a document on a desk rather than as a
-          hero graphic — the restraint is the point.
-          ================================================================== */}
-      <Section tone="raised" space="base" aria-labelledby="schedule-resolves">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
-            <div className="lg:col-span-5">
-              <SectionHeading
-                eyebrow="From spec to model"
-                lead="A schedule arrives with a description and a tag. What goes back is the exact model that satisfies it, checked against the rough-in and the opening before anything is ordered."
-              >
-                <span id="schedule-resolves">
-                  You describe it. We return the model number.
-                </span>
-              </SectionHeading>
-            </div>
-
-            <div className="lg:col-span-7">
-              <ScheduleResolve />
-            </div>
-          </div>
-        </Container>
-      </Section>
+      {/* A signature homepage animation belongs here. The first attempt — an
+          equipment schedule resolving row by row — was removed: it put example
+          model numbers on a public page, and it illustrated how Urban Reach
+          matches a specification, which is not information to hand competitors.
+          Left empty on purpose until a replacement concept is agreed. Do not
+          fill it with a reordered section from elsewhere. */}
 
       {/* ==================================================================
           Process teaser

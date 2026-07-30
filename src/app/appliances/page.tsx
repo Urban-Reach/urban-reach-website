@@ -93,7 +93,7 @@ export default function AppliancesPage() {
           <SectionHeading
             eyebrow="Spec to installed"
             align="center"
-            lead="Two further units, resolving the way every appliance we supply does."
+            lead="Three units, resolving the way every appliance we supply does."
           >
             <span id="spec-resolve">
               Every unit starts as a line on an equipment schedule
@@ -101,6 +101,16 @@ export default function AppliancesPage() {
           </SectionHeading>
 
           <div className="mt-20 space-y-24 lg:space-y-32">
+            {/* Refrigeration leads the sequence. It is the category a schedule
+                constrains hardest — cutout, utility rough-in and finish standard
+                all at once — so it makes the clearest first case. */}
+            <BlueprintToReality
+              kind="refrigeration"
+              eyebrow="Refrigeration"
+              title="From a spec line to a unit on site"
+              body="A refrigeration callout carries three constraints at once: a cutout, a utility rough-in, and a finish standard. We reconcile all three before anything is ordered, so the unit that arrives fits the opening that was built."
+            />
+
             <BlueprintToReality
               kind="dishwasher"
               layout="media-wide"

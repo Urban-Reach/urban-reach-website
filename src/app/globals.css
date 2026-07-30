@@ -354,114 +354,56 @@
 }
 
 /* ==========================================================================
-   Homepage signature animation — "the schedule resolves"
+   Service area traverse ("Where we work", /contact)
    --------------------------------------------------------------------------
-   An equipment schedule builds itself a row at a time: the hairline draws
-   left to right, the tag and description fade up behind it, and the model
-   number resolves last — arriving wide-tracked and transparent, then
-   tightening into place. The model lands last because it is the answer.
+   One hairline draws across the metro; each city node lights at the moment the
+   line reaches it. Timing comes from the component: --draw is the total draw
+   duration, --at is each node's arrival time, computed from its real distance
+   along the route rather than a flat stagger.
 
-   The whole sequence is keyframes driven off one `--row` index per row, so
-   there is no per-frame JavaScript. src/components/schedule-resolve.tsx only
-   flips [data-running] once, on entering view.
-
-   Nothing here is inside the reduced-motion guard by accident: the start
-   states live in the `no-preference` block below, so a reader with the
-   setting on sees the finished schedule from the first paint with no JS
-   involved. Do not move the start states out of that block.
+   Start states live inside the prefers-reduced-motion: no-preference guard, so
+   a reader with the setting on gets the finished drawing on first paint with no
+   JS involved. The <noscript> override in the layout covers JS-off. In both
+   cases every city name is present and legible — the motion is never load
+   bearing. Do not move these start states out of that block.
    ========================================================================== */
 
-[data-schedule-row] {
-  /* Hairline, drawn rather than bordered. A real border-bottom cannot be
-     animated left-to-right; a scaled pseudo-element can. */
-  position: relative;
-}
-
-[data-schedule-row]::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: 1px;
-  background: var(--color-rule);
-  transform-origin: left center;
-}
-
-[data-schedule-row]:last-child::after {
-  display: none;
-}
-
-@keyframes schedule-rule-draw {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes schedule-cell-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* The model number does not fade in, it RESOLVES: tracking closes and the
-   colour arrives together, which reads as a value settling rather than an
-   element appearing. */
-@keyframes schedule-model-resolve {
-  from {
-    opacity: 0;
-    letter-spacing: 0.42em;
-    color: var(--color-bone-dim);
-  }
-  60% {
-    opacity: 1;
-  }
-  to {
-    opacity: 1;
-    letter-spacing: 0;
-    color: var(--color-amber);
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  /* Start states. Applied to the whole block, not only while running, so the
-     schedule cannot flash its finished form before the observer fires. */
-  [data-schedule] [data-schedule-row]::after {
-    transform: scaleX(0);
+  [data-traverse] [data-traverse-line] {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
   }
 
-  [data-schedule] [data-schedule-cell],
-  [data-schedule] [data-schedule-model] {
+  [data-traverse] [data-traverse-node] {
     opacity: 0;
   }
 
-  /* Timing. Each row starts 0.42s after the one above it. Within a row the
-     rule leads, the copy follows at +0.16s, and the model resolves at +0.42s
-     — late enough to read as a response to the description rather than as
-     part of the same gesture. */
-  [data-schedule][data-running="true"] [data-schedule-row]::after {
-    animation: schedule-rule-draw 0.62s var(--ease-out-quiet) both;
-    animation-delay: calc(var(--row) * 0.42s);
+  [data-traverse][data-running="true"] [data-traverse-line] {
+    animation: traverse-draw var(--draw) var(--ease-in-out-slow) both;
   }
 
-  [data-schedule][data-running="true"] [data-schedule-cell] {
-    animation: schedule-cell-in 0.5s var(--ease-out-quiet) both;
-    animation-delay: calc(var(--row) * 0.42s + 0.16s);
+  /* Nodes arrive slightly BEFORE the line technically reaches them (-0.12s) and
+     fade over 0.5s. Landing them exactly on arrival read as the line dragging
+     each dot into existence; a little ahead reads as the line connecting places
+     that were already there, which is the truer idea. */
+  [data-traverse][data-running="true"] [data-traverse-node] {
+    animation: traverse-node-in 0.5s var(--ease-out-quiet) both;
+    animation-delay: calc(var(--at) - 0.12s);
   }
+}
 
-  [data-schedule][data-running="true"] [data-schedule-model] {
-    /* display: inline-block so letter-spacing animates without reflowing the
-       surrounding table cell on every frame. */
-    display: inline-block;
-    animation: schedule-model-resolve 0.72s var(--ease-out-quiet) both;
-    animation-delay: calc(var(--row) * 0.42s + 0.42s);
+@keyframes traverse-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes traverse-node-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
