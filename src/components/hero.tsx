@@ -68,24 +68,28 @@ export function Hero({
 }) {
   const isHome = page === "home";
 
+  // HEIGHT — this regressed repeatedly, so the reasoning is recorded here.
+  //
+  // The site header is `sticky top-0` with h-20, and a sticky element occupies
+  // normal flow space. The hero therefore STARTS 5rem down the page. Sizing it
+  // at 94svh/72svh meant header + hero exceeded the viewport, and because the
+  // content is centred inside that overflowing box, the lower half of the copy
+  // (description and both buttons) fell below the fold.
+  //
+  // Fixed by subtracting the header from the height rather than by nudging
+  // per-page padding. Padding is now modest — the previous 304px of combined
+  // pt/pb was itself pushing content out of view. Bottom padding only needs to
+  // clear the absolutely-positioned scroll cue (~110px from the section
+  // bottom), which pb-32 covers.
+  //
+  // Do not reintroduce svh values that ignore --header-h.
   return (
     <section
-      className={`relative isolate flex overflow-hidden ${
-        isHome ? "min-h-[94svh] items-center" : "min-h-[72svh] items-end"
-      }`}
+      className="relative isolate flex min-h-[calc(100svh-var(--header-h))] items-center overflow-hidden"
     >
       <HeroMedia page={page} align={align} />
 
-      {/*
-        Bottom padding reserves clear space for the scroll cue. Previously the
-        cue sat close enough to the CTA row to crowd it; the copy block now ends
-        well above it so the cue reads as a separate, breathing element.
-      */}
-      <Container
-        className={`relative z-10 w-full ${
-          isHome ? "pb-48 pt-28 sm:pb-52 sm:pt-32" : "pb-40 pt-36 sm:pb-44 sm:pt-40"
-        }`}
-      >
+      <Container className="relative z-10 w-full pb-28 pt-8 sm:pb-32 sm:pt-10">
         <div
           className={
             align === "center" ? "mx-auto max-w-4xl text-center" : "max-w-3xl mr-auto"
@@ -110,10 +114,10 @@ export function Hero({
           {wordmark && (
             <Reveal>
               <h1 className="flex flex-col items-center">
-                <span className="font-display text-[clamp(2.75rem,11vw,8.5rem)] font-semibold uppercase leading-[0.92] tracking-[-0.02em] text-bone">
+                <span className="font-display text-[clamp(2.5rem,min(10vw,14vh),7.5rem)] font-semibold uppercase leading-[0.92] tracking-[-0.02em] text-bone">
                   {wordmark.name}
                 </span>
-                <span className="mt-5 max-w-2xl font-display text-[clamp(1.05rem,2.6vw,1.85rem)] leading-snug text-amber">
+                <span className="mt-5 max-w-2xl font-display text-[clamp(1rem,min(2.4vw,3.4vh),1.7rem)] leading-snug text-amber">
                   {wordmark.tagline}
                 </span>
               </h1>
@@ -123,7 +127,7 @@ export function Hero({
           {/* Interior pages: a conventional headline. */}
           {headline && (
             <Reveal delay={90}>
-              <h1 className="mt-6 font-display text-[clamp(2.1rem,5.6vw,4.25rem)] leading-[1.04] tracking-[-0.025em]">
+              <h1 className="mt-6 font-display text-[clamp(1.9rem,min(5.2vw,7.5vh),3.9rem)] leading-[1.04] tracking-[-0.025em]">
                 {headline}
               </h1>
             </Reveal>

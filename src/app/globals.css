@@ -13,6 +13,12 @@
    ========================================================================== */
 
 @theme {
+  /* Height of the sticky site header (site-header.tsx uses h-20 = 5rem).
+     The header is `sticky`, so it OCCUPIES flow space — the hero therefore
+     begins this far down the page. Any full-height hero must subtract it or
+     its lower content lands below the fold. Keep these two in sync. */
+  --header-h: 5rem;
+
   --color-charcoal: #0e0e0e;
   --color-charcoal-raised: #141414;
   --color-walnut: #211a15;

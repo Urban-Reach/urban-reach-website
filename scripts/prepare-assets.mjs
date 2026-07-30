@@ -17,6 +17,7 @@
 
 import sharp from 'sharp';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -30,6 +31,20 @@ const SOURCES = {
   urbanReach: join(DOWNLOADS, 'Gemini_Generated_Image_gmrraigmrraigmrr.png'),
   // Client-supplied hero photograph: a dark commercial kitchen lit warm.
   hero: join(DOWNLOADS, 'moody kitchen.png'),
+
+  // Per-page hero photographs. OPTIONAL — each page falls back to a crop of the
+  // panorama above if its file is absent. That fallback is why five pages
+  // currently read as the same room repositioned: it IS the same photograph.
+  // Drop a file at any of these paths and that page uses it instead,
+  // cover-cropped to the hero frame. Nothing else needs changing.
+  //
+  // Wanted: landscape, 2000px wide or more, dark and warm-lit to match.
+  heroPages: {
+    about: join(DOWNLOADS, 'hero-about.png'),
+    appliances: join(DOWNLOADS, 'hero-appliances.png'),
+    process: join(DOWNLOADS, 'hero-process.png'),
+    contact: join(DOWNLOADS, 'hero-contact.png'),
+  },
   // Vendor marks. [slug, source, keyWhiteBackground] — same shape as
   // GC_SOURCES below. Samsung/Summit/GE-Haier/Fisher & Paykel/BUNN arrived with
   // genuine alpha. Champion arrived only on solid white (a 2560x940 source,
@@ -314,9 +329,18 @@ async function main() {
   };
 
   for (const [name, crop] of Object.entries(heroCrops)) {
-    await sharp(SOURCES.hero)
-      .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
-      .resize({ width: 2000, withoutEnlargement: false })
+    // A dedicated photograph wins over the shared panorama crop. `cover` at the
+    // hero's own 3:2 frame rather than `extract`, because a supplied image will
+    // not be 1774x887 and cropping by absolute pixels would clip it arbitrarily.
+    const dedicated = SOURCES.heroPages[name];
+    const framed = () =>
+      dedicated && existsSync(dedicated)
+        ? sharp(dedicated).resize({ width: 2000, height: 1333, fit: 'cover', position: 'centre' })
+        : sharp(SOURCES.hero)
+            .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
+            .resize({ width: 2000, withoutEnlargement: false });
+
+    await framed()
       // Only a light touch. The frame is brighter on the chrome and the window
       // wall than through the centre floor, but heavy source darkening made the
       // photograph read as a faint backdrop. Legibility is handled by the
@@ -327,8 +351,7 @@ async function main() {
 
     // A tiny blurred version, inlined as the CSS placeholder so the hero never
     // flashes flat charcoal before the photo decodes.
-    const tiny = await sharp(SOURCES.hero)
-      .extract({ left: crop.left, top: 0, width: crop.width, height: 887 })
+    const tiny = await framed()
       .resize({ width: 20 })
       .modulate({ brightness: 0.96 })
       .blur(1.2)

@@ -64,7 +64,11 @@ export default function AppliancesPage() {
             <span id="categories">What Urban Reach sources and installs</span>
           </SectionHeading>
 
-          <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Five categories, so a plain 3-column grid would leave a visible
+              gap in the second row. A 6-track grid with each card spanning 2,
+              and the 4th card starting at track 2, centres the final row of two
+              instead — no empty cell, and it reads as deliberate. */}
+          <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:[&>li]:col-span-2 lg:[&>li:nth-child(4)]:col-start-2">
             {applianceCategories.map((category, i) => (
               <Reveal as="li" key={category.slug} from="rise" delay={i * 70}>
                 <Card>

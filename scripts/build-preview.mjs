@@ -234,6 +234,23 @@ async function resolve(urlPath) {
 }
 
 const server = createServer(async (req, res) => {
+  // This is a STATIC export, so /api/contact does not exist here. Without this
+  // branch the POST 404s and the form shows its generic failure message, which
+  // reads as a broken site rather than an expected limitation of the preview.
+  // Answer with the shape the form already understands so it surfaces the real
+  // reason.
+  if ((req.url ?? "").startsWith("/api/contact")) {
+    res.writeHead(501, { "content-type": "application/json" });
+    res.end(
+      JSON.stringify({
+        ok: false,
+        message:
+          "The contact form is intentionally disabled in this preview copy — it needs a live mail server. On the published site it sends normally. To test it, run the project with npm run dev.",
+      }),
+    );
+    return;
+  }
+
   const file = await resolve(req.url ?? "/");
   if (!file) {
     const notFound = await resolve("/404.html");

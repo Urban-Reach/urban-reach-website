@@ -98,26 +98,81 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
  * Used on the homepage only.
  */
 export function TrustStrip() {
+  /* Both rows share one treatment so they read as a pair: centred label above a
+     centred row of marks, identical sizing and hover behaviour. The GC row comes
+     first — those are the clients, which is the stronger opening signal.
+
+     Sizing is driven by HEIGHT: a fixed h-10 with `w-auto`, so every mark lands
+     at exactly the same 40px optical height and only its width varies. That is
+     how logo rows are normally set, and it is what makes six very different
+     source aspect ratios read as one even row.
+
+     `max-w-none` is load-bearing. Tailwind's preflight applies
+     `img { max-width: 100% }`, and inside a flex row that percentage resolves
+     against the share of the line each item gets — which silently width-bound
+     the wide marks and rendered Samsung at 29px next to Summit at 40px. Height
+     caps alone could not fix that; the width cap had to be released.
+
+     Wrapping is a GRID below xl and a nowrap FLEX row at xl. At xl the six marks
+     sum to ~1050px, which fits the 1216px content box alongside the gaps, so one
+     line is guaranteed. Below xl the sum exceeds the container, and free-flowing
+     `flex-wrap` there put five marks on one line and left BUNN alone on a second
+     — the exact bug being fixed. Fixed grid tracks make an orphan impossible: the
+     row breaks 3 + 3, then 2 + 2 + 2. Note `xl:max-w-none` is only applied in
+     flex mode; in grid mode the track keeps the widest marks in bounds.
+     Re-measure before raising the heights or widening the xl gap. */
+  /* One shared row treatment, so the two sections read as a matched pair. */
+  const rowClasses =
+    "mt-10 grid grid-cols-2 items-center justify-items-center gap-x-8 gap-y-9 md:grid-cols-3 md:gap-x-10 xl:flex xl:flex-nowrap xl:justify-center xl:gap-x-6";
+
+  const markClasses =
+    "h-7 w-auto max-w-full object-contain opacity-75 transition-opacity duration-300 hover:opacity-100 sm:h-9 xl:h-10 xl:max-w-none";
+
   return (
     // id="after-hero" is the scroll cue's target: it must sit on whichever
     // section comes first below the hero.
     <Section id="after-hero" tone="raised" space="tight" aria-labelledby="trust">
       <Container>
         <h2 id="trust" className="sr-only">
-          Authorized manufacturer partners and general contractors we work with
+          General contractors we work with, and our authorized manufacturer
+          partners
         </h2>
 
-        <div className="grid gap-12 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-20">
+        {/* Working with — general contractors */}
+        <Reveal>
+          <p className="label-caps text-center text-bone-dim">Working with</p>
+        </Reveal>
+
+        <Reveal delay={90}>
+          <ul className={rowClasses}>
+            {generalContractors.map((gc) => (
+              <li key={gc.name} className="flex h-12 items-center">
+                <Image
+                  src={`${gc.logo}.webp`}
+                  alt={gc.name}
+                  width={gc.width}
+                  height={gc.height}
+                  loading="lazy"
+                  sizes="(max-width: 640px) 40vw, 220px"
+                  className={markClasses}
+                />
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+
+        {/* Authorized dealer for — manufacturers */}
+        <div className="mt-16 border-t border-rule pt-16">
           <Reveal>
-            <p className="label-caps max-w-[13rem] text-bone-dim">
+            <p className="label-caps text-center text-bone-dim">
               Authorized dealer for
             </p>
           </Reveal>
 
           <Reveal delay={90}>
-            <ul className="flex flex-wrap items-center gap-x-12 gap-y-8 sm:gap-x-16">
+            <ul className={rowClasses}>
               {brands.map((brand) => (
-                <li key={brand.slug} className="flex h-9 items-center sm:h-10">
+                <li key={brand.slug} className="flex h-12 shrink-0 items-center">
                   {brand.logo ? (
                     <Image
                       src={`${brand.logo}.webp`}
@@ -125,45 +180,19 @@ export function TrustStrip() {
                       width={brand.width}
                       height={brand.height}
                       loading="lazy"
-                      sizes="160px"
-                      className="max-h-8 w-auto max-w-[126px] object-contain opacity-70 transition-opacity duration-300 hover:opacity-100 sm:max-h-9 sm:max-w-[148px]"
+                      sizes="(max-width: 640px) 40vw, 180px"
+                      className={markClasses}
                     />
                   ) : (
-                    /* MISSING ASSET: no Champion logo file supplied. */
-                    <span className="font-display text-xl text-bone/70">{brand.name}</span>
+                    /* MISSING ASSET: no logo file supplied for this brand. */
+                    <span className="font-display text-xl text-bone/70">
+                      {brand.name}
+                    </span>
                   )}
                 </li>
               ))}
             </ul>
           </Reveal>
-        </div>
-
-        <div className="mt-14 border-t border-rule pt-14">
-          <div className="grid gap-12 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-20">
-            <Reveal>
-              <p className="label-caps max-w-[13rem] text-bone-dim">
-                Working with
-              </p>
-            </Reveal>
-
-            <Reveal delay={90}>
-              <ul className="flex flex-wrap items-center gap-x-14 gap-y-8 sm:gap-x-20">
-                {generalContractors.map((gc) => (
-                  <li key={gc.name} className="flex h-9 items-center sm:h-10">
-                    <Image
-                      src={`${gc.logo}.webp`}
-                      alt={gc.name}
-                      width={gc.width}
-                      height={gc.height}
-                      loading="lazy"
-                      sizes="160px"
-                      className="max-h-8 w-auto max-w-[132px] object-contain opacity-70 transition-opacity duration-300 hover:opacity-100 sm:max-h-9 sm:max-w-[154px]"
-                    />
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
         </div>
       </Container>
     </Section>

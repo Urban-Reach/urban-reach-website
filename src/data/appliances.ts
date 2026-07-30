@@ -1,6 +1,19 @@
 /**
  * Appliance categories.
  *
+ * CONFIRMED SCOPE: the brief named exactly three categories — refrigeration,
+ * dishwashers, and beverage equipment — plus latitude for "general commercial
+ * appliance categories".
+ *
+ * "Laundry" was previously listed here. It was an inference from that latitude,
+ * and a poor one: none of the six authorized brands is primarily a laundry
+ * manufacturer, and laundry is usually a separate trade with its own vendors.
+ * Removed. Do not re-add it without written confirmation from the client.
+ *
+ * "Cooking appliances" is kept because it IS well supported — Samsung, GE/Haier,
+ * Fisher & Paykel and Summit all build ranges, cooktops and wall ovens, and a
+ * multifamily unit appliance package effectively always includes a range.
+ *
  * PLACEHOLDER (build prompt §11): kept general and expandable because a final
  * category list is not locked. Deliberately no SKUs, model numbers, capacities,
  * or exhaustive sub-lists — those would become wrong the moment the catalog
@@ -12,7 +25,7 @@ export type ApplianceCategory = {
   title: string;
   body: string;
   /** Which of the hand-drawn blueprint glyphs to render for this category. */
-  glyph: "refrigeration" | "dishwasher" | "beverage" | "cooking" | "laundry" | "specialty";
+  glyph: "refrigeration" | "dishwasher" | "beverage" | "cooking" | "specialty";
 };
 
 export const applianceCategories: ApplianceCategory[] = [
@@ -39,12 +52,6 @@ export const applianceCategories: ApplianceCategory[] = [
     title: "Cooking appliances",
     body: "Ranges, cooktops, wall ovens, microwaves, and ventilation for residential units and commercial break-room build-outs.",
     glyph: "cooking",
-  },
-  {
-    slug: "laundry",
-    title: "Laundry",
-    body: "In-unit and common-area laundry equipment for multifamily developments, coordinated to stacked, side-by-side, or closet configurations.",
-    glyph: "laundry",
   },
   {
     slug: "specialty",
