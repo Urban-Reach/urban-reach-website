@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import { Reveal } from "@/components/motion";
 import { Hero } from "@/components/hero";
+import { BlueprintToReality } from "@/components/blueprint-to-reality";
 import { CtaBand, TrustStrip } from "@/components/sections";
-import { Seam } from "@/components/seam";
 import {
   ButtonLink,
   Card,
@@ -43,6 +43,61 @@ export default function HomePage() {
       <TrustStrip />
 
       {/* ==================================================================
+          Signature animation — spec to installed
+
+          MOVED here from /appliances at the client's direction, and removed
+          there: it is one treatment and it belongs to one page. Placed directly
+          below the logos, so the first thing after the credibility signal is the
+          work itself.
+
+          Copy is the approved wording from the Appliances page, carried over
+          unchanged rather than rewritten, so nothing new is being claimed by the
+          move.
+          ================================================================== */}
+      <Section space="base" tone="charcoal" aria-labelledby="spec-resolve">
+        <Container>
+          <SectionHeading
+            eyebrow="Spec to installed"
+            align="center"
+            lead="Three units, resolving the way every appliance we supply does."
+          >
+            <span id="spec-resolve">
+              Every unit starts as a line on an equipment schedule
+            </span>
+          </SectionHeading>
+
+          <div className="mt-20 space-y-24 lg:space-y-32">
+            {/* Refrigeration leads the sequence. It is the category a schedule
+                constrains hardest — cutout, utility rough-in and finish standard
+                all at once — so it makes the clearest first case. */}
+            <BlueprintToReality
+              kind="refrigeration"
+              eyebrow="Refrigeration"
+              title="From a spec line to a unit on site"
+              body="A refrigeration callout carries three constraints at once: a cutout, a utility rough-in, and a finish standard. We reconcile all three before anything is ordered, so the unit that arrives fits the opening that was built."
+            />
+
+            <BlueprintToReality
+              kind="dishwasher"
+              layout="media-wide"
+              eyebrow="Dishwashers"
+              title="Specified around the rough-in that already exists"
+              body="Under-counter dishwashing equipment is determined by the utility rough-in and the cabinet opening far more than by the model line. We verify both against the drawings before sourcing. Our units go in once."
+            />
+
+            <BlueprintToReality
+              kind="beverage"
+              layout="copy-wide"
+              eyebrow="Beverage equipment"
+              title="Amenity equipment that matches the finish level"
+              body="Beverage coolers and brewers occupy the most visible parts of an office floor. We source to the finish standard of the surrounding space, not to the schedule's minimum."
+              reverse
+            />
+          </div>
+        </Container>
+      </Section>
+
+      {/* ==================================================================
           Value proposition
           ================================================================== */}
       <Section tone="charcoal" space="airy" aria-labelledby="value-prop">
@@ -67,12 +122,12 @@ export default function HomePage() {
                 </p>
               </Reveal>
 
-              {/* Two cards, not three. "Sourcing and install together" used to
-                  sit here; it is now the signature section below, which states it
-                  far better than a card can. Saying it in both places was the
-                  repetition this site has been repeatedly pulled up on. */}
-              <div className="mt-12 grid gap-5 sm:grid-cols-2">
+              <div className="mt-12 grid gap-5 sm:grid-cols-3">
                 {[
+                  {
+                    title: "Sourcing and install together",
+                    body: "A single partner from purchase order through installation. No handoff between vendors, and no gap for a detail to fall through.",
+                  },
                   {
                     title: "Built for commercial scale",
                     body: "Unit-count packages for multifamily developments and full-floor office work. Built for volume, not retail quantities.",
@@ -95,35 +150,6 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* ==================================================================
-          Signature animation — the seam
-
-          The homepage's own treatment. /appliances resolves a product and
-          /contact draws a place; this resolves a relationship, so the three
-          share no visual language.
-
-          Centred rather than set beside the heading, because the composition is
-          horizontal and symmetrical — the gap has to close in the middle of the
-          reader's attention, not off to one side.
-          ================================================================== */}
-      <Section tone="raised" space="base" aria-labelledby="no-handoff">
-        <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <SectionHeading
-              align="center"
-              eyebrow="One partner"
-              lead="Appliance work is usually split between a vendor who sells and a contractor who installs. Urban Reach is both, so nothing is passed across a boundary and nothing waits at one."
-            >
-              <span id="no-handoff">No handoff, and no gap to fall through</span>
-            </SectionHeading>
-          </div>
-
-          <div className="mx-auto mt-16 max-w-3xl">
-            <Seam />
           </div>
         </Container>
       </Section>

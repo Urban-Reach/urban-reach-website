@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { Reveal } from "@/components/motion";
 import { BrandGrid, CtaBand } from "@/components/sections";
-import { BlueprintToReality } from "@/components/blueprint-to-reality";
 import { CategoryGlyph } from "@/components/appliance-art";
 import { Hero } from "@/components/hero";
 import {
@@ -84,50 +83,6 @@ export default function AppliancesPage() {
               </Reveal>
             ))}
           </ul>
-        </Container>
-      </Section>
-
-      {/* Blueprint to reality — second and third instances */}
-      <Section space="base" tone="raised" aria-labelledby="spec-resolve">
-        <Container>
-          <SectionHeading
-            eyebrow="Spec to installed"
-            align="center"
-            lead="Three units, resolving the way every appliance we supply does."
-          >
-            <span id="spec-resolve">
-              Every unit starts as a line on an equipment schedule
-            </span>
-          </SectionHeading>
-
-          <div className="mt-20 space-y-24 lg:space-y-32">
-            {/* Refrigeration leads the sequence. It is the category a schedule
-                constrains hardest — cutout, utility rough-in and finish standard
-                all at once — so it makes the clearest first case. */}
-            <BlueprintToReality
-              kind="refrigeration"
-              eyebrow="Refrigeration"
-              title="From a spec line to a unit on site"
-              body="A refrigeration callout carries three constraints at once: a cutout, a utility rough-in, and a finish standard. We reconcile all three before anything is ordered, so the unit that arrives fits the opening that was built."
-            />
-
-            <BlueprintToReality
-              kind="dishwasher"
-              layout="media-wide"
-              eyebrow="Dishwashers"
-              title="Specified around the rough-in that already exists"
-              body="Under-counter dishwashing equipment is determined by the utility rough-in and the cabinet opening far more than by the model line. We verify both against the drawings before sourcing. Our units go in once."
-            />
-
-            <BlueprintToReality
-              kind="beverage"
-              layout="copy-wide"
-              eyebrow="Beverage equipment"
-              title="Amenity equipment that matches the finish level"
-              body="Beverage coolers and brewers occupy the most visible parts of an office floor. We source to the finish standard of the surrounding space, not to the schedule's minimum."
-              reverse
-            />
-          </div>
         </Container>
       </Section>
 
