@@ -369,32 +369,31 @@
    ========================================================================== */
 
 @media (prefers-reduced-motion: no-preference) {
-  [data-traverse] [data-traverse-line] {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
+  /* The map fades up as one layer, then the markers light north to south. The
+     base geography is never animated stroke-by-stroke: dash-drawing 200-odd
+     county, road and river polylines is a great deal of work for an effect that
+     reads as noise at this scale. */
+  [data-traverse] [data-traverse-map] {
+    opacity: 0;
   }
 
   [data-traverse] [data-traverse-node] {
     opacity: 0;
   }
 
-  [data-traverse][data-running="true"] [data-traverse-line] {
-    animation: traverse-draw var(--draw) var(--ease-in-out-slow) both;
+  [data-traverse][data-running="true"] [data-traverse-map] {
+    animation: traverse-map-in 0.9s var(--ease-out-quiet) both;
   }
 
-  /* Nodes arrive slightly BEFORE the line technically reaches them (-0.12s) and
-     fade over 0.5s. Landing them exactly on arrival read as the line dragging
-     each dot into existence; a little ahead reads as the line connecting places
-     that were already there, which is the truer idea. */
   [data-traverse][data-running="true"] [data-traverse-node] {
     animation: traverse-node-in 0.5s var(--ease-out-quiet) both;
-    animation-delay: calc(var(--at) - 0.12s);
+    animation-delay: var(--at);
   }
 }
 
-@keyframes traverse-draw {
+@keyframes traverse-map-in {
   to {
-    stroke-dashoffset: 0;
+    opacity: 1;
   }
 }
 
