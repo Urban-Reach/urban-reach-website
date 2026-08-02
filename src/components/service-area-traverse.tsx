@@ -7,7 +7,7 @@ import { site } from "@/data/site";
 /**
  * "Where we work" — the service area plotted on a real map of the Austin metro.
  *
- * This replaced an abstract version: six nodes joined by a single drawn line, no
+ * This replaced an abstract version: nodes joined by a single drawn line, no
  * geography at all. It read as a diagram of relationships rather than a place,
  * and the point of the section is the place.
  *
@@ -24,13 +24,19 @@ import { site } from "@/data/site";
  * this says the opposite — contact us even if you are just outside. Markers on a
  * real map show reach without asserting a limit.
  *
+ * An earlier version also drew the surrounding towns (Georgetown, Leander,
+ * Hutto, etc.) in a quiet unmarked tone, as region-building context. The client
+ * confirmed none of those are actual service cities and had them removed
+ * entirely — see the note on MAP.towns in src/data/austin-map.ts. Do not
+ * reintroduce that layer without an explicit confirmed list from the client.
+ *
  * ATTRIBUTION
  * The river and highways come from OpenStreetMap under ODbL, which obliges
  * attribution in any published work. The credit is rendered below the map. It is
  * not optional and it is not decoration: if those layers ship, it ships.
  *
  * CONTENT
- * The only place names are the six confirmed cities in site.serviceArea, already
+ * The only place names are the confirmed cities in site.serviceArea, already
  * published in the footer and the FAQ. CITY_GEO is keyed to that union, so adding
  * a city there without coordinates fails the build rather than silently dropping
  * it from the map.
@@ -49,7 +55,6 @@ type City = (typeof site.serviceArea)[number];
 const CITY_GEO: Record<City, { lat: number; lon: number; side: "left" | "right" }> = {
   Austin: { lat: 30.2672, lon: -97.7431, side: "right" },
   "Round Rock": { lat: 30.5083, lon: -97.6789, side: "right" },
-  Georgetown: { lat: 30.6333, lon: -97.6772, side: "right" },
   Pflugerville: { lat: 30.4394, lon: -97.62, side: "right" },
   "Cedar Park": { lat: 30.5052, lon: -97.8203, side: "left" },
   "Bee Cave": { lat: 30.3077, lon: -97.9464, side: "left" },
@@ -57,7 +62,6 @@ const CITY_GEO: Record<City, { lat: number; lon: number; side: "left" | "right" 
 
 /** Markers light in this order — north to south, the anchor city last. */
 const ORDER: City[] = [
-  "Georgetown",
   "Round Rock",
   "Cedar Park",
   "Pflugerville",
@@ -170,36 +174,13 @@ export function ServiceAreaTraverse() {
           </g>
         </g>
 
-        {/* Surrounding towns. Quiet, unmarked, and deliberately present: with
-            only the six service cities on it, the map read as a boundary rather
-            than as a region. These are the places in between, and their presence
-            is what makes "we work across the metro" legible without drawing a
-            coverage area. */}
-        <g data-traverse-towns="">
-          {MAP.towns.map((t) => {
-            /* Towns near the right edge set their label inward. Elgin sits at
-               the very edge of the window and ran off the frame with a
-               right-hand label. */
-            const flip = t.x > MAP.W * 0.78;
-            return (
-            <g key={t.name}>
-              <circle cx={t.x} cy={t.y} r={2} fill="#F2EDE6" fillOpacity={0.28} />
-              <text
-                x={t.x + (flip ? -8 : 8)}
-                textAnchor={flip ? "end" : "start"}
-                y={t.y + 4}
-                stroke="var(--color-walnut)"
-                strokeWidth={4}
-                strokeLinejoin="round"
-                paintOrder="stroke"
-                className="fill-bone/40 text-[12px]"
-              >
-                {t.name}
-              </text>
-            </g>
-            );
-          })}
-        </g>
+        {/* Surrounding towns used to render here — Georgetown, Leander, Hutto
+            and five others, drawn quiet and unmarked as region-building
+            context. Removed at the client's direction: none were confirmed
+            service cities, and the client wanted them off the map entirely
+            rather than merely de-emphasised. MAP.towns is now always an empty
+            array (see src/data/austin-map.ts), so there is nothing to iterate
+            here. Do not re-add this block without a confirmed list. */}
 
         {/* Markers. */}
         {PLACED.map(({ city, x, y, side, at }) => {

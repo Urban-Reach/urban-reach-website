@@ -377,16 +377,8 @@
     opacity: 0;
   }
 
-  [data-traverse] [data-traverse-towns],
   [data-traverse] [data-traverse-node] {
     opacity: 0;
-  }
-
-  /* Towns arrive with the map, just after it, so the region is established
-     before the service cities land on top of it. */
-  [data-traverse][data-running="true"] [data-traverse-towns] {
-    animation: traverse-map-in 0.7s var(--ease-out-quiet) both;
-    animation-delay: 0.35s;
   }
 
   [data-traverse][data-running="true"] [data-traverse-map] {

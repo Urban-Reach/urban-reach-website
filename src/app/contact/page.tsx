@@ -147,14 +147,18 @@ export default function ContactPage() {
                 {/* Was "Serving Austin, Round Rock, Georgetown, Pflugerville,
                     Cedar Park, and Bee Cave" — the full list, verbatim. It read
                     as an exclusive one: those six towns and nowhere else, which
-                    is not true.
+                    is not true. (Georgetown has since been removed sitewide as
+                    unconfirmed — see site.serviceArea — so the list below is
+                    five cities, but the exclusivity problem this solved is
+                    unrelated to which cities are on it.)
 
                     The list was there for local search, but it is not carrying
-                    that weight here. All six cities still appear in the page's
-                    meta description, in the LocalBusiness areaServed structured
-                    data on every page, in the FAQ, in the site footer sitewide,
-                    and as labels on the map below. An H2 is a contributing
-                    signal, not the load-bearing one, so accuracy wins. */}
+                    that weight here. Every confirmed city still appears in the
+                    page's meta description, in the LocalBusiness areaServed
+                    structured data on every page, in the FAQ, in the site footer
+                    sitewide, and as labels on the map below. An H2 is a
+                    contributing signal, not the load-bearing one, so accuracy
+                    wins. */}
                 <span id="areas">Across Austin and the surrounding metro</span>
               </SectionHeading>
             </div>

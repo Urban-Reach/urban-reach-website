@@ -2,10 +2,11 @@
  * FAQ content — supplied by the client (build prompt §12).
  * These answers double as FAQPage structured data, so keep them factual.
  *
- * The service-area answer is the one edit to the client's original wording: it
- * now includes Georgetown, because the client expanded the service area after
- * the brief was written and this answer would otherwise contradict the rest of
- * the site. Anything else here should be treated as verbatim.
+ * The service-area answer is the one edit to the client's original wording, and
+ * it has moved twice. Georgetown was added when the client expanded the service
+ * area after the brief was written, then removed again when the client
+ * confirmed Georgetown itself was never an actual confirmed service city.
+ * Anything else here should be treated as verbatim.
  */
 
 export type FaqItem = { question: string; answer: string };
@@ -14,7 +15,7 @@ export const faqs: FaqItem[] = [
   {
     question: "What areas does Urban Reach serve?",
     answer:
-      "Urban Reach serves Austin, Texas and the surrounding communities, including Round Rock, Georgetown, Pflugerville, Cedar Park, and Bee Cave.",
+      "Urban Reach serves Austin, Texas and the surrounding communities, including Round Rock, Pflugerville, Cedar Park, and Bee Cave.",
   },
   {
     question: "What types of commercial projects do you work with?",

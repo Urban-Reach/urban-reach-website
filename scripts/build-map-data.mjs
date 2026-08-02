@@ -94,19 +94,14 @@ for (const file of ROAD_FILES) {
 }
 
 /* ---- surrounding towns ----
-   Context, and a correction. The section used to name six cities and read as if
-   those were the only ones served. Showing the towns around them, unmarked and
-   in a quieter tone, makes the region legible and makes the six read as anchors
-   rather than as a boundary. */
-const SERVICE = new Set(['Austin', 'Round Rock', 'Georgetown', 'Pflugerville', 'Cedar Park', 'Bee Cave']);
+   REMOVED at the client's direction. An earlier version drew every unconfirmed
+   town in the window (Liberty Hill, Georgetown, Leander, Taylor, Hutto, Lakeway,
+   Manor, Elgin) in a quiet tone as region-building context. The client confirmed
+   NONE of those are actual service cities and asked for them off the map
+   entirely, so `towns` is now always empty. Left as a typed empty array rather
+   than deleted so the component's rendering code does not need touching if a
+   future confirmed expansion wants a "surrounding towns" treatment again. */
 const towns = [];
-for (const e of JSON.parse(readFileSync('places.json', 'utf8')).elements) {
-  const name = e.tags?.name;
-  if (!name || SERVICE.has(name)) continue;
-  const [x, y] = px([e.lon, e.lat]);
-  if (x < 8 || x > W - 8 || y < 8 || y > H - 8) continue;
-  towns.push({ name, x: +x.toFixed(1), y: +y.toFixed(1) });
-}
 
 const out = { W, H, LON0, LON1, LAT0, LAT1, counties, water, roads, towns };
 const json = JSON.stringify(out);

@@ -50,7 +50,7 @@ export const PAGE_SEO = {
     primary: "commercial appliance supplier Austin service area",
     title: "Contact & FAQs | Urban Reach Appliance Supplier, Austin TX",
     description:
-      "Contact Urban Reach for commercial appliance sourcing and installation in Austin, Round Rock, Georgetown, Pflugerville, Cedar Park, and Bee Cave. Answers to common questions on scope, lead times, and service area.",
+      "Contact Urban Reach for commercial appliance sourcing and installation in Austin, Round Rock, Pflugerville, Cedar Park, and Bee Cave. Answers to common questions on scope, lead times, and service area.",
   },
   privacy: {
     path: "/privacy-policy",

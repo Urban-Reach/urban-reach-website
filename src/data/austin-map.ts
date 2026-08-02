@@ -9,19 +9,21 @@
  *
  *  - County boundaries: US Census Bureau cartographic boundary files. A work of
  *    the US federal government, so public domain. No attribution obligation.
- *  - Waterways, highways and town positions: OpenStreetMap, which is ODbL. Using
- *    the geometry in a published work REQUIRES attributing "© OpenStreetMap
- *    contributors". That credit is rendered beneath the map in the component —
- *    if the map ships, the credit ships with it. Do not remove it while those
- *    layers are still in use.
+ *  - Waterways and highways: OpenStreetMap, which is ODbL. Using the geometry in
+ *    a published work REQUIRES attributing "© OpenStreetMap contributors". That
+ *    credit is rendered beneath the map in the component — if the map ships, the
+ *    credit ships with it. Do not remove it while those layers are still in use.
  *
  * The river carries Lady Bird Lake, Lake Austin and Lake Travis: OpenStreetMap
  * maps those as widenings of one named waterway rather than as separate bodies,
  * which is why there is no separate lake layer.
  *
- * `towns` is every place=city|town in the window EXCEPT the six service cities,
- * which the component draws itself as amber markers. They are here to make the
- * region legible and to stop the six reading as a boundary.
+ * `towns` is intentionally always empty. An earlier version drew every
+ * unconfirmed surrounding town (Liberty Hill, Georgetown, Leander, Taylor,
+ * Hutto, Lakeway, Manor, Elgin) as quiet region-building context; the client
+ * confirmed none of those are actual service cities and asked for them off the
+ * map. Left as a typed empty array, not deleted, so the component does not need
+ * touching if a future confirmed expansion wants this treatment again.
  *
  * Projection window, in degrees. Anything drawn on top of this map has to use
  * the same window or it will not line up with the geography.
@@ -358,46 +360,5 @@ export const MAP = {
       "377.5,319.0 379.2,311.4"
     ]
   },
-  "towns": [
-    {
-      "name": "Taylor",
-      "x": 613,
-      "y": 159.3
-    },
-    {
-      "name": "Elgin",
-      "x": 644.5,
-      "y": 349.6
-    },
-    {
-      "name": "Lakeway",
-      "x": 192.5,
-      "y": 336.8
-    },
-    {
-      "name": "Hutto",
-      "x": 515.6,
-      "y": 185
-    },
-    {
-      "name": "Liberty Hill",
-      "x": 240.2,
-      "y": 81
-    },
-    {
-      "name": "Dripping Springs",
-      "x": 119.8,
-      "y": 485.2
-    },
-    {
-      "name": "Leander",
-      "x": 288.4,
-      "y": 158.7
-    },
-    {
-      "name": "Manor",
-      "x": 509,
-      "y": 355.9
-    }
-  ]
+  "towns": []
 } as const;
