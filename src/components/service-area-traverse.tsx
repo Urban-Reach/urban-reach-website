@@ -118,7 +118,7 @@ export function ServiceAreaTraverse() {
         viewBox={`0 0 ${MAP.W} ${MAP.H}`}
         className="h-auto w-full"
         role="img"
-        aria-label={`Map of the Austin metro showing the Urban Reach service area: ${site.serviceArea.join(", ")}, all in ${site.stateName}.`}
+        aria-label={`Map of the Austin metro. Urban Reach works across the region; the cities marked are those it works in most often: ${site.serviceArea.join(", ")}.`}
       >
         {/* Base geography, faintest first. Counties are the quietest layer: they
             give the frame real shape without ever becoming the subject. */}
@@ -131,22 +131,20 @@ export function ServiceAreaTraverse() {
               ))}
           </g>
 
-          {/* Highways. Divided carriageways come through as close parallel pairs,
-              which is what they are on the ground. */}
-          <g fill="none" strokeOpacity={0.24} strokeWidth={1.1} strokeLinecap="round">
-            {MAP.roads["US 183"].map((d, i) => (
-              <polyline key={`u${i}`} points={d} stroke="#F2EDE6" />
-            ))}
-            {MAP.roads["TX 71"].map((d, i) => (
-              <polyline key={`t${i}`} points={d} stroke="#F2EDE6" />
+          {/* Highways, two tiers. The majors — US-183, US-290, TX-71 and the
+              toll loops — are what turn a sparse diagram into something that
+              reads as a road network. */}
+          <g fill="none" stroke="#F2EDE6" strokeOpacity={0.2} strokeWidth={1} strokeLinecap="round">
+            {MAP.roads.major.map((d, i) => (
+              <polyline key={`m${i}`} points={d} />
             ))}
           </g>
           {/* I-35 is the strongest line on the map after the river. It is the
               spine every address in Austin is described relative to, and at the
-              opacity the other roads use it disappeared entirely — which left
-              the map looking like county lines and a river. */}
-          <g fill="none" stroke="#F2EDE6" strokeOpacity={0.4} strokeWidth={1.4} strokeLinecap="round">
-            {MAP.roads["I 35"].map((d, i) => (
+              weight the other roads use it disappeared entirely — which left the
+              map reading as county lines and a river. */}
+          <g fill="none" stroke="#F2EDE6" strokeOpacity={0.42} strokeWidth={1.5} strokeLinecap="round">
+            {MAP.roads.spine.map((d, i) => (
               <polyline key={`i${i}`} points={d} />
             ))}
           </g>
@@ -170,6 +168,37 @@ export function ServiceAreaTraverse() {
                 <polyline key={`core${i}`} points={c.d} />
               ))}
           </g>
+        </g>
+
+        {/* Surrounding towns. Quiet, unmarked, and deliberately present: with
+            only the six service cities on it, the map read as a boundary rather
+            than as a region. These are the places in between, and their presence
+            is what makes "we work across the metro" legible without drawing a
+            coverage area. */}
+        <g data-traverse-towns="">
+          {MAP.towns.map((t) => {
+            /* Towns near the right edge set their label inward. Elgin sits at
+               the very edge of the window and ran off the frame with a
+               right-hand label. */
+            const flip = t.x > MAP.W * 0.78;
+            return (
+            <g key={t.name}>
+              <circle cx={t.x} cy={t.y} r={2} fill="#F2EDE6" fillOpacity={0.28} />
+              <text
+                x={t.x + (flip ? -8 : 8)}
+                textAnchor={flip ? "end" : "start"}
+                y={t.y + 4}
+                stroke="var(--color-walnut)"
+                strokeWidth={4}
+                strokeLinejoin="round"
+                paintOrder="stroke"
+                className="fill-bone/40 text-[12px]"
+              >
+                {t.name}
+              </text>
+            </g>
+            );
+          })}
         </g>
 
         {/* Markers. */}

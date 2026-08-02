@@ -12,7 +12,7 @@ import {
   SectionHeading,
   PageShell,
 } from "@/components/ui";
-import { serviceAreaSentence, site } from "@/data/site";
+import { site } from "@/data/site";
 import { breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("contact");
@@ -144,19 +144,32 @@ export default function ContactPage() {
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeading eyebrow="Where we work">
-                {/* Generated from site.serviceArea so it can never drift out
-                    of sync with the city list shown below it. */}
-                <span id="areas">Serving {serviceAreaSentence()}</span>
+                {/* Was "Serving Austin, Round Rock, Georgetown, Pflugerville,
+                    Cedar Park, and Bee Cave" — the full list, verbatim. It read
+                    as an exclusive one: those six towns and nowhere else, which
+                    is not true.
+
+                    The list was there for local search, but it is not carrying
+                    that weight here. All six cities still appear in the page's
+                    meta description, in the LocalBusiness areaServed structured
+                    data on every page, in the FAQ, in the site footer sitewide,
+                    and as labels on the map below. An H2 is a contributing
+                    signal, not the load-bearing one, so accuracy wins. */}
+                <span id="areas">Across Austin and the surrounding metro</span>
               </SectionHeading>
             </div>
 
             <div className="lg:col-span-7">
               <Reveal>
+                {/* Inclusive first, anchors second. Previously this led with
+                    the six cities and treated everywhere else as an exception
+                    at the end, which reinforced the reading the heading gave. */}
                 <p className="text-lg leading-relaxed text-bone-dim">
-                  Urban Reach serves {site.city}, {site.stateName} and the
-                  surrounding communities. If your project sits just outside
-                  this list, contact us regardless — we will give you a direct
-                  answer.
+                  Urban Reach works throughout {site.city} and the surrounding{" "}
+                  {site.stateName} metro. The cities marked below are where we
+                  work most often — they are not a boundary. If your project is
+                  anywhere in the region, send it to us and we will give you a
+                  direct answer either way.
                 </p>
               </Reveal>
 

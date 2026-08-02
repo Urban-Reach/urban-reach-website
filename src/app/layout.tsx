@@ -96,7 +96,7 @@ export default function RootLayout({
             [data-draw] path,[data-draw] line{stroke-dasharray:none !important;stroke-dashoffset:0 !important}
             [data-b2r-line]{opacity:0 !important}
             [data-b2r-real]{opacity:1 !important;clip-path:none !important}
-            [data-traverse-map]{opacity:1 !important}
+            [data-traverse-map],[data-traverse-towns]{opacity:1 !important}
             [data-traverse-node]{opacity:1 !important}
           `}</style>
         </noscript>

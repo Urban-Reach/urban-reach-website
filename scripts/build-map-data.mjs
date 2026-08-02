@@ -66,19 +66,52 @@ for (const e of JSON.parse(readFileSync('water.json', 'utf8')).elements) {
   if (pts.length > 2 && len(pts) > 6) water.push(fmt(pts));
 }
 
-/* ---- roads ---- */
-const roads = { 'I 35': [], 'US 183': [], 'TX 71': [] };
-for (const e of JSON.parse(readFileSync('roads.json', 'utf8')).elements) {
-  if (!e.geometry || !e.tags?.ref) continue;
-  const key = ['I 35', 'US 183', 'TX 71'].find((k) => e.tags.ref.includes(k));
-  if (!key) continue;
-  const pts = simplify(e.geometry.map((g) => [g.lon, g.lat]).filter(inWindow).map(px), 1.6);
-  if (pts.length > 1 && len(pts) > 5) roads[key].push(fmt(pts));
+/* ---- roads ----
+   Two tiers. `spine` is I-35, drawn strongest because every address in Austin is
+   described relative to it. `major` is everything else worth having: the other
+   US and state highways plus the toll loops, which are what turn a sparse
+   diagram into something that reads as a road network. Anything smaller becomes
+   noise at this scale. */
+const SPINE = ['I 35'];
+const MAJOR = ['US 183', 'TX 71', 'US 290', 'TX 45', 'TX 130', 'Loop 1'];
+const roads = { spine: [], major: [] };
+const ROAD_FILES = ['roads.json', 'r290.json', 'r45.json', 'rmopac.json'];
+const seen = new Set();
+for (const file of ROAD_FILES) {
+  let els;
+  try { els = JSON.parse(readFileSync(file, 'utf8')).elements; } catch { continue; }
+  for (const e of els) {
+    if (!e.geometry || !e.tags?.ref || seen.has(e.id)) continue;
+    seen.add(e.id);
+    // Loop 111 must not be caught by a bare "Loop 1" substring test.
+    const refs = e.tags.ref.split(';').map((r) => r.trim());
+    const isSpine = refs.some((r) => SPINE.includes(r));
+    const isMajor = refs.some((r) => MAJOR.some((m) => r === m || r === `${m} Toll`));
+    if (!isSpine && !isMajor) continue;
+    const pts = simplify(e.geometry.map((g) => [g.lon, g.lat]).filter(inWindow).map(px), 1.8);
+    if (pts.length > 1 && len(pts) > 6) roads[isSpine ? 'spine' : 'major'].push(fmt(pts));
+  }
 }
 
-const out = { W, H, LON0, LON1, LAT0, LAT1, counties, water, roads };
+/* ---- surrounding towns ----
+   Context, and a correction. The section used to name six cities and read as if
+   those were the only ones served. Showing the towns around them, unmarked and
+   in a quieter tone, makes the region legible and makes the six read as anchors
+   rather than as a boundary. */
+const SERVICE = new Set(['Austin', 'Round Rock', 'Georgetown', 'Pflugerville', 'Cedar Park', 'Bee Cave']);
+const towns = [];
+for (const e of JSON.parse(readFileSync('places.json', 'utf8')).elements) {
+  const name = e.tags?.name;
+  if (!name || SERVICE.has(name)) continue;
+  const [x, y] = px([e.lon, e.lat]);
+  if (x < 8 || x > W - 8 || y < 8 || y > H - 8) continue;
+  towns.push({ name, x: +x.toFixed(1), y: +y.toFixed(1) });
+}
+
+const out = { W, H, LON0, LON1, LAT0, LAT1, counties, water, roads, towns };
 const json = JSON.stringify(out);
 writeFileSync('map-data.json', json);
 console.log('counties rings:', counties.length, '| water:', water.length,
   '| roads:', Object.entries(roads).map(([k, v]) => `${k}=${v.length}`).join(' '),
+  '| towns:', towns.length,
   '| size:', (json.length / 1024).toFixed(1), 'KB');

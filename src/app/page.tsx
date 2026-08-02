@@ -66,6 +66,10 @@ export default function HomePage() {
             </span>
           </SectionHeading>
 
+          {/* Artwork alternates left, right, left. Two consecutive units on the
+              same side read as a mistake rather than as a rhythm — `reverse`
+              flips which column the artwork sits in, so it must alternate on
+              every instance if one is ever added or removed. */}
           <div className="mt-20 space-y-24 lg:space-y-32">
             {/* Refrigeration leads the sequence. It is the category a schedule
                 constrains hardest — cutout, utility rough-in and finish standard
@@ -83,6 +87,7 @@ export default function HomePage() {
               eyebrow="Dishwashers"
               title="Specified around the rough-in that already exists"
               body="Under-counter dishwashing equipment is determined by the utility rough-in and the cabinet opening far more than by the model line. We verify both against the drawings before sourcing. Our units go in once."
+              reverse
             />
 
             <BlueprintToReality
@@ -91,7 +96,6 @@ export default function HomePage() {
               eyebrow="Beverage equipment"
               title="Amenity equipment that matches the finish level"
               body="Beverage coolers and brewers occupy the most visible parts of an office floor. We source to the finish standard of the surrounding space, not to the schedule's minimum."
-              reverse
             />
           </div>
         </Container>
