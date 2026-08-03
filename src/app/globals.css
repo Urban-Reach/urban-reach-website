@@ -353,59 +353,6 @@
   }
 }
 
-/* ==========================================================================
-   Service area traverse ("Where we work", /contact)
-   --------------------------------------------------------------------------
-   One hairline draws across the metro; each city node lights at the moment the
-   line reaches it. Timing comes from the component: --draw is the total draw
-   duration, --at is each node's arrival time, computed from its real distance
-   along the route rather than a flat stagger.
-
-   Start states live inside the prefers-reduced-motion: no-preference guard, so
-   a reader with the setting on gets the finished drawing on first paint with no
-   JS involved. The <noscript> override in the layout covers JS-off. In both
-   cases every city name is present and legible — the motion is never load
-   bearing. Do not move these start states out of that block.
-   ========================================================================== */
-
-@media (prefers-reduced-motion: no-preference) {
-  /* The map fades up as one layer, then the markers light north to south. The
-     base geography is never animated stroke-by-stroke: dash-drawing 200-odd
-     county, road and river polylines is a great deal of work for an effect that
-     reads as noise at this scale. */
-  [data-traverse] [data-traverse-map] {
-    opacity: 0;
-  }
-
-  [data-traverse] [data-traverse-node] {
-    opacity: 0;
-  }
-
-  [data-traverse][data-running="true"] [data-traverse-map] {
-    animation: traverse-map-in 0.9s var(--ease-out-quiet) both;
-  }
-
-  [data-traverse][data-running="true"] [data-traverse-node] {
-    animation: traverse-node-in 0.5s var(--ease-out-quiet) both;
-    animation-delay: var(--at);
-  }
-}
-
-@keyframes traverse-map-in {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes traverse-node-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 /* Soft amber glow on interactive surfaces. */
 .glow-hover {
   transition:

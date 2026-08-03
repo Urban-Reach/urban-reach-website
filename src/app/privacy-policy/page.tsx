@@ -24,10 +24,15 @@ export const metadata: Metadata = pageMetadata("privacy");
  * by vendors who necessarily process the submission. Saying otherwise would be
  * inaccurate, and accuracy is the governing instruction here.
  *
- * NOTE FOR FUTURE MAINTAINERS: this site currently runs no analytics, no
- * advertising pixels, and sets no tracking cookies. The "Analytics and
- * cookies" section below asserts that. If any analytics or tracking is ever
- * added, that section MUST be updated in the same change.
+ * NOTE FOR FUTURE MAINTAINERS: this site runs no analytics and carries no
+ * advertising pixels. It is NOT cookie-free, though: /contact embeds a Google
+ * My Maps iframe (see ServiceAreaMap), which loads Google's own resources and
+ * sets Google's own cookies on that page. The "Analytics and cookies" section
+ * below discloses this narrowly and specifically — it does not claim the site
+ * is cookie-free, and it must not be reworded back to that blanket claim while
+ * the map embed is in place. If the map is ever removed, or if analytics or
+ * advertising tracking is ever added, that section MUST be updated in the same
+ * change.
  */
 export default function PrivacyPolicyPage() {
   const updated = "July 27, 2026";
@@ -138,10 +143,23 @@ export default function PrivacyPolicyPage() {
                 Analytics and cookies
               </h2>
               <p className="mt-4 leading-relaxed text-bone-dim">
-                This website does not run analytics software, does not carry
-                advertising or social media tracking pixels, and does not set
-                cookies to track you across sites. There is no consent banner
-                here because there is nothing to consent to.
+                This website does not run analytics software and does not carry
+                advertising or social media tracking pixels.
+              </p>
+              <p className="mt-4 leading-relaxed text-bone-dim">
+                The Contact page embeds a Google Map to show our service area.
+                Loading that map lets Google set its own cookies and collect
+                usage data under{" "}
+                <a
+                  href="https://policies.google.com/privacy"
+                  className="link-underline text-amber"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Google&rsquo;s privacy policy
+                </a>
+                , which we do not control. No other page on this site sets any
+                cookie.
               </p>
             </section>
 

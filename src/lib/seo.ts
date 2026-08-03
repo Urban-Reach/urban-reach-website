@@ -49,8 +49,14 @@ export const PAGE_SEO = {
     path: "/contact",
     primary: "commercial appliance supplier Austin service area",
     title: "Contact & FAQs | Urban Reach Appliance Supplier, Austin TX",
+    // Naming all 8 confirmed cities pushes this past the ~155-char guideline
+    // above (it runs ~170). That is a deliberate tradeoff, not an oversight:
+    // the client wants every confirmed city named here for local search, and
+    // Google frequently rewrites meta descriptions in the snippet anyway, so a
+    // few characters of truncation risk costs less than dropping a confirmed
+    // city would.
     description:
-      "Contact Urban Reach for commercial appliance sourcing and installation in Austin, Round Rock, Pflugerville, Cedar Park, and Bee Cave. Answers to common questions on scope, lead times, and service area.",
+      "Urban Reach serves Austin, Round Rock, Pflugerville, Cedar Park, Bee Cave, West Lake Hills, Manchaca, and East Austin with commercial appliance sourcing and installation.",
   },
   privacy: {
     path: "/privacy-policy",
@@ -96,6 +102,23 @@ export function pageMetadata(key: PageKey): Metadata {
  * those are confirmed, and inventing them would violate the content integrity
  * rule as well as Google's structured data policies.
  */
+/**
+ * schema.org @type override for service-area entries that are not themselves
+ * incorporated municipalities. Everything not listed here defaults to "City".
+ *
+ * Manchaca is an unincorporated community (a Census-designated place), and
+ * East Austin is a district within the City of Austin itself, not a separate
+ * municipality — labelling either "City" would be a factual inaccuracy, and
+ * this site treats an inaccurate label the same as an unconfirmed claim (see
+ * the content-integrity rule in site.ts). "Place" is the correct generic
+ * schema.org type for a named location that is not itself a municipality.
+ * West Lake Hills IS an incorporated city, so it is not listed here.
+ */
+const AREA_TYPE: Partial<Record<(typeof site.serviceArea)[number], "City" | "Place">> = {
+  Manchaca: "Place",
+  "East Austin": "Place",
+};
+
 export function localBusinessJsonLd() {
   return {
     "@context": "https://schema.org",
@@ -114,9 +137,9 @@ export function localBusinessJsonLd() {
       addressRegion: site.state,
       addressCountry: site.country,
     },
-    areaServed: site.serviceArea.map((city) => ({
-      "@type": "City",
-      name: `${city}, ${site.state}`,
+    areaServed: site.serviceArea.map((area) => ({
+      "@type": AREA_TYPE[area] ?? "City",
+      name: `${area}, ${site.state}`,
     })),
     sameAs: [site.social.linkedin, site.social.instagram],
   };

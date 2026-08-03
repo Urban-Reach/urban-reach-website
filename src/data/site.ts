@@ -27,13 +27,25 @@ export const site = {
   country: "US",
 
   /**
-   * Confirmed service area. Do NOT broaden to statewide or national.
+   * Confirmed service area. Do NOT broaden to statewide or national, and do
+   * not add or remove a single entry without the client's explicit written
+   * confirmation — this list has already drifted twice (Georgetown was added
+   * on the strength of an MSA designation, then removed again once the client
+   * confirmed it was never an actual confirmed city; a set of surrounding
+   * towns was drawn on the old illustrated map and then removed the same way).
+   * MSA membership, geographic proximity, or "looks nearby" is NOT the same
+   * thing as confirmation.
    *
-   * Georgetown was added here at one point on the strength of the metro's
-   * official "Austin–Round Rock–Georgetown, TX" MSA designation, but the
-   * client later confirmed Georgetown itself was never an actual confirmed
-   * service city and had it removed sitewide. Do not re-add it without
-   * explicit written confirmation — MSA membership is not service confirmation.
+   * Expanded from 5 to 8 at the client's direction to add West Lake Hills,
+   * Manchaca, and East Austin. Note that Manchaca and East Austin are not
+   * incorporated municipalities — Manchaca is an unincorporated community and
+   * East Austin is a district within the City of Austin itself — which matters
+   * for the schema.org @type used in lib/seo.ts (see AREA_TYPE there). It does
+   * not change anything about how they are treated in prose copy.
+   *
+   * These are areas Urban Reach SERVES (a present capability), not areas with
+   * a confirmed project history — do not add language implying past completed
+   * projects in any specific one of these without separate confirmation.
    *
    * Anything referencing this list is generated from it. If a city is added or
    * removed, check src/data/faq.ts and src/lib/seo.ts, which also name the
@@ -45,6 +57,9 @@ export const site = {
     "Pflugerville",
     "Cedar Park",
     "Bee Cave",
+    "West Lake Hills",
+    "Manchaca",
+    "East Austin",
   ] as const,
 
   // Only these two are confirmed. No Facebook, X, or other platforms.
@@ -62,13 +77,31 @@ export const site = {
 } as const;
 
 /**
- * "Austin, Round Rock, Pflugerville, Cedar Park, and Bee Cave"
+ * "Austin, Round Rock, Pflugerville, Cedar Park, Bee Cave, West Lake Hills,
+ * Manchaca, and East Austin"
  *
  * Use this anywhere the service area is written as prose, so headings and body
  * copy stay in sync with `site.serviceArea` automatically.
  */
 export function serviceAreaSentence() {
   const cities = [...site.serviceArea];
+  const last = cities.pop();
+  return `${cities.join(", ")}, and ${last}`;
+}
+
+/**
+ * Same list, but with `exclude` (Austin by default) left out — for copy that
+ * already named the anchor city earlier in the sentence, where
+ * serviceAreaSentence() would repeat it: "Urban Reach serves Austin ... and
+ * the surrounding communities, including Austin, Round Rock, ..." reads as a
+ * mistake. Generated rather than hand-listed for the same reason as
+ * serviceAreaSentence() — this list has drifted out of sync with itself twice
+ * already.
+ */
+export function otherServiceAreaSentence(
+  exclude: (typeof site.serviceArea)[number] = site.city,
+) {
+  const cities = site.serviceArea.filter((c) => c !== exclude);
   const last = cities.pop();
   return `${cities.join(", ")}, and ${last}`;
 }

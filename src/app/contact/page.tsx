@@ -4,7 +4,7 @@ import { Reveal } from "@/components/motion";
 import { ContactForm } from "@/components/contact-form";
 import { FaqList } from "@/components/faq-list";
 import { Hero } from "@/components/hero";
-import { ServiceAreaTraverse } from "@/components/service-area-traverse";
+import { ServiceAreaMap } from "@/components/service-area-map";
 import {
   Container,
   JsonLd,
@@ -138,36 +138,30 @@ export default function ContactPage() {
         </Container>
       </Section>
 
-      {/* Service area — text only, no map embed */}
+      {/* Service area — real Google My Maps embed, plus a crawlable text list.
+
+          The map is an iframe: its pins and labels are not part of this
+          page's text to a search crawler or a screen reader, no matter how
+          accurate the map itself is. Specific city names are worth more for
+          local search than an iframe alone, so the same 8 cities are also
+          listed as plain text below, generated from site.serviceArea rather
+          than typed twice, so the two can never say different things. */}
       <Section space="tight" tone="walnut" aria-labelledby="areas">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeading eyebrow="Where we work">
-                {/* Was "Serving Austin, Round Rock, Georgetown, Pflugerville,
-                    Cedar Park, and Bee Cave" — the full list, verbatim. It read
-                    as an exclusive one: those six towns and nowhere else, which
-                    is not true. (Georgetown has since been removed sitewide as
-                    unconfirmed — see site.serviceArea — so the list below is
-                    five cities, but the exclusivity problem this solved is
-                    unrelated to which cities are on it.)
-
-                    The list was there for local search, but it is not carrying
-                    that weight here. Every confirmed city still appears in the
-                    page's meta description, in the LocalBusiness areaServed
-                    structured data on every page, in the FAQ, in the site footer
-                    sitewide, and as labels on the map below. An H2 is a
-                    contributing signal, not the load-bearing one, so accuracy
-                    wins. */}
+                {/* Deliberately not a list of cities — see the "not a
+                    boundary" paragraph below. The city names live in the list
+                    and the map, not in the heading. */}
                 <span id="areas">Across Austin and the surrounding metro</span>
               </SectionHeading>
             </div>
 
             <div className="lg:col-span-7">
               <Reveal>
-                {/* Inclusive first, anchors second. Previously this led with
-                    the six cities and treated everywhere else as an exception
-                    at the end, which reinforced the reading the heading gave. */}
+                {/* Inclusive first, anchors second: the region, then the
+                    cities as examples of it rather than a hard edge. */}
                 <p className="text-lg leading-relaxed text-bone-dim">
                   Urban Reach works throughout {site.city} and the surrounding{" "}
                   {site.stateName} metro. The cities marked below are where we
@@ -177,28 +171,20 @@ export default function ContactPage() {
                 </p>
               </Reveal>
 
-              {/* Two presentations of the same six cities, one shown at a
-                  time.
-
-                  The traverse needs width to work. Squeezed into a phone-width
-                  column its labels render at about 10.5px — too small for what
-                  is primary content on this page, and no amount of scaling fixes
-                  it without the long labels clipping or colliding. So below sm
-                  the plain list stays, which is legible at any width, and the
-                  drawing takes over from sm up where it has room to breathe.
-
-                  Only one is ever displayed, so the duplicated city names are
-                  not announced twice; the SVG is a single labelled image to a
-                  screen reader regardless. */}
-              <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-rule bg-rule sm:hidden">
+              {/* 8 cities, so 4 columns at sm+ makes a clean 2x4; 2 columns on
+                  a phone makes 4x2. Always visible at every width — this used
+                  to be a mobile-only fallback for an SVG map whose labels
+                  clipped below a certain width, but a plain text grid has no
+                  such constraint, so there is no reason to hide it above sm. */}
+              <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-rule bg-rule sm:grid-cols-4">
                 {site.serviceArea.map((city, i) => (
                   <Reveal
                     as="li"
                     key={city}
                     delay={i * 60}
-                    className="bg-walnut px-6 py-7"
+                    className="bg-walnut px-5 py-6"
                   >
-                    <span className="font-display text-xl text-bone">
+                    <span className="font-display text-lg text-bone">
                       {city}
                     </span>
                     <span className="mt-1 block text-xs text-bone-dim">
@@ -208,9 +194,7 @@ export default function ContactPage() {
                 ))}
               </ul>
 
-              <div className="mt-10 hidden rounded-lg border border-rule px-5 py-6 sm:block sm:px-7 sm:py-8">
-                <ServiceAreaTraverse />
-              </div>
+              <ServiceAreaMap />
             </div>
           </div>
         </Container>

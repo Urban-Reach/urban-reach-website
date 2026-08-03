@@ -3,11 +3,20 @@
  * These answers double as FAQPage structured data, so keep them factual.
  *
  * The service-area answer is the one edit to the client's original wording, and
- * it has moved twice. Georgetown was added when the client expanded the service
- * area after the brief was written, then removed again when the client
- * confirmed Georgetown itself was never an actual confirmed service city.
- * Anything else here should be treated as verbatim.
+ * it has moved several times — Georgetown was added, then removed once the
+ * client confirmed it was never an actual confirmed city; the area was then
+ * expanded from 5 to 8 cities to add West Lake Hills, Manchaca and East Austin.
+ * It is generated from site.serviceArea via otherServiceAreaSentence() rather
+ * than hand-typed, specifically because it has drifted out of sync with the
+ * rest of the site's copy before. Anything else here should be treated as
+ * verbatim.
+ *
+ * Phrasing is present-tense capability ("serves"), not project history — this
+ * answer must never be edited to imply completed projects in any specific one
+ * of these cities unless that is separately confirmed.
  */
+
+import { otherServiceAreaSentence, site } from "@/data/site";
 
 export type FaqItem = { question: string; answer: string };
 
@@ -15,7 +24,7 @@ export const faqs: FaqItem[] = [
   {
     question: "What areas does Urban Reach serve?",
     answer:
-      "Urban Reach serves Austin, Texas and the surrounding communities, including Round Rock, Pflugerville, Cedar Park, and Bee Cave.",
+      `Urban Reach serves ${site.city}, ${site.stateName} and the surrounding communities, including ${otherServiceAreaSentence()}.`,
   },
   {
     question: "What types of commercial projects do you work with?",
