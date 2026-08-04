@@ -79,7 +79,7 @@ export function ContactForm() {
         role="status"
         className="rounded-lg border border-amber/40 bg-charcoal p-10 text-center"
       >
-        <h3 className="font-display text-2xl">Thank you — your message is in.</h3>
+        <h3 className="font-display text-2xl">Thank you. Your message is in.</h3>
         <p className="mt-4 leading-relaxed text-bone-dim">
           We have received your inquiry and will follow up at the email address
           you provided. If it is time-sensitive, call{" "}

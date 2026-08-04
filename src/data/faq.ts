@@ -1,19 +1,24 @@
 /**
  * FAQ content — supplied by the client (build prompt §12).
- * These answers double as FAQPage structured data, so keep them factual.
+ * These answers double as FAQPage structured data, so keep them factual, and
+ * each answer must be a complete, self-contained statement: an AI system
+ * citing one Q&A pair will not have the surrounding page for context, so an
+ * answer cannot lean on a pronoun or reference that only resolves nearby.
  *
- * The service-area answer is the one edit to the client's original wording, and
- * it has moved several times — Georgetown was added, then removed once the
+ * The service-area answer is the one edit to the client's original wording,
+ * and it has moved several times: Georgetown was added, then removed once the
  * client confirmed it was never an actual confirmed city; the area was then
  * expanded from 5 to 8 cities to add West Lake Hills, Manchaca and East Austin.
  * It is generated from site.serviceArea via otherServiceAreaSentence() rather
  * than hand-typed, specifically because it has drifted out of sync with the
- * rest of the site's copy before. Anything else here should be treated as
- * verbatim.
+ * rest of the site's copy before. It also frames the named cities as
+ * illustrative, not exhaustive, since the confirmed list is not the actual
+ * boundary of where Urban Reach works. Anything else here should be treated
+ * as verbatim.
  *
- * Phrasing is present-tense capability ("serves"), not project history — this
- * answer must never be edited to imply completed projects in any specific one
- * of these cities unless that is separately confirmed.
+ * Phrasing is present-tense capability ("serves"), not project history, and
+ * this answer must never be edited to imply completed projects in any
+ * specific one of these cities unless that is separately confirmed.
  */
 
 import { otherServiceAreaSentence, site } from "@/data/site";
@@ -24,12 +29,12 @@ export const faqs: FaqItem[] = [
   {
     question: "What areas does Urban Reach serve?",
     answer:
-      `Urban Reach serves ${site.city}, ${site.stateName} and the surrounding communities, including ${otherServiceAreaSentence()}.`,
+      `Urban Reach serves ${site.city}, ${site.stateName} and the surrounding Central Texas region. Confirmed communities include ${otherServiceAreaSentence()}, among others. If a project sits elsewhere in the region, contact Urban Reach directly to confirm coverage.`,
   },
   {
     question: "What types of commercial projects do you work with?",
     answer:
-      "Urban Reach provides appliance sourcing, procurement, and installation for the full range of commercial construction projects that general contractors take on — including multifamily developments, office buildouts, tenant improvements, and other interior finish work across the Austin area.",
+      "Urban Reach provides appliance sourcing, procurement, and installation for the full range of commercial construction projects that general contractors take on, including multifamily developments, office buildouts, tenant improvements, and other interior finish work across the Austin area.",
   },
   {
     question: "What appliance brands does Urban Reach source?",
@@ -62,6 +67,6 @@ export const faqs: FaqItem[] = [
     question:
       "Does Urban Reach work directly with property owners and developers, or only through general contractors?",
     answer:
-      "Urban Reach primarily partners with general contractors managing commercial projects, but also welcomes inquiries from architects, designers, developers, and property owners.",
+      "Urban Reach primarily partners with general contractors managing commercial projects, but also welcomes inquiries from architects, designers, developers, and commercial property owners.",
   },
 ];

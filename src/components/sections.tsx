@@ -69,7 +69,7 @@ function LogoRow({
 }: {
   marks: readonly Mark[];
   variant: "gc" | "vendor";
-  /** Appended to each alt, e.g. " — authorized dealer". */
+  /** Appended to each alt, e.g. ", authorized dealer". */
   altSuffix?: string;
 }) {
   return (
@@ -139,7 +139,7 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
           asset sitting directly on the dark ground. Sizing comes from the shared
           LogoRow above, so this row and the homepage trust strip are guaranteed
           to match. */}
-      <LogoRow marks={brands} variant="vendor" altSuffix=" — authorized dealer" />
+      <LogoRow marks={brands} variant="vendor" altSuffix=", authorized dealer" />
     </>
   );
 }

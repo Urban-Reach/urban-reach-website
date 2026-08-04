@@ -32,7 +32,7 @@ export const applianceCategories: ApplianceCategory[] = [
   {
     slug: "refrigeration",
     title: "Refrigeration",
-    body: "Commercial and residential-grade refrigeration for unit kitchens, break rooms, and shared amenity spaces. Sized to the specification and the opening.",
+    body: "Commercial-grade refrigeration across a range of specification tiers, for unit kitchens, break rooms, and shared amenity spaces. Sized to the specification and the opening.",
     glyph: "refrigeration",
   },
   {
@@ -50,7 +50,7 @@ export const applianceCategories: ApplianceCategory[] = [
   {
     slug: "cooking",
     title: "Cooking appliances",
-    body: "Ranges, cooktops, wall ovens, microwaves, and ventilation for residential units and commercial break-room build-outs.",
+    body: "Ranges, cooktops, wall ovens, microwaves, and ventilation for multifamily units and commercial break rooms.",
     glyph: "cooking",
   },
   {

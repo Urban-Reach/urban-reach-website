@@ -30,7 +30,7 @@ export default function HomePage() {
            heading that still carries "commercial appliance" and "Austin". The
            exact primary phrase appears in the title tag and in the lead below. */
         wordmark={{ name: site.name, tagline: site.tagline }}
-        lead="We supply and install commercial-grade appliances for construction projects across the Austin metro. One partner, from the equipment schedule to the finished install."
+        lead="Urban Reach supplies and installs commercial-grade appliances for general contractors, architects, and developers building across the Austin metro. One partner, from the equipment schedule to the finished install."
         primary={{ href: "/contact", label: "Start a project" }}
         secondary={{ href: "/appliances", label: "See our work" }}
       />
@@ -138,7 +138,7 @@ export default function HomePage() {
                   },
                   {
                     title: "One metro, covered properly",
-                    body: "Austin and its immediate suburbs. Close enough to commit to a delivery window and keep it.",
+                    body: "Austin and the surrounding Central Texas region. Close enough to commit to a delivery window and keep it.",
                   },
                 ].map((item, i) => (
                   <Reveal key={item.title} delay={i * 90}>

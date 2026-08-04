@@ -20,12 +20,16 @@ export const metadata: Metadata = pageMetadata("about");
 /**
  * About.
  *
- * CONTENT INTEGRITY (§1, §7): Urban Reach is roughly one year old. That is
- * stated plainly rather than obscured. There are deliberately NO years-in-
- * business claims, project counts, satisfaction percentages, testimonials, or
- * certifications on this page — the company holds no WBE/MBE status or bonding,
- * and none of those numbers have been confirmed. Confidence is carried by
- * qualitative language instead.
+ * CONTENT INTEGRITY (§1, §7): NO company-age references anywhere on this page,
+ * or anywhere on the site. No "one year old," no "young company," no founding
+ * date, no years-in-business claim of any kind, stated or implied. This was
+ * flagged and removed once already and regressed once already: treat any future
+ * reintroduction of an age or history reference as a bug, not a stylistic
+ * choice. There are also deliberately NO project counts, satisfaction
+ * percentages, testimonials, or certifications on this page, the company holds
+ * no WBE/MBE status or bonding, and none of those numbers have been confirmed.
+ * Confidence is carried by qualitative language about focus and approach
+ * instead, never by tenure.
  */
 export default function AboutPage() {
   return (
@@ -53,7 +57,7 @@ export default function AboutPage() {
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-4">
               <SectionHeading eyebrow="Our story">
-                <span id="story">A young company, deliberately narrow</span>
+                <span id="story">A deliberately narrow focus</span>
               </SectionHeading>
 
               <Reveal delay={80}>
@@ -74,14 +78,10 @@ export default function AboutPage() {
               <Reveal>
                 <div className="space-y-6 text-lg leading-relaxed text-bone-dim">
                   <p>
-                    Urban Reach is approximately one year old. We state that
-                    plainly. Being new is not the same as being unprepared.
-                  </p>
-                  <p>
-                    In place of a long history, we chose a narrow scope:
-                    commercial appliance fulfillment for construction projects,
-                    in one metro. That focus is what allows a small team to
-                    answer a specification question the same day it is asked.
+                    Urban Reach chose a narrow scope on purpose: commercial
+                    appliance fulfillment for construction projects, in one
+                    metro. That focus is what allows a small team to answer a
+                    specification question the same day it is asked.
                   </p>
                   <p>
                     We work with general contractors, architects, designers,
@@ -121,15 +121,15 @@ export default function AboutPage() {
               },
               {
                 title: "Price so it can be defended",
-                body: "Pricing returns itemized and legible — ready to set against a budget line or present to an owner without translation.",
+                body: "Pricing returns itemized and legible, ready to set against a budget line or present to an owner without translation.",
               },
               {
                 title: "Own the whole handoff",
                 body: "Sourcing, delivery, and installation form one scope under one point of contact. There is no seam between supplier and installer.",
               },
               {
-                title: "Stay inside the metro",
-                body: "Austin and its immediate suburbs. Declining work beyond that radius is precisely what allows us to commit to delivery windows within it.",
+                title: "Cover the region properly",
+                body: "Austin and the surrounding Central Texas region, covered thoroughly enough to commit to a delivery window and keep it.",
               },
             ].map((item, i) => (
               <Reveal as="li" key={item.title} from="left" delay={i * 80}>
@@ -179,7 +179,7 @@ export default function AboutPage() {
                   Urban Reach partners primarily with general contractors
                   managing commercial projects across {site.city}. We also work
                   directly with architects, designers, developers, and property
-                  owners, typically earlier in the process — while the equipment
+                  owners, typically earlier in the process, while the equipment
                   schedule is still forming and selections can still change
                   without a change order.
                 </p>

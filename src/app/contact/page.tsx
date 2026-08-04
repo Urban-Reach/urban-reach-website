@@ -163,9 +163,9 @@ export default function ContactPage() {
                 {/* Inclusive first, anchors second: the region, then the
                     cities as examples of it rather than a hard edge. */}
                 <p className="text-lg leading-relaxed text-bone-dim">
-                  Urban Reach works throughout {site.city} and the surrounding{" "}
-                  {site.stateName} metro. The cities marked below are where we
-                  work most often — they are not a boundary. If your project is
+                  Urban Reach works throughout {site.city} and the surrounding
+                  Central Texas region. The cities marked below are where we
+                  work most often. They are not a boundary. If your project is
                   anywhere in the region, send it to us and we will give you a
                   direct answer either way.
                 </p>

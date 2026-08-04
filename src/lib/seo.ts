@@ -19,7 +19,7 @@ export const PAGE_SEO = {
     primary: "commercial appliance supplier Austin TX",
     title: "Commercial Appliance Supplier in Austin, TX | Urban Reach",
     description:
-      "Urban Reach is a commercial appliance supplier in Austin, TX — sourcing, delivering, and installing appliance packages for general contractors.",
+      "Urban Reach is a commercial appliance supplier in Austin, TX, sourcing, delivering, and installing appliance packages for general contractors.",
   },
   about: {
     path: "/about",

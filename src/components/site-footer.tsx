@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BrandMark } from "@/components/brand-mark";
-import { nav, serviceAreaSentence, site } from "@/data/site";
+import { nav, otherServiceAreaSentence, site } from "@/data/site";
 
 /**
  * Site footer.
@@ -100,11 +100,16 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Service area — geo signal, repeated in crawlable text */}
+        {/* Service area — geo signal, repeated in crawlable text.
+            Broadened and framed as illustrative rather than exhaustive: the
+            confirmed cities are examples of the region served, not its
+            boundary. Uses otherServiceAreaSentence() so Austin is named once,
+            as the anchor, rather than repeated inside the "including" list. */}
         <div className="mt-14 border-t border-rule pt-8">
           <p className="text-xs leading-relaxed text-bone-dim">
-            <span className="label-caps text-bone">Service area — </span>
-            Serving {serviceAreaSentence()}, {site.stateName}.
+            <span className="label-caps text-bone">Service area:</span>{" "}
+            {site.city}, {site.stateName} and the surrounding Central Texas
+            region, including {otherServiceAreaSentence()}, among others.
           </p>
           <p className="mt-4 text-xs text-bone-dim">
             © {new Date().getFullYear()} {site.name}. All rights reserved.

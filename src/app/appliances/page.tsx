@@ -48,7 +48,7 @@ export default function AppliancesPage() {
         align="left"
         eyebrow="Appliances"
         headline="Commercial appliance categories for Austin construction projects"
-        lead="We supply commercial-grade appliances for multifamily, office, and tenant improvement work across the Austin metro — sourced through authorized manufacturer partnerships and installed by the same team that priced them."
+        lead="Urban Reach supplies commercial-grade appliances for general contractors and architects managing multifamily, office, and tenant improvement work across the Austin metro. Every unit is sourced through an authorized manufacturer partnership and installed by the same team that priced it."
         primary={{ href: "/contact", label: "Send a schedule" }}
         secondary={{ href: "/process", label: "See how we work" }}
       />
@@ -94,25 +94,35 @@ export default function AppliancesPage() {
           </div>
 
           <Reveal delay={160}>
-            {/* Centred to match the heading and the logo row above it — the
-                three blocks are one section, so they share one alignment. */}
+            {/* Centred to match the heading and the logo row above it: the
+                three blocks are one section, so they share one alignment.
+
+                This paragraph deliberately does not name which brand fills
+                which role. It used to (Samsung/GE/Fisher & Paykel for one
+                tier, Summit for compact/ADA cases, Champion for dishwashing,
+                BUNN for beverage), which meant the paragraph needed a rewrite
+                every time a manufacturer relationship changed. It now explains
+                the REASONING for holding a range of relationships instead, which
+                stays true regardless of which six brands currently fill it. */}
             <div className="mx-auto mt-12 max-w-2xl space-y-4 text-center leading-relaxed text-bone-dim">
               <p>
-                These relationships span the range deliberately. Samsung,
-                GE/Haier, and Fisher &amp; Paykel carry the residential-grade
-                specifications most multifamily unit packages are written to.
-                Summit covers the compact and ADA-height cases that constrained
-                floor plans require. Champion handles commercial dishwashing.
-                BUNN handles beverage service on office amenity floors.
+                Urban Reach maintains six manufacturer relationships for
+                specific reasons, not simply to have a long list. Together they
+                cover different specification tiers for different unit types,
+                compact and ADA-height options for constrained floor plans, and
+                dedicated categories such as commercial dishwashing and beverage
+                service. When a project calls for a manufacturer outside this
+                list, Urban Reach sources it directly.
               </p>
               <p>
                 {/* The Samsung long-tail phrase still appears in crawlable body
                     copy, but as one relationship among several rather than as
-                    the page's identity. */}
+                    the page's identity. The "sourcing beyond the list" point
+                    lives in the paragraph above now, so it is not repeated
+                    here. */}
                 Urban Reach is an authorized Samsung commercial appliance
                 dealer in {site.city}, and an authorized dealer for each of the
-                brands above. When a specification calls for a manufacturer
-                outside that list, we source it.
+                brands above.
               </p>
             </div>
           </Reveal>

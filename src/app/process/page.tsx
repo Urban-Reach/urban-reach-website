@@ -49,7 +49,7 @@ export default function ProcessPage() {
         align="left"
         eyebrow="Process"
         headline="From specification to commercial appliance installation in Austin"
-        lead="Three steps, one point of contact, and no handoff between the people who price the appliances and the people who install them."
+        lead="Urban Reach manages commercial appliance installation for general contractors and architects in three steps. One point of contact, and no handoff between the people who price the appliances and the people who install them."
         primary={{ href: "/contact", label: "Start a conversation" }}
         secondary={{ href: "/appliances", label: "See what we supply" }}
       />
@@ -59,7 +59,7 @@ export default function ProcessPage() {
         <Container>
           <SectionHeading
             eyebrow="The work"
-            lead="A short, predictable sequence — by design."
+            lead="A short, predictable sequence, by design."
           >
             <span id="steps">How a project runs with Urban Reach</span>
           </SectionHeading>
@@ -156,7 +156,7 @@ export default function ProcessPage() {
             {[
               {
                 title: "The appliance or equipment schedule",
-                body: "In whatever form it exists — a finished schedule, a specification section, or a marked-up sheet.",
+                body: "In whatever form it currently exists, such as a finished schedule, a specification section, or a marked-up sheet.",
               },
               {
                 title: "Relevant plan sheets",
@@ -198,7 +198,7 @@ export default function ProcessPage() {
 
       <CtaBand
         title="Ready when your schedule is"
-        body="Send the appliance scope. We will tell you what it costs, how long it takes, and what will not work — before it becomes a change order."
+        body="Send the appliance scope. We will tell you what it costs, how long it takes, and what will not work, before any of it becomes a change order."
       />
     </PageShell>
   );

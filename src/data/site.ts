@@ -121,7 +121,7 @@ export const processSteps = [
   {
     number: "01",
     title: "Review project specifications",
-    body: "We begin with your appliance and equipment schedule. Each unit is verified against the specification, the opening it must occupy, and the date it must arrive — before anything is priced.",
+    body: "We begin with your appliance and equipment schedule. Each unit is verified against the specification, the opening it must occupy, and the date it must arrive. Only then is anything priced.",
   },
   {
     number: "02",

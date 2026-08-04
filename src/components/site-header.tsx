@@ -87,7 +87,7 @@ export function SiteHeader() {
         <Link
           href="/"
           className="relative z-10 flex items-center"
-          aria-label={`${site.name} — home`}
+          aria-label={`${site.name} home`}
         >
           {/* The link already carries the accessible name, so the mark itself
               is decorative to avoid a duplicate announcement. */}
