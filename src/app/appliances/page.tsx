@@ -98,21 +98,27 @@ export default function AppliancesPage() {
                 three blocks are one section, so they share one alignment.
 
                 This paragraph deliberately does not name which brand fills
-                which role. It used to (Samsung/GE/Fisher & Paykel for one
+                which role (it used to: Samsung/GE/Fisher & Paykel for one
                 tier, Summit for compact/ADA cases, Champion for dishwashing,
-                BUNN for beverage), which meant the paragraph needed a rewrite
-                every time a manufacturer relationship changed. It now explains
-                the REASONING for holding a range of relationships instead, which
-                stays true regardless of which six brands currently fill it. */}
+                BUNN for beverage), which meant a rewrite every time a
+                manufacturer relationship changed. It also deliberately does
+                NOT state how many relationships Urban Reach holds. An earlier
+                draft said "six manufacturer relationships," which invites the
+                reader to compare that number to a competitor's longer brand
+                list — exactly backwards, since the actual differentiator is
+                that these are close, authorized relationships plus the
+                standing ability to source beyond them, not a tally. Do not
+                reintroduce a specific count here. */}
             <div className="mx-auto mt-12 max-w-2xl space-y-4 text-center leading-relaxed text-bone-dim">
               <p>
-                Urban Reach maintains six manufacturer relationships for
-                specific reasons, not simply to have a long list. Together they
-                cover different specification tiers for different unit types,
-                compact and ADA-height options for constrained floor plans, and
-                dedicated categories such as commercial dishwashing and beverage
-                service. When a project calls for a manufacturer outside this
-                list, Urban Reach sources it directly.
+                Urban Reach holds close, authorized relationships with the
+                manufacturers it carries, chosen to cover different
+                specification tiers, compact and ADA-height options for
+                constrained floor plans, and dedicated categories such as
+                commercial dishwashing and beverage service. Those
+                relationships are the standing core, not the ceiling. When a
+                project calls for a manufacturer outside them, Urban Reach
+                sources it just the same.
               </p>
               <p>
                 {/* The Samsung long-tail phrase still appears in crawlable body

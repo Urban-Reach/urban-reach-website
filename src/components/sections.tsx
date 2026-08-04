@@ -8,14 +8,6 @@ import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui"
 /* Authorized brand grid                                                      */
 /* -------------------------------------------------------------------------- */
 
-/** Small counts read better spelled out in body copy than as numerals. */
-function countWord(n: number) {
-  return (
-    ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n] ??
-    String(n)
-  );
-}
-
 /* -------------------------------------------------------------------------- */
 /* Shared logo row                                                            */
 /* -------------------------------------------------------------------------- */
@@ -118,10 +110,12 @@ function LogoRow({
 export function BrandGrid({ heading = true }: { heading?: boolean }) {
   return (
     <>
-      {/* Deliberately brand-neutral. Urban Reach holds six authorized dealer
-          relationships and sources beyond them, so no single manufacturer
-          should headline this section or stand in for the whole roster.
-          The count is derived from `brands` so it cannot go stale.
+      {/* Deliberately brand-neutral, and deliberately not counted. Stating the
+          exact number invites the reader to compare it to a competitor's
+          longer list; the actual differentiator is that these are close,
+          authorized relationships plus the ability to source beyond them, not
+          a tally. No single manufacturer should headline this section or stand
+          in for the whole roster either.
 
           Centred, because the logo row beneath it is centred. Left-aligned copy
           above a centred row read as two unrelated blocks. */}
@@ -129,7 +123,7 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
         <SectionHeading
           align="center"
           eyebrow="Authorized dealer"
-          lead={`Urban Reach is an authorized dealer for the ${countWord(brands.length)} manufacturers below, and sources beyond them whenever a specification requires it.`}
+          lead="Urban Reach holds authorized dealer relationships with the manufacturers below, and sources beyond them whenever a specification requires it."
         >
           Manufacturer partnerships, and the range to look beyond them
         </SectionHeading>
