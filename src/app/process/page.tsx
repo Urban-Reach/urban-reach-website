@@ -64,32 +64,40 @@ export default function ProcessPage() {
             <span id="steps">How a project runs with Urban Reach</span>
           </SectionHeading>
 
-          <ol className="mt-16 space-y-5">
+          {/* Cards are deliberately compact. At the previous size (sm:p-10
+              padding, a text-6xl number, and a 3:2 photo that grew with the
+              card's full width) three of these stacked past a laptop's
+              viewport height, and the photo was doing more work than the
+              content beside it. The photo is now a fixed, capped height
+              instead of an aspect ratio, so it stays a supporting image
+              rather than the dominant element regardless of how wide the
+              card gets. */}
+          <ol className="mt-16 space-y-4">
             {processSteps.map((step, i) => (
               <Reveal as="li" key={step.number} from="right" delay={i * 90}>
-                <Card className="overflow-hidden sm:p-10">
-                  <div className="grid gap-6 sm:grid-cols-12 sm:gap-10">
+                <Card className="overflow-hidden sm:p-7">
+                  <div className="grid gap-5 sm:grid-cols-12 sm:gap-8">
                     <div className="sm:col-span-3">
                       <span
-                        className="font-display text-5xl text-amber sm:text-6xl"
+                        className="font-display text-4xl text-amber sm:text-5xl"
                         aria-hidden="true"
                       >
                         {step.number}
                       </span>
-                      <DrawRule width={56} className="mt-5" />
+                      <DrawRule width={48} className="mt-4" />
                     </div>
                     <div className="sm:col-span-9">
-                      <h3 className="font-display text-2xl leading-snug">
+                      <h3 className="font-display text-xl leading-snug">
                         {step.title}
                       </h3>
-                      <p className="mt-4 text-lg leading-relaxed text-bone-dim">
+                      <p className="mt-3 leading-relaxed text-bone-dim">
                         {step.body}
                       </p>
                     </div>
                   </div>
 
                   {stepPhotos[i] && (
-                    <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden rounded-md">
+                    <div className="relative mt-6 h-44 w-full overflow-hidden rounded-md sm:h-52 md:h-56">
                       <Image
                         src={stepPhotos[i].src}
                         alt={stepPhotos[i].alt}

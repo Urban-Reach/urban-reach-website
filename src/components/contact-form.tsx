@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { site } from "@/data/site";
 
 /**
@@ -32,10 +32,27 @@ type Status = "idle" | "sending" | "sent" | "error";
 
 export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
+  const confirmationRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState("");
   const [fileNames, setFileNames] = useState<string[]>([]);
+
+  // The confirmation was rendering, but readers often never saw it. This form
+  // is long, and the submit button sits at its bottom, so a reader typically
+  // has the page scrolled well down by the time they click it. The moment
+  // status flips to "sent", the tall form is replaced by a much shorter card,
+  // the page's total height shrinks, and the browser does not re-scroll to
+  // compensate — the reader can end up looking at whatever section follows
+  // the form, with the confirmation sitting off-screen above them. Explicitly
+  // scrolling and focusing it is what actually makes it visible, not just
+  // having it exist in the DOM.
+  useEffect(() => {
+    if (status === "sent") {
+      confirmationRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      confirmationRef.current?.focus({ preventScroll: true });
+    }
+  }, [status]);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -76,8 +93,10 @@ export function ContactForm() {
   if (status === "sent") {
     return (
       <div
+        ref={confirmationRef}
         role="status"
-        className="rounded-lg border border-amber/40 bg-charcoal p-10 text-center"
+        tabIndex={-1}
+        className="rounded-lg border border-amber/40 bg-charcoal p-10 text-center focus:outline-none"
       >
         <h3 className="font-display text-2xl">Thank you. Your message is in.</h3>
         <p className="mt-4 leading-relaxed text-bone-dim">

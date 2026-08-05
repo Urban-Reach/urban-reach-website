@@ -295,7 +295,15 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
         src={heroFile(page)}
         alt=""
         fill
-        priority={page === "home"}
+        // Every page has exactly one Hero, and it is always that page's
+        // largest above-the-fold element — so it is always that page's LCP
+        // candidate, not just on Home. This was previously priority={page ===
+        // "home"}, which meant About, Appliances, Process, and Contact all
+        // loaded their hero photograph at normal fetch priority with no
+        // preload, competing with fonts and JS instead of being prioritized.
+        // Since only one Hero is ever mounted at a time, there is no
+        // downside to always preloading it.
+        priority
         sizes="100vw"
         placeholder={blur ? "blur" : "empty"}
         blurDataURL={blur}
