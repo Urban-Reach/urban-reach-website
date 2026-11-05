@@ -18,13 +18,62 @@ const inputClass =
 
 type Status = "idle" | "sending" | "sent" | "error";
 
+const MAX_FILES = 5;
+const MAX_TOTAL_BYTES = 10 * 1024 * 1024;
+const ACCEPT =
+  ".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg,.webp,.heic,.dwg,.dxf,.rvt,.zip";
+
+const fileKey = (f: File) => `${f.name}:${f.size}:${f.lastModified}`;
+
+function formatSize(bytes: number) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const confirmationRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState("");
-  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const totalBytes = files.reduce((sum, f) => sum + f.size, 0);
+
+  function addFiles(picked: FileList | null) {
+    if (!picked?.length) return;
+    const seen = new Set(files.map(fileKey));
+    const next = [...files];
+    let skipped = "";
+    for (const file of Array.from(picked)) {
+      if (seen.has(fileKey(file))) continue;
+      if (next.length >= MAX_FILES) {
+        skipped = `You can attach up to ${MAX_FILES} files.`;
+        break;
+      }
+      if (next.reduce((sum, f) => sum + f.size, 0) + file.size > MAX_TOTAL_BYTES) {
+        skipped = `"${file.name}" would take attachments over 10 MB. Please send larger files by email.`;
+        continue;
+      }
+      seen.add(fileKey(file));
+      next.push(file);
+    }
+    setFiles(next);
+    setErrors((current) => {
+      const rest = { ...current };
+      delete rest.attachments;
+      return skipped ? { ...rest, attachments: skipped } : rest;
+    });
+  }
+
+  function removeFile(key: string) {
+    setFiles((current) => current.filter((f) => fileKey(f) !== key));
+    setErrors((current) => {
+      const rest = { ...current };
+      delete rest.attachments;
+      return rest;
+    });
+  }
 
   useEffect(() => {
     if (status === "sent") {
@@ -40,16 +89,15 @@ export function ContactForm() {
     setMessage("");
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        body: new FormData(event.currentTarget),
-      });
+      const body = new FormData(event.currentTarget);
+      for (const file of files) body.append("attachments", file);
+      const response = await fetch("/api/contact", { method: "POST", body });
       const data = await response.json();
 
       if (response.ok && data.ok) {
         setStatus("sent");
         formRef.current?.reset();
-        setFileNames([]);
+        setFiles([]);
         return;
       }
 
@@ -183,24 +231,69 @@ export function ContactForm() {
         hint="Appliance schedules, spec sections, or plan sheets. Up to 5 files, 10 MB total."
       >
         <input
-          id="attachments"
-          name="attachments"
+          ref={fileInputRef}
+          id="attachments-picker"
           type="file"
           multiple
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg,.webp,.heic,.dwg,.dxf,.rvt,.zip"
-          onChange={(e) =>
-            setFileNames(Array.from(e.target.files ?? []).map((f) => f.name))
-          }
-          className="w-full cursor-pointer rounded-md border border-rule bg-charcoal px-4 py-3.5 text-sm text-bone-dim transition-colors file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-amber file:px-5 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-widest file:text-charcoal hover:border-amber/50"
+          accept={ACCEPT}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="sr-only"
+          onChange={(e) => {
+            addFiles(e.target.files);
+            e.target.value = "";
+          }}
         />
-        {fileNames.length > 0 && (
-          <ul className="mt-3 space-y-1">
-            {fileNames.map((fileName) => (
-              <li key={fileName} className="text-sm text-bone-dim">
-                {fileName}
+
+        {files.length > 0 && (
+          <ul className="mb-3 divide-y divide-rule rounded-md border border-rule bg-charcoal">
+            {files.map((file) => (
+              <li
+                key={fileKey(file)}
+                className="flex items-center gap-3 py-2.5 pl-4 pr-1.5 text-sm"
+              >
+                <span className="min-w-0 flex-1 truncate text-bone" title={file.name}>
+                  {file.name}
+                </span>
+                <span className="shrink-0 text-xs text-bone-dim">
+                  {formatSize(file.size)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeFile(fileKey(file))}
+                  aria-label={`Remove ${file.name}`}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-bone-dim transition-colors hover:bg-walnut hover:text-amber focus-visible:text-amber"
+                >
+                  <svg viewBox="0 0 16 16" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round">
+                    <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
+                  </svg>
+                </button>
               </li>
             ))}
           </ul>
+        )}
+
+        {files.length < MAX_FILES ? (
+          <button
+            id="attachments"
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            aria-describedby={errors.attachments ? "attachments-error" : undefined}
+            className="flex w-full items-center justify-center gap-2.5 rounded-md border border-dashed border-rule bg-charcoal px-4 py-3.5 text-sm text-bone transition-colors hover:border-amber/60 hover:text-amber focus-visible:border-amber focus-visible:outline-none"
+          >
+            <span aria-hidden="true" className="text-lg leading-none text-amber">+</span>
+            {files.length === 0 ? "Add files" : "Add another file"}
+          </button>
+        ) : (
+          <p id="attachments" className="text-xs text-bone-dim">
+            That&apos;s the limit of {MAX_FILES} files. Remove one to add a different file.
+          </p>
+        )}
+
+        {files.length > 0 && (
+          <p className="mt-2 text-xs text-bone-dim">
+            {files.length} of {MAX_FILES} files, {formatSize(totalBytes)} of 10 MB
+          </p>
         )}
       </Field>
 
