@@ -56,12 +56,4 @@ export const brands: Brand[] = [
     height: 122,
     opticalScale: 0.71,
   },
-  {
-    slug: "sabre",
-    name: "Sabre",
-    logo: "/brand/vendors/sabre-reversed",
-    width: 640,
-    height: 156,
-    opticalScale: 0.79,
-  },
 ];

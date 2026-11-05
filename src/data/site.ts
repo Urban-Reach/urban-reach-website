@@ -75,4 +75,5 @@ export const generalContractors = [
   { name: "Structura", logo: "/brand/gc/structura-reversed", width: 640, height: 136, opticalScale: 0.86 },
   { name: "Trimbuilt", logo: "/brand/gc/trimbuilt-reversed", width: 640, height: 146, opticalScale: 0.89 },
   { name: "Novo", logo: "/brand/gc/novo-reversed", width: 640, height: 198, opticalScale: 1 },
+  { name: "Sabre", logo: "/brand/gc/sabre-reversed", width: 640, height: 156, opticalScale: 0.91 },
 ] as const;

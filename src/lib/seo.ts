@@ -22,7 +22,7 @@ export const PAGE_SEO = {
     primary: "commercial appliance dealer Austin",
     title: "Commercial Appliance Dealer in Austin, TX | Urban Reach",
     description:
-      "Authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, BUNN, and Sabre. Refrigeration, dishwashers, and beverage equipment across Austin.",
+      "Authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, and BUNN. Refrigeration, dishwashers, and beverage equipment across Austin.",
   },
   process: {
     path: "/process",
