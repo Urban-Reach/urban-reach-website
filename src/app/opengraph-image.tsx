@@ -3,25 +3,11 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { site } from "@/data/site";
 
-/**
- * Open Graph share image (build prompt §10).
- *
- * No real photography exists, so this is a designed card: the reversed logo and
- * the tagline on the brand palette. Generated at build time rather than shipped
- * as a static file, so it stays in sync with the tagline and the logo asset.
- *
- * Applies site-wide via the root app directory — every page that does not
- * define its own opengraph-image inherits this one, which prevents the blank or
- * broken previews the spec calls out.
- */
-
 export const alt = `${site.name}: ${site.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
-  // Read from disk rather than fetching over the network: the deployment has
-  // no reliable absolute URL at build time.
   const logo = await readFile(
     join(process.cwd(), "public", "brand", "urban-reach-lockup.png"),
   );
@@ -38,7 +24,6 @@ export default async function OpenGraphImage() {
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "#0E0E0E",
-          // Blueprint field + warm amber wash, matching the site's hero.
           backgroundImage:
             "radial-gradient(ellipse at 50% 40%, rgba(201,146,47,0.18), transparent 62%)," +
             "linear-gradient(to right, rgba(201,146,47,0.07) 1px, transparent 1px)," +
@@ -47,7 +32,6 @@ export default async function OpenGraphImage() {
           position: "relative",
         }}
       >
-        {/* Satori renders this to a static PNG; next/image is not applicable. */}
         <img src={logoSrc} alt="" width={470} height={312} />
 
         <div

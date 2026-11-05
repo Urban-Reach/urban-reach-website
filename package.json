@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "preview": "node scripts/build-preview.mjs",
-    "assets": "node scripts/prepare-assets.mjs"
+    "lint": "eslint"
   },
   "dependencies": {
     "next": "16.2.12",

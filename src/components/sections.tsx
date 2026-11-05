@@ -4,14 +4,6 @@ import { generalContractors, site } from "@/data/site";
 import { Reveal } from "@/components/motion";
 import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui";
 
-/* -------------------------------------------------------------------------- */
-/* Authorized brand grid                                                      */
-/* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
-/* Shared logo row                                                            */
-/* -------------------------------------------------------------------------- */
-
 type Mark = {
   readonly name: string;
   readonly logo: string | null;
@@ -20,37 +12,7 @@ type Mark = {
   readonly opticalScale: number;
 };
 
-/**
- * The ONE place logo sizing is decided.
- *
- * Both the homepage trust strip and the Appliances dealer grid render through
- * this, so the two cannot drift apart — they previously carried separate size
- * caps and the same six marks came out at different proportions in each.
- *
- * Two things make a row of mismatched marks read as even:
- *
- *  1. Per-mark optical scaling. Each height is `--mark-h * opticalScale`, a
- *     tempered equal-area factor stored alongside the asset (see brands.ts).
- *     Equal height alone made Samsung dominate at 2.8x the area of Summit.
- *  2. `max-w-none`. Tailwind preflight applies `img { max-width: 100% }`, and
- *     inside a flex row that percentage resolves against each item's share of
- *     the line — which silently width-bound the wide marks and undid the
- *     scaling. Releasing it lets height drive width, as it must.
- *
- * Layout is a fixed grid below xl and a nowrap flex row at xl. Free-flowing
- * `flex-wrap` is deliberately not used: at intermediate widths it put five
- * marks on one line and orphaned BUNN alone on a second. Fixed tracks break
- * 3 + 3, then 2 + 2 + 2. A leftover single mark (seven vendors) is centred
- * on its own line rather than left-aligned under the first column.
- *
- * The --mark-h ladders below are measured, not guessed: at every breakpoint the
- * widest mark in each row fits its track (or, at xl, the whole row fits the
- * 1216px content box alongside its gaps) with margin to spare. Raising them
- * means re-measuring.
- */
 const MARK_HEIGHTS = {
-  /* Three marks and a full row to themselves, so these run appreciably larger
-     than the manufacturer row — up to 62px against 46px. */
   gc: "[--mark-h:34px] sm:[--mark-h:44px] md:[--mark-h:50px] lg:[--mark-h:56px] xl:[--mark-h:62px]",
   vendor: "[--mark-h:30px] sm:[--mark-h:34px] md:[--mark-h:40px] xl:[--mark-h:46px]",
 } as const;
@@ -62,7 +24,6 @@ function LogoRow({
 }: {
   marks: readonly Mark[];
   variant: "gc" | "vendor";
-  /** Appended to each alt, e.g. ", authorized dealer". */
   altSuffix?: string;
 }) {
   return (
@@ -88,9 +49,6 @@ function LogoRow({
               className="w-auto max-w-none object-contain opacity-75 transition-opacity duration-300 hover:opacity-100"
             />
           ) : (
-            /* MISSING ASSET: no logo file supplied for this brand. Set in the
-               display face at a comparable optical weight rather than left as a
-               blank gap or filled with a redrawn substitute. */
             <span className="font-display text-xl text-bone/70">{mark.name}</span>
           )}
         </Reveal>
@@ -99,27 +57,9 @@ function LogoRow({
   );
 }
 
-/**
- * Every supplied manufacturer mark is dark ink on transparent, so each sits on
- * a light chip. Recoloring a manufacturer's mark to survive a dark background
- * would breach most dealer brand-usage guidelines; presenting the unmodified
- * mark on a light field does not.
- *
- * PLACEHOLDER (§11): confirm each brand's dealer brand-usage guidelines and
- * source final art from their official media/dealer portal before publishing.
- */
 export function BrandGrid({ heading = true }: { heading?: boolean }) {
   return (
     <>
-      {/* Deliberately brand-neutral, and deliberately not counted. Stating the
-          exact number invites the reader to compare it to a competitor's
-          longer list; the actual differentiator is that these are close,
-          authorized relationships plus the ability to source beyond them, not
-          a tally. No single manufacturer should headline this section or stand
-          in for the whole roster either.
-
-          Centred, because the logo row beneath it is centred. Left-aligned copy
-          above a centred row read as two unrelated blocks. */}
       {heading && (
         <SectionHeading
           align="center"
@@ -130,34 +70,13 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
         </SectionHeading>
       )}
 
-      {/* No chips or boxes behind the marks. Each logo is a reversed one-colour
-          asset sitting directly on the dark ground. Sizing comes from the shared
-          LogoRow above, so this row and the homepage trust strip are guaranteed
-          to match. */}
       <LogoRow marks={brands} variant="vendor" altSuffix=", authorized dealer" />
     </>
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Trust strip — directly beneath the hero                                    */
-/* -------------------------------------------------------------------------- */
-
-/**
- * The credibility signal, placed as the first thing after the hero.
- *
- * Deliberately NOT the same section as BrandGrid on the Appliances page. This is
- * logos only — two quiet labelled rows, no heading, no lead, no cards. The
- * Appliances page carries the same marks inside a section whose actual content
- * is the explanatory copy about what each manufacturer covers. Same assets, two
- * genuinely different jobs: recognition here, explanation there.
- *
- * Used on the homepage only.
- */
 export function TrustStrip() {
   return (
-    // id="after-hero" is the scroll cue's target: it must sit on whichever
-    // section comes first below the hero.
     <Section id="after-hero" tone="raised" space="tight" aria-labelledby="trust">
       <Container>
         <h2 id="trust" className="sr-only">
@@ -165,10 +84,6 @@ export function TrustStrip() {
           partners
         </h2>
 
-        {/* Both rows share one treatment so they read as a pair: a centred label
-            above a centred row, same hover, same sizing rules. The GC row comes
-            first — those are the clients, which is the stronger opening signal.
-            The GC marks run larger because there are only three of them. */}
         <Reveal>
           <p className="label-caps text-center text-bone-dim">Working with</p>
         </Reveal>
@@ -187,14 +102,6 @@ export function TrustStrip() {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Closing CTA                                                                */
-/* -------------------------------------------------------------------------- */
-
-/**
- * No "request a bid" flow anywhere (build prompt §1) — bids happen through
- * private industry channels. This is a general inquiry CTA only.
- */
 export function CtaBand({
   title = "Have an equipment schedule to price?",
   body = "Send it to us. We will review the specifications, source against them, and return pricing you can present to a client.",

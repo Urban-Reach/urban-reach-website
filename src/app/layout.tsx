@@ -9,10 +9,6 @@ import { JsonLd } from "@/components/ui";
 import { localBusinessJsonLd } from "@/lib/seo";
 import { site } from "@/data/site";
 
-/**
- * Fonts are self-hosted and preloaded by next/font — no render-blocking request
- * to Google's CDN, and no layout shift, which protects the CLS < 0.1 target.
- */
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
@@ -30,7 +26,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: `${site.name} | ${site.tagline}`,
-    // Each page supplies a complete, hand-written title; no boilerplate suffix.
     template: "%s",
   },
   description: site.tagline,
@@ -66,30 +61,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${playfair.variable} ${inter.variable} h-full antialiased`}
-      /*
-        REQUIRED — do not remove. globals.css sets `scroll-behavior: smooth` on
-        <html> so the hero's scroll cue glides to the first section. Without this
-        attribute, Next.js also routes its post-navigation scroll RESET through
-        that smooth behaviour: clicking a nav link from partway down a long page
-        animated the viewport across thousands of pixels of the NEW page over
-        ~1.5s. Because sections reveal on scroll, everything in that band was
-        still at opacity 0, so the new page looked blank and broken — it read as
-        "the other pages don't work".
-
-        This attribute tells Next to reset scroll instantly on route changes
-        while leaving in-page anchor scrolling smooth.
-        https://nextjs.org/docs/messages/missing-data-scroll-behavior
-      */
       data-scroll-behavior="smooth"
     >
       <head>
-        {/*
-          Scroll-reveal start states live behind
-          `@media (prefers-reduced-motion: no-preference)` in globals.css, and
-          the IntersectionObserver that clears them needs JS. Without JS the
-          elements would stay at opacity 0, so pin them to their resolved state
-          here. Keep in sync with the animated start states in globals.css.
-        */}
         <noscript>
           <style>{`
             [data-reveal]{opacity:1 !important;transform:none !important}
@@ -101,7 +75,6 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full flex-col bg-charcoal text-bone">
 
-        {/* LocalBusiness structured data on every page (build prompt §7). */}
         <JsonLd data={localBusinessJsonLd()} />
 
         <a
@@ -111,8 +84,6 @@ export default function RootLayout({
           Skip to content
         </a>
 
-        {/* Appliance glyph gradients, defined once for the whole document so
-            the glyphs stay server components. See appliance-art.tsx. */}
         <ApplianceGradientSprite />
 
         <SiteHeader />

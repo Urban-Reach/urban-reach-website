@@ -2,12 +2,6 @@ import type { MetadataRoute } from "next";
 import { site } from "@/data/site";
 import { PAGE_SEO } from "@/lib/seo";
 
-/**
- * Generated sitemap (build prompt §7). Served at /sitemap.xml.
- *
- * Priorities reflect commercial intent rather than depth: Contact ranks
- * alongside the service pages because it carries the FAQ and geo content.
- */
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 

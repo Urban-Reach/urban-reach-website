@@ -7,33 +7,6 @@ import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("privacy");
 
-/**
- * Privacy Policy.
- *
- * SCOPE (build prompt §3): states plainly and ONLY what is true — what is
- * collected (contact form submissions), how it is used (responding to
- * inquiries), that it is not sold, and who to contact with questions.
- *
- * DELIBERATELY ABSENT: any claim of CCPA, GDPR, or other regulatory
- * compliance; any certification; any guarantee Urban Reach cannot verify or
- * fulfil. Do not add those without verified legal advice — an unverifiable
- * compliance claim is a worse liability than no claim.
- *
- * The service-provider paragraph is deliberately more precise than a blanket
- * "we never share your data": email delivery and website hosting are performed
- * by vendors who necessarily process the submission. Saying otherwise would be
- * inaccurate, and accuracy is the governing instruction here.
- *
- * NOTE FOR FUTURE MAINTAINERS: this site runs no analytics and carries no
- * advertising pixels. It is NOT cookie-free, though: /contact embeds a Google
- * My Maps iframe (see ServiceAreaMap), which loads Google's own resources and
- * sets Google's own cookies on that page. The "Analytics and cookies" section
- * below discloses this narrowly and specifically — it does not claim the site
- * is cookie-free, and it must not be reworded back to that blanket claim while
- * the map embed is in place. If the map is ever removed, or if analytics or
- * advertising tracking is ever added, that section MUST be updated in the same
- * change.
- */
 export default function PrivacyPolicyPage() {
   const updated = "July 27, 2026";
 
@@ -56,7 +29,6 @@ export default function PrivacyPolicyPage() {
 
       <Section tone="charcoal">
         <Container>
-          {/* Good-faith disclosure notice — required to be visible (§3). */}
           <div className="mb-14 rounded-lg border border-amber/40 bg-walnut p-6 sm:p-8">
             <h2 className="label-caps text-amber">Please note</h2>
             <p className="mt-4 leading-relaxed text-bone">

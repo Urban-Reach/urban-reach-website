@@ -6,38 +6,8 @@ import { join } from "node:path";
 import { Reveal, ScrollCue } from "@/components/motion";
 import { Container } from "@/components/ui";
 
-/**
- * Site-wide hero.
- *
- * One component drives the hero on every page so the typography scale, photo
- * treatment, CTA pattern and scroll indicator cannot drift apart. Each page
- * passes a different `page`, which selects both its crop of the kitchen
- * photograph and its composition, so the pages are visibly different
- * arrangements of one language rather than the same block with the text
- * swapped.
- *
- * PHOTOGRAPHY
- * Each page has its OWN photograph, prepared by scripts/prepare-assets.mjs: the
- * commercial kitchen on the homepage, an unfinished building on About, a
- * warehouse aisle of stainless fronts on Appliances, a night loading dock on
- * Process, a finished apartment kitchen at blue hour on Contact. All five were
- * previously crops of one panorama, which read as the same room repositioned.
- *
- * Every frame is darkened slightly at source AND carries a scrim beneath the
- * text block. Text is never placed directly on the raw image.
- */
-
 type Page = "home" | "about" | "appliances" | "process" | "contact";
 
-/**
- * Hero photography, resolved at build time from public/hero/manifest.json.
- *
- * Filenames carry a content hash (`about.d8d658db.webp`), so replacing a
- * photograph changes the URL. Without that, swapping the images left every
- * browser and CDN that had already cached `/_next/image?url=/hero/about.webp`
- * serving the previous picture indefinitely — which is exactly what happened.
- * Never hard-code `/hero/<page>.webp` here again.
- */
 function heroFile(page: Page) {
   const manifest = JSON.parse(
     readFileSync(join(process.cwd(), "public", "hero", "manifest.json"), "utf8"),
@@ -45,11 +15,6 @@ function heroFile(page: Page) {
   return `/hero/${manifest[page]}`;
 }
 
-/**
- * Inline blur placeholder, read at build time. Keeps the hero from flashing flat
- * charcoal before a ~145KB photo decodes, without shipping a separate request
- * for a 20px image.
- */
 function blurFor(page: Page) {
   try {
     return readFileSync(join(process.cwd(), "public", "hero", `${page}.blur.txt`), "utf8");
@@ -69,38 +34,16 @@ export function Hero({
   align = "center",
 }: {
   page: Page;
-  /** Small amber label above the headline. Omitted on the homepage. */
   eyebrow?: string;
-  /**
-   * Homepage only: renders "URBAN REACH" as the dominant white wordmark with
-   * the tagline directly beneath it in amber. Both live inside the single H1 so
-   * the page keeps one heading that still carries its keywords.
-   */
   wordmark?: { name: string; tagline: string };
   headline?: ReactNode;
   lead?: ReactNode;
   primary?: { href: string; label: string; plain?: boolean };
-  /** Rendered as a plain-text arrow link, never a second filled button. */
   secondary?: { href: string; label: string; plain?: boolean };
   align?: "center" | "left";
 }) {
   const isHome = page === "home";
 
-  // HEIGHT — this regressed repeatedly, so the reasoning is recorded here.
-  //
-  // The site header is `sticky top-0` with h-20, and a sticky element occupies
-  // normal flow space. The hero therefore STARTS 5rem down the page. Sizing it
-  // at 94svh/72svh meant header + hero exceeded the viewport, and because the
-  // content is centred inside that overflowing box, the lower half of the copy
-  // (description and both buttons) fell below the fold.
-  //
-  // Fixed by subtracting the header from the height rather than by nudging
-  // per-page padding. Padding is now modest — the previous 304px of combined
-  // pt/pb was itself pushing content out of view. Bottom padding only needs to
-  // clear the absolutely-positioned scroll cue (~110px from the section
-  // bottom), which pb-32 covers.
-  //
-  // Do not reintroduce svh values that ignore --header-h.
   return (
     <section
       className="relative isolate flex min-h-[calc(100svh-var(--header-h))] items-center overflow-hidden"
@@ -128,7 +71,6 @@ export function Hero({
             </Reveal>
           )}
 
-          {/* Homepage: wordmark + tagline, as one H1. */}
           {wordmark && (
             <Reveal>
               <h1 className="flex flex-col items-center">
@@ -142,7 +84,6 @@ export function Hero({
             </Reveal>
           )}
 
-          {/* Interior pages: a conventional headline. */}
           {headline && (
             <Reveal delay={90}>
               <h1 className="mt-6 font-display text-[clamp(1.9rem,min(5.2vw,7.5vh),3.9rem)] leading-[1.04] tracking-[-0.025em]">
@@ -178,18 +119,6 @@ export function Hero({
         </div>
       </Container>
 
-      {/*
-        LIGHT BRIDGE — the visual link between photograph and type.
-
-        Sits ABOVE the copy and uses `plus-lighter`, which can only ADD light.
-        That matters: it means the effect physically cannot reduce text contrast,
-        so the wordmark keeps its measured legibility while the kitchen's warm
-        lighting appears to spill across the top edge of the letterforms instead
-        of the type floating flatly on the image.
-
-        Two parts: a broad warm bloom grazing the wordmark, and a narrow
-        horizontal sheen that reads as a steel reflection catching the type.
-      */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-20 mix-blend-plus-lighter"
@@ -242,8 +171,6 @@ function PrimaryCta({ href, label, plain }: { href: string; label: string; plain
 }
 
 function SecondaryCta({ href, label, plain }: { href: string; label: string; plain?: boolean }) {
-  // Plain-text arrow link, deliberately not a second filled button — the hero
-  // carries one clear primary action.
   const cls =
     "label-caps-lg link-underline inline-flex items-center gap-2 text-bone transition-colors duration-300 hover:text-amber";
   const inner = (
@@ -265,27 +192,6 @@ function SecondaryCta({ href, label, plain }: { href: string; label: string; pla
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Media layer                                                                */
-/* -------------------------------------------------------------------------- */
-
-/**
- * The photograph plus the scrim stack that keeps text legible over it.
- *
- * The scrim is not one flat wash. The source frame's brightness is uneven —
- * hot on the chrome hood and the window wall, dark through the centre floor —
- * so a single overlay either crushes the photo or leaves the copy sitting on a
- * bright highlight. Instead:
- *
- *   1. a global tint, to seat the whole image in the brand's charcoal
- *   2. a directional gradient weighted toward wherever the copy sits
- *   3. a focused ellipse directly behind the text block
- *   4. a vignette, pulling the frame edges down
- *   5. film grain, so the gradients do not band on wide displays
- *
- * Measured result: the darkest text on the page still clears WCAG AA against
- * the brightest pixel that ends up behind it.
- */
 function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
   const blur = blurFor(page);
 
@@ -295,14 +201,6 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
         src={heroFile(page)}
         alt=""
         fill
-        // Every page has exactly one Hero, and it is always that page's
-        // largest above-the-fold element — so it is always that page's LCP
-        // candidate, not just on Home. This was previously priority={page ===
-        // "home"}, which meant About, Appliances, Process, and Contact all
-        // loaded their hero photograph at normal fetch priority with no
-        // preload, competing with fonts and JS instead of being prioritized.
-        // Since only one Hero is ever mounted at a time, there is no
-        // downside to always preloading it.
         priority
         sizes="100vw"
         placeholder={blur ? "blur" : "empty"}
@@ -310,21 +208,8 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
         className="object-cover object-center"
       />
 
-      {/*
-        The scrim is split deliberately: the layers that cover the WHOLE frame
-        are kept light so the photograph reads strongly, and the legibility work
-        is concentrated in layer 3, which only covers the text block. Lifting the
-        global tint alone would have washed the copy out; lifting it while
-        tightening layer 3 makes the image more present AND the text no less
-        readable. Contrast is measured after any change to these numbers.
-      */}
-
-      {/* 1. Global tint — seats the photo in the brand charcoal. Reduced from
-             0.55 so the kitchen is a present part of the hero, not a backdrop. */}
       <div className="absolute inset-0 bg-charcoal/28" />
 
-      {/* 2. Directional gradient. Eased off through the middle of the frame,
-             where there is no copy, so the equipment stays visible. */}
       <div
         className={
           align === "center"
@@ -333,10 +218,6 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
         }
       />
 
-      {/* 3. Focused scrim directly behind the text block — tightened and
-             strengthened to carry the legibility now that layers 1, 2 and 4 are
-             lighter. This is the layer that guarantees contrast regardless of
-             what the photograph is doing underneath. */}
       <div
         className="absolute inset-0"
         style={{
@@ -347,10 +228,8 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
         }}
       />
 
-      {/* 4. Vignette, eased so it frames rather than smothers. */}
       <div className="absolute inset-0 bg-[radial-gradient(126%_96%_at_50%_46%,transparent_42%,rgba(6,6,6,0.62)_100%)]" />
 
-      {/* 5. Film grain, so the gradient stack does not band on wide screens. */}
       <div
         className="absolute inset-0 opacity-[0.13] mix-blend-overlay"
         style={{
@@ -360,7 +239,6 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
         }}
       />
 
-      {/* Hard edge into the next section. */}
       <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--color-charcoal))]" />
     </div>
   );

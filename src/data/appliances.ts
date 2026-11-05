@@ -1,30 +1,7 @@
-/**
- * Appliance categories.
- *
- * CONFIRMED SCOPE: the brief named exactly three categories — refrigeration,
- * dishwashers, and beverage equipment — plus latitude for "general commercial
- * appliance categories".
- *
- * "Laundry" was previously listed here. It was an inference from that latitude,
- * and a poor one: none of the six authorized brands is primarily a laundry
- * manufacturer, and laundry is usually a separate trade with its own vendors.
- * Removed. Do not re-add it without written confirmation from the client.
- *
- * "Cooking appliances" is kept because it IS well supported — Samsung, GE/Haier,
- * Fisher & Paykel and Summit all build ranges, cooktops and wall ovens, and a
- * multifamily unit appliance package effectively always includes a range.
- *
- * PLACEHOLDER (build prompt §11): kept general and expandable because a final
- * category list is not locked. Deliberately no SKUs, model numbers, capacities,
- * or exhaustive sub-lists — those would become wrong the moment the catalog
- * shifts. Add categories here and the /appliances grid picks them up.
- */
-
 export type ApplianceCategory = {
   slug: string;
   title: string;
   body: string;
-  /** Which of the hand-drawn blueprint glyphs to render for this category. */
   glyph: "refrigeration" | "dishwasher" | "beverage" | "cooking" | "specialty";
 };
 
@@ -61,10 +38,6 @@ export const applianceCategories: ApplianceCategory[] = [
   },
 ];
 
-/**
- * Project types Urban Reach serves. Used for the SEO-supporting sections and
- * kept aligned with the client-supplied FAQ answer on project types.
- */
 export const projectTypes = [
   {
     title: "Multifamily developments",

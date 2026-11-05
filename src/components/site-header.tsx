@@ -6,15 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { BrandMark } from "@/components/brand-mark";
 import { nav, site } from "@/data/site";
 
-/**
- * Site header.
- *
- * Unified navigation — deliberately NOT segmented into GC vs. architect tracks
- * (build prompt §13). One voice speaking to all of them.
- *
- * On small screens this collapses to a real full-height menu panel rather than
- * shrinking the desktop row.
- */
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -22,17 +13,12 @@ export function SiteHeader() {
   const panelRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
-  // Close the panel on route change. Adjusting state during render is React's
-  // recommended pattern for resetting state when a value changes — doing this
-  // in an effect would render the stale open panel for a frame first.
   const [lastPathname, setLastPathname] = useState(pathname);
   if (lastPathname !== pathname) {
     setLastPathname(pathname);
     setOpen(false);
   }
 
-  // Subtle background once the page has moved, so the header never floats over
-  // content unreadably.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
@@ -40,7 +26,6 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Escape to close, and keep focus inside the open panel.
   useEffect(() => {
     if (!open) return;
 
@@ -89,12 +74,9 @@ export function SiteHeader() {
           className="relative z-10 flex items-center"
           aria-label={`${site.name} home`}
         >
-          {/* The link already carries the accessible name, so the mark itself
-              is decorative to avoid a duplicate announcement. */}
           <BrandMark decorative eager className="h-11 w-auto sm:h-12" />
         </Link>
 
-        {/* Desktop nav */}
         <nav aria-label="Primary" className="hidden lg:block">
           <ul className="flex items-center gap-9">
             {nav.map((item) => {
@@ -119,9 +101,6 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        {/* Plain text, not a bordered pill. The reference layout keeps all
-            button weight out of the nav so the hero's single primary CTA is the
-            only filled element on the first screen. */}
         <div className="hidden lg:block">
           <a
             href={site.phoneHref}
@@ -131,7 +110,6 @@ export function SiteHeader() {
           </a>
         </div>
 
-        {/* Mobile toggle */}
         <button
           ref={toggleRef}
           type="button"
@@ -161,7 +139,6 @@ export function SiteHeader() {
         </button>
       </div>
 
-      {/* Mobile panel */}
       <div
         id="mobile-menu"
         ref={panelRef}

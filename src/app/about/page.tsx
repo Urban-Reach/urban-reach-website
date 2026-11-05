@@ -17,20 +17,6 @@ import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("about");
 
-/**
- * About.
- *
- * CONTENT INTEGRITY (§1, §7): NO company-age references anywhere on this page,
- * or anywhere on the site. No "one year old," no "young company," no founding
- * date, no years-in-business claim of any kind, stated or implied. This was
- * flagged and removed once already and regressed once already: treat any future
- * reintroduction of an age or history reference as a bug, not a stylistic
- * choice. There are also deliberately NO project counts, satisfaction
- * percentages, testimonials, or certifications on this page, the company holds
- * no WBE/MBE status or bonding, and none of those numbers have been confirmed.
- * Confidence is carried by qualitative language about focus and approach
- * instead, never by tenure.
- */
 export default function AboutPage() {
   return (
     <PageShell rhythm="about">
@@ -51,7 +37,6 @@ export default function AboutPage() {
         secondary={{ href: "/process", label: "See how we work" }}
       />
 
-      {/* Story */}
       <Section id="after-hero" space="airy" tone="charcoal" aria-labelledby="story">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -101,7 +86,6 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Approach */}
       <Section space="airy" tone="walnut" aria-labelledby="approach">
         <Container>
           <SectionHeading
@@ -147,7 +131,6 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Who we work with */}
       <Section space="tight" tone="raised" aria-labelledby="who">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -193,10 +176,6 @@ export default function AboutPage() {
                 </p>
               </Reveal>
 
-              {/* A single inline link rather than a closing CTA band. This page
-                  already ends on an invitation; wrapping it in another
-                  eyebrow-heading-lead-button section would be the templated
-                  padding this page was audited to remove. */}
               <Reveal delay={200}>
                 <Link
                   href="/contact"

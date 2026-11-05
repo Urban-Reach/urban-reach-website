@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-/** On-brand 404 (build prompt §10) — never a default blank error page. */
 export default function NotFound() {
   return (
     <section className="relative overflow-hidden">

@@ -2,24 +2,11 @@ import Link from "next/link";
 import { BrandMark } from "@/components/brand-mark";
 import { nav, otherServiceAreaSentence, site } from "@/data/site";
 
-/**
- * Site footer.
- *
- * No business hours anywhere (build prompt §3) — there is no showroom to attach
- * hours to. Social links are LinkedIn and Instagram only; no other accounts are
- * confirmed, and these must stay in sync with the Google Business Profile
- * "Profiles" section.
- */
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-rule bg-walnut">
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20">
-        {/* Phones: brand on top, Navigate and Follow side by side, Contact
-            full width beneath, so the footer is three short blocks instead of
-            four stacked ones. From md up it is the original three columns,
-            with Follow sitting under Contact. */}
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-12 md:gap-x-12">
-          {/* Brand */}
           <div className="col-span-2 md:col-span-5 md:row-span-2">
             <BrandMark className="h-14 w-auto" />
             <p className="mt-6 max-w-sm font-display text-lg leading-snug text-bone">
@@ -32,7 +19,6 @@ export function SiteFooter() {
             </p>
           </div>
 
-          {/* Navigate */}
           <nav aria-label="Footer" className="md:col-span-3 md:row-span-2">
             <h2 className="label-caps text-amber">Navigate</h2>
             <ul className="mt-6 flex flex-col gap-3">
@@ -57,7 +43,6 @@ export function SiteFooter() {
             </ul>
           </nav>
 
-          {/* Contact */}
           <div className="order-last col-span-2 md:order-none md:col-span-4">
             <h2 className="label-caps text-amber">Contact</h2>
             <address className="mt-6 flex flex-col gap-3 not-italic">
@@ -79,7 +64,6 @@ export function SiteFooter() {
             </address>
           </div>
 
-          {/* Follow */}
           <div className="md:col-span-4 md:col-start-9">
             <h2 className="label-caps text-amber">Follow</h2>
             <ul className="mt-6 flex flex-col gap-3 md:flex-row md:gap-6">
@@ -109,11 +93,6 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Service area — geo signal, repeated in crawlable text.
-            Broadened and framed as illustrative rather than exhaustive: the
-            confirmed cities are examples of the region served, not its
-            boundary. Uses otherServiceAreaSentence() so Austin is named once,
-            as the anchor, rather than repeated inside the "including" list. */}
         <div className="mt-14 border-t border-rule pt-8">
           <p className="text-xs leading-relaxed text-bone-dim">
             <span className="label-caps text-bone">Service area:</span>{" "}

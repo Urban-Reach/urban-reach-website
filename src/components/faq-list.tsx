@@ -1,14 +1,6 @@
 import { faqs } from "@/data/faq";
 import { Reveal } from "@/components/motion";
 
-/**
- * FAQ list.
- *
- * Built on native <details>/<summary>: keyboard accessible and screen-reader
- * correct with no JS, and the answer text stays in the DOM so it is fully
- * crawlable. The same content is emitted as FAQPage structured data on the
- * Contact page.
- */
 export function FaqList() {
   return (
     <ul className="mt-14 divide-y divide-rule border-y border-rule">

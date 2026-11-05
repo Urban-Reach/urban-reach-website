@@ -3,18 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/data/site";
 
-/**
- * Contact form.
- *
- * This is a general inquiry form. There is deliberately no "request a bid"
- * flow (build prompt §1) — bids happen through private industry channels.
- * Attachments exist so a contractor can send an appliance schedule alongside
- * an inquiry, not to submit a bid package.
- *
- * Spam protection (§10): a honeypot field, hidden from real users and from
- * assistive technology, validated server-side in /api/contact.
- */
-
 const PROJECT_TYPES = [
   "Multifamily development",
   "Office buildout",
@@ -38,15 +26,6 @@ export function ContactForm() {
   const [message, setMessage] = useState("");
   const [fileNames, setFileNames] = useState<string[]>([]);
 
-  // The confirmation was rendering, but readers often never saw it. This form
-  // is long, and the submit button sits at its bottom, so a reader typically
-  // has the page scrolled well down by the time they click it. The moment
-  // status flips to "sent", the tall form is replaced by a much shorter card,
-  // the page's total height shrinks, and the browser does not re-scroll to
-  // compensate — the reader can end up looking at whatever section follows
-  // the form, with the confirmation sitting off-screen above them. Explicitly
-  // scrolling and focusing it is what actually makes it visible, not just
-  // having it exist in the DOM.
   useEffect(() => {
     if (status === "sent") {
       confirmationRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -120,8 +99,6 @@ export function ContactForm() {
 
   return (
     <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-6">
-      {/* Honeypot. Hidden from sighted users AND from screen readers, so it can
-          only be filled in by something crawling the DOM. */}
       <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="website">Website (leave this field empty)</label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
@@ -199,7 +176,6 @@ export function ContactForm() {
         />
       </Field>
 
-      {/* Attachments */}
       <Field
         label="Attachments"
         name="attachments"

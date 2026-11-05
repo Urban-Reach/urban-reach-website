@@ -18,21 +18,6 @@ import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("appliances");
 
-/**
- * Appliances.
- *
- * Primary phrase: "commercial appliance dealer Austin".
- * Secondary: "Samsung commercial appliance dealer Austin" (H3 + body),
- * "multifamily appliance supplier", "office buildout appliance supplier".
- *
- * Samsung is targeted as a supporting phrase, NOT as the page's headline. Urban
- * Reach holds six authorized dealer relationships and sources beyond them; a
- * Samsung-led title and H1 misrepresented the business as single-brand. Keep
- * any one manufacturer subordinate to the roster here.
- *
- * The Samsung dealer claim is confirmed but stays Austin-scoped (§7) — it must
- * never be broadened to statewide or Texas-wide.
- */
 export default function AppliancesPage() {
   return (
     <PageShell rhythm="appliances">
@@ -53,7 +38,6 @@ export default function AppliancesPage() {
         secondary={{ href: "/process", label: "See how we work" }}
       />
 
-      {/* Categories */}
       <Section id="after-hero" space="tight" tone="charcoal" aria-labelledby="categories">
         <Container>
           <SectionHeading
@@ -63,10 +47,6 @@ export default function AppliancesPage() {
             <span id="categories">What Urban Reach sources and installs</span>
           </SectionHeading>
 
-          {/* Five categories, so a plain 3-column grid would leave a visible
-              gap in the second row. A 6-track grid with each card spanning 2,
-              and the 4th card starting at track 2, centres the final row of two
-              instead — no empty cell, and it reads as deliberate. */}
           <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:[&>li]:col-span-2 lg:[&>li:nth-child(4)]:col-start-2">
             {applianceCategories.map((category, i) => (
               <Reveal as="li" key={category.slug} from="rise" delay={i * 70}>
@@ -86,7 +66,6 @@ export default function AppliancesPage() {
         </Container>
       </Section>
 
-      {/* Authorized brands */}
       <Section space="tight" tone="charcoal" aria-labelledby="dealer">
         <Container>
           <div id="dealer">
@@ -94,21 +73,6 @@ export default function AppliancesPage() {
           </div>
 
           <Reveal delay={160}>
-            {/* Centred to match the heading and the logo row above it: the
-                three blocks are one section, so they share one alignment.
-
-                This paragraph deliberately does not name which brand fills
-                which role (it used to: Samsung/GE/Fisher & Paykel for one
-                tier, Summit for compact/ADA cases, Champion for dishwashing,
-                BUNN for beverage), which meant a rewrite every time a
-                manufacturer relationship changed. It also deliberately does
-                NOT state how many relationships Urban Reach holds. An earlier
-                draft said "six manufacturer relationships," which invites the
-                reader to compare that number to a competitor's longer brand
-                list — exactly backwards, since the actual differentiator is
-                that these are close, authorized relationships plus the
-                standing ability to source beyond them, not a tally. Do not
-                reintroduce a specific count here. */}
             <div className="mx-auto mt-12 max-w-2xl space-y-4 text-center leading-relaxed text-bone-dim">
               <p>
                 Urban Reach holds close, authorized relationships with the
@@ -121,11 +85,6 @@ export default function AppliancesPage() {
                 sources it just the same.
               </p>
               <p>
-                {/* The Samsung long-tail phrase still appears in crawlable body
-                    copy, but as one relationship among several rather than as
-                    the page's identity. The "sourcing beyond the list" point
-                    lives in the paragraph above now, so it is not repeated
-                    here. */}
                 Urban Reach is an authorized Samsung commercial appliance
                 dealer in {site.city}, and an authorized dealer for each of the
                 brands above.
@@ -135,7 +94,6 @@ export default function AppliancesPage() {
         </Container>
       </Section>
 
-      {/* Project types — secondary phrase targets */}
       <Section space="airy" tone="walnut" aria-labelledby="project-types">
         <Container>
           <SectionHeading
@@ -164,7 +122,6 @@ export default function AppliancesPage() {
           </ul>
         </Container>
       </Section>
-
 
       <CtaBand
         title="Send us the equipment schedule"

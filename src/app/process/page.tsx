@@ -17,23 +17,12 @@ import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("process");
 
-/** One photo per step, in processSteps order. */
 const stepPhotos = [
   { src: "/photos/process-1-review.webp", alt: "An equipment schedule and floor plan for a commercial kitchen laid out on a desk" },
   { src: "/photos/process-2-source.webp", alt: "Commercial appliances staged in wholesale crates in a warehouse" },
   { src: "/photos/process-3-deliver.webp", alt: "An installer setting a commercial range into a finished kitchen opening" },
 ] as const;
 
-/**
- * Process.
- *
- * Primary phrase: "commercial appliance installation Austin".
- * Secondary: "tenant improvement appliance fulfillment".
- *
- * PUBLIC-SAFE ONLY (§1): the three steps describe what a client experiences.
- * No internal software, platforms, vendors, or workflow tooling is named here
- * or anywhere else on the site.
- */
 export default function ProcessPage() {
   return (
     <PageShell rhythm="process">
@@ -54,7 +43,6 @@ export default function ProcessPage() {
         secondary={{ href: "/appliances", label: "See what we supply" }}
       />
 
-      {/* Steps */}
       <Section id="after-hero" space="base" tone="charcoal" aria-labelledby="steps">
         <Container>
           <SectionHeading
@@ -64,14 +52,6 @@ export default function ProcessPage() {
             <span id="steps">How a project runs with Urban Reach</span>
           </SectionHeading>
 
-          {/* Cards are deliberately compact. At the previous size (sm:p-10
-              padding, a text-6xl number, and a 3:2 photo that grew with the
-              card's full width) three of these stacked past a laptop's
-              viewport height, and the photo was doing more work than the
-              content beside it. The photo is now a fixed, capped height
-              instead of an aspect ratio, so it stays a supporting image
-              rather than the dominant element regardless of how wide the
-              card gets. */}
           <ol className="mt-16 space-y-4">
             {processSteps.map((step, i) => (
               <Reveal as="li" key={step.number} from="right" delay={i * 90}>
@@ -115,7 +95,6 @@ export default function ProcessPage() {
         </Container>
       </Section>
 
-      {/* Tenant improvement — secondary phrase */}
       <Section space="tight" tone="walnut" aria-labelledby="ti">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 lg:[&>*:first-child]:order-2">
@@ -150,7 +129,6 @@ export default function ProcessPage() {
         </Container>
       </Section>
 
-      {/* What to send */}
       <Section space="base" tone="charcoal" aria-labelledby="what-to-send">
         <Container>
           <SectionHeading
@@ -202,7 +180,6 @@ export default function ProcessPage() {
           </Reveal>
         </Container>
       </Section>
-
 
       <CtaBand
         title="Ready when your schedule is"

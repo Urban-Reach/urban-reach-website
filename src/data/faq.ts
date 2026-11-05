@@ -1,26 +1,3 @@
-/**
- * FAQ content — supplied by the client (build prompt §12).
- * These answers double as FAQPage structured data, so keep them factual, and
- * each answer must be a complete, self-contained statement: an AI system
- * citing one Q&A pair will not have the surrounding page for context, so an
- * answer cannot lean on a pronoun or reference that only resolves nearby.
- *
- * The service-area answer is the one edit to the client's original wording,
- * and it has moved several times: Georgetown was added, then removed once the
- * client confirmed it was never an actual confirmed city; the area was then
- * expanded from 5 to 8 cities to add West Lake Hills, Manchaca and East Austin.
- * It is generated from site.serviceArea via otherServiceAreaSentence() rather
- * than hand-typed, specifically because it has drifted out of sync with the
- * rest of the site's copy before. It also frames the named cities as
- * illustrative, not exhaustive, since the confirmed list is not the actual
- * boundary of where Urban Reach works. Anything else here should be treated
- * as verbatim.
- *
- * Phrasing is present-tense capability ("serves"), not project history, and
- * this answer must never be edited to imply completed projects in any
- * specific one of these cities unless that is separately confirmed.
- */
-
 import { otherServiceAreaSentence, site } from "@/data/site";
 
 export type FaqItem = { question: string; answer: string };

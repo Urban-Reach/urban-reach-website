@@ -2,31 +2,11 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { site } from "@/data/site";
 
-/**
- * Contact form endpoint.
- *
- * Forwards submissions to info@urbanreachtx.com via Resend (build prompt §8,
- * §11 — this must not ship as a non-functional UI stub).
- *
- * Why a server route rather than a client-side third-party endpoint:
- *  - the API key never reaches the browser bundle
- *  - the honeypot is validated server-side, where a bot cannot skip it
- *  - file attachments are supported, so a GC can send an appliance schedule
- *  - mail arrives from Urban Reach's own domain with no third-party branding
- *
- * REQUIRED ENVIRONMENT VARIABLES
- *   RESEND_API_KEY   API key from https://resend.com/api-keys
- *   CONTACT_FROM     Verified sender, e.g. "Urban Reach <website@urbanreachtx.com>"
- *                    The domain must be verified in Resend before this works.
- *   CONTACT_TO       Optional. Defaults to info@urbanreachtx.com.
- */
-
 export const runtime = "nodejs";
 
-const MAX_TOTAL_ATTACHMENT_BYTES = 10 * 1024 * 1024; // 10 MB
+const MAX_TOTAL_ATTACHMENT_BYTES = 10 * 1024 * 1024;
 const MAX_FILES = 5;
 
-/** Document types a contractor would realistically attach to an inquiry. */
 const ALLOWED_EXTENSIONS = [
   "pdf", "doc", "docx", "xls", "xlsx", "csv",
   "png", "jpg", "jpeg", "webp", "heic",
@@ -64,8 +44,6 @@ export async function POST(request: Request) {
   const projectType = value("projectType");
   const message = value("message");
 
-  // Honeypot (§10). Hidden from real users; bots fill it in. Respond with a
-  // normal-looking success so the bot gets no signal that it was caught.
   if (value("website")) {
     return NextResponse.json({ ok: true });
   }
@@ -87,7 +65,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, errors }, { status: 422 });
   }
 
-  // ---- Attachments --------------------------------------------------------
   const files = form
     .getAll("attachments")
     .filter((f): f is File => f instanceof File && f.size > 0);
@@ -133,14 +110,11 @@ export async function POST(request: Request) {
     })),
   );
 
-  // ---- Send ---------------------------------------------------------------
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.CONTACT_FROM;
   const to = process.env.CONTACT_TO ?? site.email;
 
   if (!apiKey || !from) {
-    // Fail loudly in the server log, but do not tell the visitor that the site
-    // is misconfigured — give them the direct email address instead.
     console.error(
       "[contact] Missing RESEND_API_KEY and/or CONTACT_FROM. " +
         "Set both in the environment before going live; see README.",

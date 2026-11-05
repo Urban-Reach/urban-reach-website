@@ -3,19 +3,6 @@ import type { Metadata } from "next";
 import { ProcessJourney } from "@/components/process-journey";
 import { Container, Section, SectionHeading } from "@/components/ui";
 
-/**
- * SANDBOX — not part of the site.
- *
- * A review page for the Process journey animation, so it can be judged before
- * anything is committed to /process. Deliberately:
- *
- *  - noindex, nofollow. It must never appear in search results.
- *  - absent from the nav and the sitemap, so no visitor can reach it by
- *    accident. It exists only for whoever is given the URL.
- *
- * DELETE THIS DIRECTORY once the animation is either adopted or dropped. A
- * sandbox left in a shipped codebase becomes a page nobody remembers owning.
- */
 export const metadata: Metadata = {
   title: "Sandbox — Process journey | Urban Reach",
   robots: { index: false, follow: false },

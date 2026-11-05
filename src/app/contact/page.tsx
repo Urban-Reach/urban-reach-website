@@ -17,15 +17,6 @@ import { breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("contact");
 
-/**
- * Contact.
- *
- * No map embed (§3) — there is no public street address to pin, so the service
- * area is given as text. No business hours anywhere on the site (§3).
- *
- * The FAQ block carries FAQPage structured data for long-tail capture, and the
- * answers are the client-supplied text verbatim.
- */
 export default function ContactPage() {
   return (
     <PageShell rhythm="contact">
@@ -49,11 +40,9 @@ export default function ContactPage() {
         secondary={{ href: site.emailHref, label: "Email us", plain: true }}
       />
 
-      {/* Form + details */}
       <Section id="after-hero" space="base" tone="charcoal" aria-labelledby="get-in-touch">
         <Container>
           <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">
-            {/* Details */}
             <div className="lg:col-span-4">
               <SectionHeading eyebrow="Reach us">
                 <span id="get-in-touch">Direct contact</span>
@@ -119,7 +108,6 @@ export default function ContactPage() {
               </Reveal>
             </div>
 
-            {/* Form */}
             <div className="lg:col-span-8">
               <Reveal>
                 <div className="rounded-lg border border-rule bg-charcoal-raised p-6 sm:p-10">
@@ -138,30 +126,17 @@ export default function ContactPage() {
         </Container>
       </Section>
 
-      {/* Service area — real Google My Maps embed, plus a crawlable text list.
-
-          The map is an iframe: its pins and labels are not part of this
-          page's text to a search crawler or a screen reader, no matter how
-          accurate the map itself is. Specific city names are worth more for
-          local search than an iframe alone, so the same 8 cities are also
-          listed as plain text below, generated from site.serviceArea rather
-          than typed twice, so the two can never say different things. */}
       <Section space="tight" tone="walnut" aria-labelledby="areas">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeading eyebrow="Where we work">
-                {/* Deliberately not a list of cities — see the "not a
-                    boundary" paragraph below. The city names live in the list
-                    and the map, not in the heading. */}
                 <span id="areas">Across Austin and the surrounding metro</span>
               </SectionHeading>
             </div>
 
             <div className="lg:col-span-7">
               <Reveal>
-                {/* Inclusive first, anchors second: the region, then the
-                    cities as examples of it rather than a hard edge. */}
                 <p className="text-lg leading-relaxed text-bone-dim">
                   Urban Reach works throughout {site.city} and the surrounding
                   Central Texas region. The cities marked below are where we
@@ -171,11 +146,6 @@ export default function ContactPage() {
                 </p>
               </Reveal>
 
-              {/* 8 cities, so 4 columns at sm+ makes a clean 2x4; 2 columns on
-                  a phone makes 4x2. Always visible at every width — this used
-                  to be a mobile-only fallback for an SVG map whose labels
-                  clipped below a certain width, but a plain text grid has no
-                  such constraint, so there is no reason to hide it above sm. */}
               <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-rule bg-rule sm:grid-cols-4">
                 {site.serviceArea.map((city, i) => (
                   <Reveal
@@ -200,7 +170,6 @@ export default function ContactPage() {
         </Container>
       </Section>
 
-      {/* FAQ */}
       <Section space="airy" tone="charcoal" aria-labelledby="faq">
         <Container>
           <SectionHeading

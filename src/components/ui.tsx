@@ -2,10 +2,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { DrawRule, Reveal } from "@/components/motion";
 
-/* -------------------------------------------------------------------------- */
-/* Layout                                                                     */
-/* -------------------------------------------------------------------------- */
-
 export function Container({
   children,
   className = "",
@@ -20,12 +16,6 @@ export function Container({
   );
 }
 
-/**
- * Every page wraps its content in this. `rhythm` selects the page's spacing and
- * motion scale from the [data-rhythm] block in globals.css, which is what stops
- * the pages reading as four copies of one template — colour and type stay
- * identical, pace does not.
- */
 export function PageShell({
   rhythm,
   children,
@@ -43,13 +33,11 @@ export function PageShell({
 export function Section({
   children,
   tone = "charcoal",
-  /** `tight` and `airy` step off the page's base rhythm for local contrast. */
   space = "base",
   className = "",
   ...rest
 }: {
   children: ReactNode;
-  /** Alternating section grounds create the vertical rhythm. */
   tone?: "charcoal" | "raised" | "walnut";
   space?: "tight" | "base" | "airy";
   className?: string;
@@ -60,8 +48,6 @@ export function Section({
     walnut: "bg-walnut",
   };
 
-  // Padding derives from the page's rhythm variables rather than a fixed
-  // py-20/py-28 everywhere, so section spacing differs page to page.
   const spacing = {
     tight: "py-[calc(var(--section-y)*0.7)] sm:py-[calc(var(--section-y-lg)*0.62)]",
     base: "py-[var(--section-y)] sm:py-[var(--section-y-lg)]",
@@ -75,10 +61,6 @@ export function Section({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Typography                                                                 */
-/* -------------------------------------------------------------------------- */
-
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <div className="flex items-center gap-4">
@@ -88,10 +70,6 @@ export function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-/**
- * Section heading. `as` keeps the document outline correct — the visual size is
- * independent of the heading level, so hierarchy is never sacrificed for looks.
- */
 export function SectionHeading({
   eyebrow,
   children,
@@ -132,10 +110,6 @@ export function SectionHeading({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Buttons                                                                    */
-/* -------------------------------------------------------------------------- */
-
 export function ButtonLink({
   href,
   children,
@@ -152,7 +126,7 @@ export function ButtonLink({
 
   const styles =
     variant === "primary"
-      ? // #0E0E0E on #C9922F = 7.0:1
+      ?
         "bg-amber text-charcoal hover:bg-bone focus-visible:bg-bone"
       : "glow-hover border border-rule text-bone hover:text-amber";
 
@@ -185,10 +159,6 @@ export function ButtonLink({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Cards                                                                      */
-/* -------------------------------------------------------------------------- */
-
 export function Card({
   children,
   className = "",
@@ -205,10 +175,6 @@ export function Card({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Structured data                                                            */
-/* -------------------------------------------------------------------------- */
-
 export function JsonLd({ data }: { data: object | object[] }) {
   const payload = Array.isArray(data) ? data : [data];
   return (
@@ -217,7 +183,6 @@ export function JsonLd({ data }: { data: object | object[] }) {
         <script
           key={i}
           type="application/ld+json"
-          // Content is our own static data, not user input.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
         />
       ))}

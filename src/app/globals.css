@@ -1,22 +1,6 @@
 @import "tailwindcss";
 
-/* ==========================================================================
-   Urban Reach design system
-   Palette is locked by the brand spec. Verified WCAG 2.1 AA contrast:
-     #F2EDE6 on #0E0E0E ....... 16.6:1
-     #F2EDE6 on #141414 ....... 16.1:1
-     #F2EDE6 on #211A15 ....... 14.7:1
-     #C9922F on #0E0E0E ........ 7.0:1  (safe for body-size text, not just accents)
-     #C9922F on #211A15 ........ 6.2:1
-     #0E0E0E on #C9922F ........ 7.0:1  (filled amber button)
-   No pure black (#000) and no stark white (#FFF) anywhere.
-   ========================================================================== */
-
 @theme {
-  /* Height of the sticky site header (site-header.tsx uses h-20 = 5rem).
-     The header is `sticky`, so it OCCUPIES flow space — the hero therefore
-     begins this far down the page. Any full-height hero must subtract it or
-     its lower content lands below the fold. Keep these two in sync. */
   --header-h: 5rem;
 
   --color-charcoal: #0e0e0e;
@@ -25,18 +9,12 @@
   --color-amber: #c9922f;
   --color-bone: #f2ede6;
 
-  /* Muted text step. 9.9:1 on charcoal — still clears AA for body copy. */
   --color-bone-dim: #b8b0a6;
-  /* Hairline rules. Decorative only, never load-bearing for meaning. */
   --color-rule: #2b2620;
 
   --font-display: var(--font-playfair), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  /* Four distinct easings. Reusing one curve everywhere is a large part of why
-     a site reads as templated — the motion signature becomes identical from
-     page to page. Each page picks one as its default via a data-rhythm
-     attribute (see the Rhythm section below). */
   --ease-out-quiet: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-long: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-crisp: cubic-bezier(0.33, 0.9, 0.28, 1);
@@ -70,7 +48,6 @@
     text-wrap: pretty;
   }
 
-  /* Visible, on-brand focus ring. Never remove without a replacement. */
   :focus-visible {
     outline: 2px solid var(--color-amber);
     outline-offset: 3px;
@@ -84,7 +61,6 @@
 }
 
 @layer components {
-  /* Refined all-caps label treatment used for eyebrows, nav and buttons. */
   .label-caps {
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -101,29 +77,6 @@
   }
 }
 
-/* ==========================================================================
-   Motion
-   Every scroll-driven effect below is opt-in via a data attribute that JS sets
-   only after checking prefers-reduced-motion. The reduced-motion block at the
-   bottom is the belt-and-braces static fallback.
-   ========================================================================== */
-
-/* Animated start states are gated on prefers-reduced-motion: no-preference, so
-   the reduced-motion fallback is pure CSS and applies from the very first
-   paint — no JS, no hydration dependency, no flash.
-
-   The JS-disabled fallback is the <noscript> override in the root layout, which
-   pins these same elements to their resolved state. Keep the two in sync: if
-   you add a new animated start state here, add its override there. */
-
-/* ==========================================================================
-   Per-page rhythm
-   Each page sets data-rhythm on <main>. That drives section padding, reveal
-   distance, duration and easing, so Home / About / Appliances / Process each
-   have their own pace instead of four pages sharing one set of numbers.
-   Colour and type are untouched by this — only spacing and motion.
-   ========================================================================== */
-
 [data-rhythm] {
   --section-y: 5rem;
   --section-y-lg: 7rem;
@@ -132,7 +85,6 @@
   --reveal-ease: var(--ease-out-quiet);
 }
 
-/* Home — brisk and confident, tight vertical pace. */
 [data-rhythm="home"] {
   --section-y: 5rem;
   --section-y-lg: 7rem;
@@ -141,7 +93,6 @@
   --reveal-ease: var(--ease-out-crisp);
 }
 
-/* About — slowest and most spacious; it is the reading page. */
 [data-rhythm="about"] {
   --section-y: 6rem;
   --section-y-lg: 9.5rem;
@@ -150,7 +101,6 @@
   --reveal-ease: var(--ease-out-long);
 }
 
-/* Appliances — catalogue cadence: denser sections, shorter travel. */
 [data-rhythm="appliances"] {
   --section-y: 4.5rem;
   --section-y-lg: 6rem;
@@ -159,7 +109,6 @@
   --reveal-ease: var(--ease-out-crisp);
 }
 
-/* Process — deliberate, step-by-step; longest settle. */
 [data-rhythm="process"] {
   --section-y: 5.5rem;
   --section-y-lg: 8.5rem;
@@ -168,7 +117,6 @@
   --reveal-ease: var(--ease-in-out-slow);
 }
 
-/* Contact — steady and businesslike. */
 [data-rhythm="contact"] {
   --section-y: 5rem;
   --section-y-lg: 7.5rem;
@@ -178,8 +126,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Fade + slide-up on section entry. Distance, duration and easing all come
-     from the page's rhythm, so no two pages animate identically. */
   [data-reveal] {
     opacity: 0;
     transform: translateY(var(--reveal-shift, 18px));
@@ -189,7 +135,6 @@
     transition-delay: var(--reveal-delay, 0ms);
   }
 
-  /* Sideways reveal, for alternating editorial rows. */
   [data-reveal="left"] {
     transform: translate3d(calc(var(--reveal-shift, 18px) * -1.4), 0, 0);
   }
@@ -198,7 +143,6 @@
     transform: translate3d(calc(var(--reveal-shift, 18px) * 1.4), 0, 0);
   }
 
-  /* Scale-in, for feature media. */
   [data-reveal="rise"] {
     transform: translate3d(0, calc(var(--reveal-shift, 18px) * 1.5), 0) scale(0.985);
   }
@@ -208,7 +152,6 @@
     transform: none;
   }
 
-  /* Amber rule that draws itself in. */
   [data-draw] path,
   [data-draw] line {
     stroke-dasharray: var(--draw-length, 1000);
@@ -221,32 +164,6 @@
     stroke-dashoffset: 0;
   }
 }
-
-/* ==========================================================================
-   Blueprint to reality — scroll-driven, off the main thread
-   ==========================================================================
-   This effect previously ran through React: a scroll listener recomputed
-   progress, called setState every frame, and the layers carried
-   `transition: clip-path 120ms`. Two problems, one of them serious:
-
-     1. Every frame re-rendered both appliance SVGs (~120 elements) — real work
-        on a mid-range phone.
-     2. The 120ms transition meant the visual ALWAYS trailed the scroll by
-        120ms, and each frame restarted the interpolation. That is what "laggy"
-        actually was: latency built into the design, not dropped frames.
-
-   Now the whole thing is a CSS scroll-driven animation on a view() timeline.
-   No JS, no React re-render, no transition, and the browser runs it off the
-   main thread. Scrolling and the artwork are locked together.
-
-   The range values are derived, not guessed. For an element of height h in a
-   viewport of height v, the `cover` range spans v + h, and the element's centre
-   sits at v - p(v + h) + h/2. Solving for a centre of 0.95v (blueprint fully
-   legible, ~60% of the object on screen) and 0.42v (resolved, comfortably
-   centred) gives p ≈ 0.21 and p ≈ 0.55. Those hold within a percentage point
-   across phone and desktop viewports, which is why fixed percentages are safe
-   here. `cover` is used rather than `entry` because `entry` never completes for
-   an element taller than the viewport (short landscape phones). */
 
 @keyframes b2r-resolve {
   from {
@@ -295,8 +212,6 @@
       animation-range: cover 21% cover 55%;
     }
 
-    /* The edge highlight shares the clip animation, so its bottom border sits
-       exactly on the wipe line for free — no separate position maths. */
     [data-b2r-edge] {
       animation:
         b2r-resolve linear both,
@@ -305,8 +220,6 @@
       animation-range: cover 21% cover 55%, cover 21% cover 55%;
     }
 
-    /* Linework clears a little ahead of the wipe finishing, so the two layers
-       are never both faint at once. */
     [data-b2r-line] {
       animation: b2r-linework-out linear both;
       animation-timeline: --b2r;
@@ -314,9 +227,6 @@
     }
   }
 
-  /* Browsers without scroll-driven animations fall back to a rAF loop that
-     writes these custom properties directly to the element — still no React
-     re-render and still no transition. See useB2RFallback in motion.tsx. */
   @supports not (animation-timeline: view()) {
     [data-b2r-real],
     [data-b2r-edge] {
@@ -333,8 +243,6 @@
   }
 }
 
-/* Scroll cue arrow: a slow, small drift. Deliberately not a bounce — elastic
-   easing is exactly the template tell the brief rules out. */
 @keyframes scroll-cue-drift {
   0%,
   100% {
@@ -353,7 +261,6 @@
   }
 }
 
-/* Soft amber glow on interactive surfaces. */
 .glow-hover {
   transition:
     border-color 0.35s var(--ease-out-quiet),
@@ -369,7 +276,6 @@
     0 8px 40px -12px color-mix(in srgb, var(--color-amber) 30%, transparent);
 }
 
-/* Understated underline that grows from the left on hover. */
 .link-underline {
   position: relative;
 }
@@ -393,8 +299,6 @@
   transform: scaleX(1);
 }
 
-/* Blueprint grid used behind hero and section breaks in place of photography.
-   PLACEHOLDER: this stands in for real jobsite imagery (build prompt §11). */
 .blueprint-grid {
   background-image:
     linear-gradient(
@@ -430,8 +334,6 @@
     scroll-behavior: auto;
   }
 
-  /* Pin every scroll-driven state to its resolved end state. The inline script
-     already withholds .motion-ready here; these rules are the backstop. */
   [data-reveal],
   [data-reveal][data-revealed="true"] {
     opacity: 1 !important;
@@ -446,8 +348,6 @@
     transition: none !important;
   }
 
-  /* Blueprint-to-reality resolves fully: line art hidden, appliance shown,
-     wipe edge absent. */
   [data-b2r-line],
   [data-b2r-edge] {
     opacity: 0 !important;

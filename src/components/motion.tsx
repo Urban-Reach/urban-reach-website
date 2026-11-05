@@ -8,28 +8,10 @@ import {
   type ReactNode,
 } from "react";
 
-/**
- * Motion primitives — deliberately hand-rolled.
- *
- * No Framer Motion / GSAP / AOS. The whole set below is a few hundred bytes of
- * IntersectionObserver and one shared rAF scroll loop, which keeps the bundle
- * small enough to hold the Core Web Vitals targets (LCP < 2.5s, CLS < 0.1,
- * PSI mobile 85+) that a general-purpose animation library would put at risk.
- *
- * Every effect checks prefers-reduced-motion and bails out to a static resolved
- * state. globals.css enforces the same fallback in CSS as a second line of
- * defence, so a user with the setting on gets the finished composition even if
- * JS runs.
- */
-
 function prefersReducedMotion() {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Shared scroll loop                                                          */
-/* -------------------------------------------------------------------------- */
 
 type ScrollSubscriber = () => void;
 const subscribers = new Set<ScrollSubscriber>();
@@ -40,9 +22,6 @@ function onScroll() {
   if (ticking) return;
   ticking = true;
   requestAnimationFrame(() => {
-    // try/finally matters: without it, one throwing subscriber would leave
-    // `ticking` stuck true and silently kill every scroll-driven effect on the
-    // page for the rest of the session.
     try {
       subscribers.forEach((fn) => fn());
     } finally {
@@ -51,10 +30,6 @@ function onScroll() {
   });
 }
 
-/**
- * One passive scroll listener and one rAF for the whole page, rather than one
- * per animated element.
- */
 function subscribeToScroll(fn: ScrollSubscriber) {
   subscribers.add(fn);
   if (!listening) {
@@ -74,33 +49,10 @@ function subscribeToScroll(fn: ScrollSubscriber) {
   };
 }
 
-/* -------------------------------------------------------------------------- */
-/* Reveal manager                                                              */
-/* -------------------------------------------------------------------------- */
-
-/**
- * One shared IntersectionObserver for every reveal on the page, plus a scroll
- * sweep as a safety net.
- *
- * The sweep is not belt-and-braces paranoia — it fixes a real failure. An
- * IntersectionObserver only notifies when the intersection ratio *crosses* a
- * threshold. If an element enters and leaves the viewport between two
- * intersection computations — fast flick scrolling on mobile, an anchor jump,
- * browser scroll restoration on back-navigation — the ratio never registers as
- * crossing, no callback fires, and the element is stranded at opacity 0
- * forever. That was reproducible: scrolling a page in 500px steps left 12 of 23
- * sections permanently blank.
- *
- * So on each scroll frame we also reveal anything already past the trigger
- * line. `pending` drains to empty as elements reveal, and the sweep
- * unsubscribes itself at that point, so the steady-state cost is zero.
- */
-
 const pending = new Map<Element, () => void>();
 let sharedObserver: IntersectionObserver | null = null;
 let sweepUnsubscribe: (() => void) | null = null;
 
-/** Matches the observer's -12% bottom rootMargin. */
 function triggerLine() {
   return window.innerHeight * 0.88;
 }
@@ -131,8 +83,6 @@ function observeForReveal(el: Element, onReveal: () => void) {
     sharedObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          // The second clause catches elements already scrolled past, which is
-          // the case a plain isIntersecting check misses.
           if (
             entry.isIntersecting ||
             entry.boundingClientRect.top < triggerLine()
@@ -156,25 +106,18 @@ function observeForReveal(el: Element, onReveal: () => void) {
   };
 }
 
-/** Reveals once, then stops tracking. Returns [ref, revealed]. */
 function useRevealOnce<T extends Element>() {
   const ref = useRef<T>(null);
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
-    // Under reduced motion, globals.css already pins this element to its
-    // resolved state, so there is nothing to observe and no state to set.
     if (!el || prefersReducedMotion()) return;
     return observeForReveal(el, () => setRevealed(true));
   }, []);
 
   return [ref, revealed] as const;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Reveal — fade + slide-up on section entry                                   */
-/* -------------------------------------------------------------------------- */
 
 export function Reveal({
   children,
@@ -186,13 +129,7 @@ export function Reveal({
 }: {
   children: ReactNode;
   as?: ElementType;
-  /** Stagger in ms. Keep small; long chains read as a template effect. */
   delay?: number;
-  /**
-   * Direction the element arrives from. Pages use different values so the
-   * motion signature is not identical everywhere — see the [data-reveal]
-   * variants in globals.css.
-   */
   from?: "up" | "left" | "right" | "rise";
   className?: string;
 } & Record<string, unknown>) {
@@ -212,10 +149,6 @@ export function Reveal({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* DrawRule — amber divider that draws itself in                               */
-/* -------------------------------------------------------------------------- */
-
 export function DrawRule({
   className = "",
   width = 120,
@@ -223,8 +156,6 @@ export function DrawRule({
   className?: string;
   width?: number;
 }) {
-  // Shares the reveal manager with <Reveal>, so it inherits the same
-  // scrolled-past safety net rather than needing its own observer.
   const [ref, revealed] = useRevealOnce<SVGSVGElement>();
 
   return (
@@ -252,27 +183,6 @@ export function DrawRule({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* useB2RFallback — legacy path for the blueprint-to-reality effect            */
-/* -------------------------------------------------------------------------- */
-
-/**
- * The blueprint-to-reality effect is a CSS scroll-driven animation on a `view()`
- * timeline (see globals.css). Where that is supported it runs off the main
- * thread with no JavaScript at all, and this hook attaches nothing.
- *
- * This is only the fallback for browsers without scroll-driven animations. Two
- * rules it deliberately follows, both of which the previous React-state version
- * broke:
- *
- *   - It writes a CSS custom property straight to the element instead of
- *     calling setState. Per-frame setState re-rendered both appliance SVGs
- *     (~120 elements) on every scroll frame.
- *   - Nothing it touches carries a CSS transition. The old version had
- *     `transition: clip-path 120ms`, which meant the artwork permanently
- *     trailed the scroll by 120ms and every frame restarted the interpolation.
- *     That latency was the "lag" — not dropped frames.
- */
 export function useB2RFallback<T extends HTMLElement>() {
   const ref = useRef<T>(null);
 
@@ -280,8 +190,6 @@ export function useB2RFallback<T extends HTMLElement>() {
     const el = ref.current;
     if (!el) return;
 
-    // Reduced motion is resolved in CSS, and where view() timelines exist the
-    // browser drives the whole thing. Either way, attach nothing.
     if (prefersReducedMotion()) return;
     if (
       typeof CSS !== "undefined" &&
@@ -294,27 +202,16 @@ export function useB2RFallback<T extends HTMLElement>() {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Same mapping as the CSS `cover 21% .. 55%` range: track the element's
-      // CENTRE rather than its top edge, so roughly 60% of the object is
-      // visible before anything moves and it finishes resolved near the middle
-      // of the viewport.
       const centre = rect.top + rect.height / 2;
       const start = vh * 0.95;
       const end = vh * 0.42;
       const p = Math.min(1, Math.max(0, (start - centre) / (start - end)));
 
       el.style.setProperty("--b2r-p", p.toFixed(4));
-      // Matches the b2r-edge-fade keyframes: present through the middle of the
-      // wipe, absent at both ends.
       const edge = p <= 0 || p >= 1 ? 0 : Math.min(1, Math.min(p, 1 - p) / 0.12);
       el.style.setProperty("--b2r-edge-opacity", edge.toFixed(3));
     };
 
-    // Not gated on an IntersectionObserver "is visible" flag: skipping the
-    // computation while off-screen freezes the value at whatever it was when
-    // the element was last visible, leaving something scrolled far past still
-    // reporting itself unresolved. The clamp above already yields the correct
-    // end value from position alone.
     const ro = new ResizeObserver(write);
     ro.observe(el);
     const unsubscribe = subscribeToScroll(write);
@@ -328,29 +225,6 @@ export function useB2RFallback<T extends HTMLElement>() {
   return ref;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Scroll cue                                                                 */
-/* -------------------------------------------------------------------------- */
-
-/**
- * The "Scroll" label and arrow at the foot of every hero.
- *
- * It is absolutely positioned inside the hero, so it does eventually leave with
- * it — but the hero is a full viewport tall, which meant the cue sat there fully
- * opaque through the first ~620px of scrolling. By then the reader is plainly
- * already scrolling and the prompt has become an instruction they are being
- * given after the fact.
- *
- * So it fades on the scroll itself: full strength at rest, gone by 18% of a
- * viewport. Rendered client-side against the shared scroll loop rather than as a
- * CSS `animation-timeline: scroll()`, because scroll-driven CSS animations are
- * still missing in Safari and this is a visible affordance rather than a
- * flourish — degrading to "never disappears" is exactly the bug being fixed.
- *
- * Opacity is written straight to the node instead of held in state: this runs on
- * every scroll frame, and a setState per frame would re-render the subtree ~60
- * times a second for one style property.
- */
 export function ScrollCue() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -362,8 +236,6 @@ export function ScrollCue() {
       const end = window.innerHeight * 0.18;
       const opacity = Math.max(0, 1 - window.scrollY / end);
       el.style.opacity = String(opacity);
-      // Fully faded means fully gone: an invisible cue must not stay clickable,
-      // and it must not be announced to a screen reader either.
       el.style.visibility = opacity === 0 ? "hidden" : "visible";
     });
   }, []);
