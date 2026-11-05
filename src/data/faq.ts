@@ -39,7 +39,7 @@ export const faqs: FaqItem[] = [
   {
     question: "What appliance brands does Urban Reach source?",
     answer:
-      "Urban Reach is an authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, and BUNN. Beyond these core partner brands, Urban Reach can source additional manufacturers as needed to meet a project's specific requirements.",
+      "Urban Reach is an authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, BUNN, and Sabre. Beyond these core partner brands, Urban Reach can source additional manufacturers as needed to meet a project's specific requirements.",
   },
   {
     question:

@@ -166,8 +166,8 @@ export function Hero({
           {(primary || secondary) && (
             <Reveal delay={240}>
               <div
-                className={`mt-11 flex flex-col items-start gap-x-9 gap-y-5 sm:flex-row sm:items-center ${
-                  align === "center" ? "sm:justify-center" : ""
+                className={`mt-11 flex flex-col gap-x-9 gap-y-5 sm:flex-row sm:items-center ${
+                  align === "center" ? "items-center sm:justify-center" : "items-start"
                 }`}
               >
                 {primary && <PrimaryCta {...primary} />}

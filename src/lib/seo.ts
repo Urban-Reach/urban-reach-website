@@ -31,12 +31,12 @@ export const PAGE_SEO = {
   appliances: {
     path: "/appliances",
     // The Samsung long-tail is still targeted, but through an H3 and body copy
-    // rather than the title and H1. Urban Reach holds six dealer relationships,
+    // rather than the title and H1. Urban Reach holds seven dealer relationships,
     // and leading with one manufacturer made the page read as Samsung-only.
     primary: "commercial appliance dealer Austin",
     title: "Commercial Appliance Dealer in Austin, TX | Urban Reach",
     description:
-      "Authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, and BUNN. Refrigeration, dishwashers, and beverage equipment across Austin.",
+      "Authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, BUNN, and Sabre. Refrigeration, dishwashers, and beverage equipment across Austin.",
   },
   process: {
     path: "/process",

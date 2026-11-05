@@ -40,7 +40,8 @@ type Mark = {
  * Layout is a fixed grid below xl and a nowrap flex row at xl. Free-flowing
  * `flex-wrap` is deliberately not used: at intermediate widths it put five
  * marks on one line and orphaned BUNN alone on a second. Fixed tracks break
- * 3 + 3, then 2 + 2 + 2.
+ * 3 + 3, then 2 + 2 + 2. A leftover single mark (seven vendors) is centred
+ * on its own line rather than left-aligned under the first column.
  *
  * The --mark-h ladders below are measured, not guessed: at every breakpoint the
  * widest mark in each row fits its track (or, at xl, the whole row fits the
@@ -66,14 +67,14 @@ function LogoRow({
 }) {
   return (
     <ul
-      className={`mt-10 grid grid-cols-2 items-center justify-items-center gap-x-8 gap-y-10 md:grid-cols-3 md:gap-x-10 xl:flex xl:flex-nowrap xl:justify-center xl:gap-x-6 ${MARK_HEIGHTS[variant]}`}
+      className={`mt-8 grid grid-cols-2 items-center justify-items-center gap-x-6 gap-y-6 sm:mt-10 sm:gap-x-8 sm:gap-y-10 md:grid-cols-3 md:gap-x-10 xl:flex xl:flex-nowrap xl:justify-center xl:gap-x-6 ${MARK_HEIGHTS[variant]}`}
     >
       {marks.map((mark, i) => (
         <Reveal
           as="li"
           key={mark.name}
           delay={i * 60}
-          className="flex h-16 shrink-0 items-center"
+          className="flex h-12 shrink-0 items-center sm:h-16 [&:nth-child(2n+1):last-child]:col-span-2 md:[&:nth-child(2n+1):last-child]:col-span-1 md:[&:nth-child(3n+1):last-child]:col-start-2"
         >
           {mark.logo ? (
             <Image
@@ -173,7 +174,7 @@ export function TrustStrip() {
         </Reveal>
         <LogoRow marks={generalContractors} variant="gc" />
 
-        <div className="mt-16 border-t border-rule pt-16">
+        <div className="mt-10 border-t border-rule pt-10 sm:mt-16 sm:pt-16">
           <Reveal>
             <p className="label-caps text-center text-bone-dim">
               Authorized dealer for

@@ -108,9 +108,6 @@ export function otherServiceAreaSentence(
 
 export const nav = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/appliances", label: "Appliances" },
-  { href: "/process", label: "Process" },
   { href: "/contact", label: "Contact & FAQs" },
 ] as const;
 
