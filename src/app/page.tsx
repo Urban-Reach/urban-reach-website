@@ -17,7 +17,7 @@ export default function HomePage() {
         page="home"
         align="center"
         wordmark={{ name: site.name, tagline: site.tagline }}
-        lead="Urban Reach supplies and installs commercial-grade appliances for general contractors, architects, and developers building across the Austin metro. One partner, from the equipment schedule to the finished install."
+        lead="We provide end-to-end procurement and installation of commercial-grade appliances for general contractors, architects, and developers throughout Central Texas. We oversee every phase of the process, from design through final installation."
         primary={{ href: "/contact", label: "Start a project" }}
       />
 
