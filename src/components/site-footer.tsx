@@ -100,7 +100,7 @@ export function SiteFooter() {
             region, including {otherServiceAreaSentence()}, among others.
           </p>
           <p className="mt-4 text-xs text-bone-dim">
-            © {new Date().getFullYear()} {site.name}. All rights reserved.
+            © {new Date().getFullYear()} {site.brand}. All rights reserved.
           </p>
         </div>
       </div>

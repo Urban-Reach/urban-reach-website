@@ -6,44 +6,44 @@ export const PAGE_SEO = {
   home: {
     path: "/",
     primary: "commercial appliance supplier Austin TX",
-    title: "Commercial Appliance Supplier in Austin, TX | Urban Reach",
+    title: "Commercial Appliance Supplier in Austin, TX | Urban Reach®",
     description:
-      "Urban Reach is a commercial appliance supplier in Austin, TX, sourcing, delivering, and installing appliance packages for general contractors.",
+      "Urban Reach® is a commercial appliance supplier in Austin, TX, sourcing, delivering, and installing appliance packages for general contractors.",
   },
   about: {
     path: "/about",
     primary: "appliance package supplier for general contractors",
-    title: "Appliance Packages for General Contractors | Urban Reach",
+    title: "Appliance Packages for General Contractors | Urban Reach®",
     description:
-      "Urban Reach is an appliance package supplier for general contractors in Austin, built around clear pricing and installation that tracks your schedule.",
+      "Urban Reach® is an appliance package supplier for general contractors in Austin, built around clear pricing and installation that tracks your schedule.",
   },
   appliances: {
     path: "/appliances",
     primary: "commercial appliance dealer Austin",
-    title: "Commercial Appliance Dealer in Austin, TX | Urban Reach",
+    title: "Commercial Appliance Dealer in Austin, TX | Urban Reach®",
     description:
       "Authorized dealer for Samsung, Summit, GE/Haier, Fisher & Paykel, Champion, and BUNN. Refrigeration, dishwashers, and beverage equipment across Austin.",
   },
   process: {
     path: "/process",
     primary: "commercial appliance installation Austin",
-    title: "Commercial Appliance Installation in Austin | Urban Reach",
+    title: "Commercial Appliance Installation in Austin | Urban Reach®",
     description:
       "From spec review to on-site commercial appliance installation in Austin. Tenant improvement appliance fulfillment as one coordinated service.",
   },
   contact: {
     path: "/contact",
     primary: "commercial appliance supplier Austin service area",
-    title: "Contact & FAQs | Urban Reach Appliance Supplier, Austin TX",
+    title: "Contact & FAQs | Urban Reach® Appliance Supplier, Austin TX",
     description:
-      "Urban Reach serves Austin, Round Rock, Pflugerville, Cedar Park, Bee Cave, West Lake Hills, Manchaca, and East Austin with commercial appliance sourcing and installation.",
+      "Urban Reach® serves Austin, Round Rock, Pflugerville, Cedar Park, Bee Cave, West Lake Hills, Manchaca, and East Austin with commercial appliance sourcing and installation.",
   },
   privacy: {
     path: "/privacy-policy",
     primary: "privacy policy",
-    title: "Privacy Policy | Urban Reach",
+    title: "Privacy Policy | Urban Reach®",
     description:
-      "How Urban Reach handles information submitted through the contact form on this website.",
+      "How Urban Reach® handles information submitted through the contact form on this website.",
   },
 } as const;
 
@@ -60,7 +60,7 @@ export function pageMetadata(key: PageKey): Metadata {
     openGraph: {
       type: "website",
       url,
-      siteName: site.name,
+      siteName: site.brand,
       title: page.title,
       description: page.description,
       locale: "en_US",

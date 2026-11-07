@@ -64,7 +64,7 @@ export function BrandGrid({ heading = true }: { heading?: boolean }) {
         <SectionHeading
           align="center"
           eyebrow="Authorized dealer"
-          lead="Urban Reach holds authorized dealer relationships with the manufacturers below, and sources beyond them whenever a specification requires it."
+          lead="Urban Reach® holds authorized dealer relationships with the manufacturers below, and sources beyond them whenever a specification requires it."
         >
           Manufacturer partnerships, and the range to look beyond them
         </SectionHeading>
@@ -128,7 +128,7 @@ export function CtaBand({
 
           <Reveal delay={140}>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <ButtonLink href="/contact">Contact Urban Reach</ButtonLink>
+              <ButtonLink href="/contact">Contact Urban Reach®</ButtonLink>
               <a
                 href={site.emailHref}
                 className="label-caps-lg link-underline px-2 py-4 text-bone transition-colors hover:text-amber"

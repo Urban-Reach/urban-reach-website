@@ -30,9 +30,9 @@ export default function AboutPage() {
       <Hero
         page="about"
         align="left"
-        eyebrow="About Urban Reach"
+        eyebrow="About Urban Reach®"
         headline="An appliance package supplier for general contractors in Austin"
-        lead="Urban Reach exists to do one part of a construction project exceptionally well: specifying, pricing, delivering, and installing commercial-grade appliances without delaying turnover."
+        lead="Urban Reach® exists to do one part of a construction project exceptionally well: specifying, pricing, delivering, and installing commercial-grade appliances without delaying turnover."
         primary={{ href: "/contact", label: "Start a conversation" }}
         secondary={{ href: "/process", label: "See how we work" }}
       />
@@ -63,7 +63,7 @@ export default function AboutPage() {
               <Reveal>
                 <div className="space-y-6 text-lg leading-relaxed text-bone-dim">
                   <p>
-                    Urban Reach chose a narrow scope on purpose: commercial
+                    Urban Reach® chose a narrow scope on purpose: commercial
                     appliance fulfillment for construction projects, in one
                     metro. That focus is what allows a small team to answer a
                     specification question the same day it is asked.
@@ -159,7 +159,7 @@ export default function AboutPage() {
             <div className="lg:col-span-8">
               <Reveal>
                 <p className="text-lg leading-relaxed text-bone-dim">
-                  Urban Reach partners primarily with general contractors
+                  Urban Reach® partners primarily with general contractors
                   managing commercial projects across {site.city}. We also work
                   directly with architects, designers, developers, and property
                   owners, typically earlier in the process, while the equipment

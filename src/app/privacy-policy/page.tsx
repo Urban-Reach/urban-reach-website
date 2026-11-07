@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
         page="contact"
         align="left"
         eyebrow="Privacy Policy"
-        headline="How Urban Reach handles information from this website"
+        headline="How Urban Reach® handles information from this website"
         lead={`Last updated ${updated}.`}
       />
 
@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
             <p className="mt-4 leading-relaxed text-bone">
               This policy is provided as a good-faith disclosure of how Urban
               Reach handles information submitted through this website. It has
-              not been reviewed by an attorney. Urban Reach recommends that a
+              not been reviewed by an attorney. Urban Reach® recommends that a
               licensed Texas attorney review this page before it is relied upon
               as a legal document, and it should not be treated as legal advice
               or as a binding legal instrument in its current form.
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
                 this website and transmit the resulting email. Those providers
                 process your submission only in order to deliver it to us, and
                 not for any purpose of their own. Your message arrives in the
-                Urban Reach {site.email} inbox and is read by the people who
+                Urban Reach® {site.email} inbox and is read by the people who
                 handle project inquiries.
               </p>
               <p className="mt-4 leading-relaxed text-bone-dim">
@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
                 Links to other sites
               </h2>
               <p className="mt-4 leading-relaxed text-bone-dim">
-                This site links to Urban Reach profiles on LinkedIn and
+                This site links to Urban Reach® profiles on LinkedIn and
                 Instagram. Those platforms have their own privacy practices,
                 which we do not control and are not responsible for.
               </p>
@@ -162,7 +162,7 @@ export default function PrivacyPolicyPage() {
               </h2>
               <p className="mt-4 leading-relaxed text-bone-dim">
                 For any question about this policy or about information you have
-                sent us, contact Urban Reach:
+                sent us, contact Urban Reach®:
               </p>
               <address className="mt-6 space-y-2 not-italic">
                 <p>

@@ -33,7 +33,7 @@ export default function AppliancesPage() {
         align="left"
         eyebrow="Appliances"
         headline="Commercial appliance categories for Austin construction projects"
-        lead="Urban Reach supplies commercial-grade appliances for general contractors and architects managing multifamily, office, and tenant improvement work across the Austin metro. Every unit is sourced through an authorized manufacturer partnership and installed by the same team that priced it."
+        lead="Urban Reach® supplies commercial-grade appliances for general contractors and architects managing multifamily, office, and tenant improvement work across the Austin metro. Every unit is sourced through an authorized manufacturer partnership and installed by the same team that priced it."
         primary={{ href: "/contact", label: "Send a schedule" }}
         secondary={{ href: "/process", label: "See how we work" }}
       />
@@ -44,7 +44,7 @@ export default function AppliancesPage() {
             eyebrow="Categories"
             lead="Deliberately broad. What matters is not the category list but matching what a specific equipment schedule calls for."
           >
-            <span id="categories">What Urban Reach sources and installs</span>
+            <span id="categories">What Urban Reach® sources and installs</span>
           </SectionHeading>
 
           <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:[&>li]:col-span-2 lg:[&>li:nth-child(4)]:col-start-2">
@@ -75,17 +75,17 @@ export default function AppliancesPage() {
           <Reveal delay={160}>
             <div className="mx-auto mt-12 max-w-2xl space-y-4 text-center leading-relaxed text-bone-dim">
               <p>
-                Urban Reach holds close, authorized relationships with the
+                Urban Reach® holds close, authorized relationships with the
                 manufacturers it carries, chosen to cover different
                 specification tiers, compact and ADA-height options for
                 constrained floor plans, and dedicated categories such as
                 commercial dishwashing and beverage service. Those
                 relationships are the standing core, not the ceiling. When a
-                project calls for a manufacturer outside them, Urban Reach
+                project calls for a manufacturer outside them, Urban Reach®
                 sources it just the same.
               </p>
               <p>
-                Urban Reach is an authorized Samsung commercial appliance
+                Urban Reach® is an authorized Samsung commercial appliance
                 dealer in {site.city}, and an authorized dealer for each of the
                 brands above.
               </p>

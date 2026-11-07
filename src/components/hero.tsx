@@ -76,6 +76,7 @@ export function Hero({
               <h1 className="flex flex-col items-center">
                 <span className="font-display text-[clamp(2.5rem,min(10vw,14vh),7.5rem)] font-semibold uppercase leading-[0.92] tracking-[-0.02em] text-bone">
                   {wordmark.name}
+                  <sup className="ml-[0.06em] align-super text-[0.3em] font-normal tracking-normal">®</sup>
                 </span>
                 <span className="mt-5 max-w-2xl font-display text-[clamp(1rem,min(2.4vw,3.4vh),1.7rem)] leading-snug text-amber">
                   {wordmark.tagline}

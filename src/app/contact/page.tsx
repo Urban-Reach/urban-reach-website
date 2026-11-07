@@ -138,7 +138,7 @@ export default function ContactPage() {
             <div className="lg:col-span-7">
               <Reveal>
                 <p className="text-lg leading-relaxed text-bone-dim">
-                  Urban Reach works throughout {site.city} and the surrounding
+                  Urban Reach® works throughout {site.city} and the surrounding
                   Central Texas region. The cities marked below are where we
                   work most often. They are not a boundary. If your project is
                   anywhere in the region, send it to us and we will give you a

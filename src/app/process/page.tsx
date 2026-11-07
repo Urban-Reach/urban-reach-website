@@ -38,7 +38,7 @@ export default function ProcessPage() {
         align="left"
         eyebrow="Process"
         headline="From specification to commercial appliance installation in Austin"
-        lead="Urban Reach manages commercial appliance installation for general contractors and architects in three steps. One point of contact, and no handoff between the people who price the appliances and the people who install them."
+        lead="Urban Reach® manages commercial appliance installation for general contractors and architects in three steps. One point of contact, and no handoff between the people who price the appliances and the people who install them."
         primary={{ href: "/contact", label: "Start a conversation" }}
         secondary={{ href: "/appliances", label: "See what we supply" }}
       />
@@ -49,7 +49,7 @@ export default function ProcessPage() {
             eyebrow="The work"
             lead="A short, predictable sequence, by design."
           >
-            <span id="steps">How a project runs with Urban Reach</span>
+            <span id="steps">How a project runs with Urban Reach®</span>
           </SectionHeading>
 
           <ol className="mt-16 space-y-4">

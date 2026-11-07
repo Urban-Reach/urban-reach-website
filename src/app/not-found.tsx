@@ -4,9 +4,9 @@ import { BrandMark } from "@/components/brand-mark";
 import { ButtonLink, Container } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "Page not found | Urban Reach",
+  title: "Page not found | Urban Reach®",
   description:
-    "The page you were looking for could not be found. Return to the Urban Reach homepage.",
+    "The page you were looking for could not be found. Return to the Urban Reach® homepage.",
   robots: { index: false, follow: true },
 };
 

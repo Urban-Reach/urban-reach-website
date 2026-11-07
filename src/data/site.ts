@@ -1,6 +1,7 @@
 export const site = {
   name: "Urban Reach",
   legalName: "Urban Reach",
+  brand: "Urban Reach®",
   tagline: "Austin's Partner in Commercial Appliance Fulfillment",
 
   phone: "(737) 381-6621",
