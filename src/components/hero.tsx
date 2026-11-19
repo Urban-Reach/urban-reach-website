@@ -8,6 +8,14 @@ import { Container } from "@/components/ui";
 
 type Page = "home" | "about" | "appliances" | "process" | "contact";
 
+const HERO_ALT: Record<Page, string> = {
+  home: "Commercial kitchen with stainless steel ranges, refrigeration, and prep counters",
+  about: "Crated appliances staged inside a commercial building under construction",
+  appliances: "Row of stainless steel commercial refrigerators wrapped for delivery",
+  process: "Delivery truck unloading wrapped appliance pallets at a loading dock",
+  contact: "Apartment kitchen with a stainless steel refrigerator and range overlooking a city skyline at dusk",
+};
+
 function heroFile(page: Page) {
   const manifest = JSON.parse(
     readFileSync(join(process.cwd(), "public", "hero", "manifest.json"), "utf8"),
@@ -77,7 +85,7 @@ export function Hero({
                 <span className="font-display text-[clamp(2.5rem,min(10vw,14vh),7.5rem)] font-semibold uppercase leading-[0.92] tracking-[-0.02em] text-bone">
                   {wordmark.name}
                   <sup className="ml-[0.06em] align-super text-[0.3em] font-normal tracking-normal">®</sup>
-                </span>
+                </span>{" "}
                 <span className="mt-5 max-w-2xl font-display text-[clamp(1rem,min(2.4vw,3.4vh),1.7rem)] leading-snug text-amber">
                   {wordmark.tagline}
                 </span>
@@ -197,10 +205,10 @@ function HeroMedia({ page, align }: { page: Page; align: "center" | "left" }) {
   const blur = blurFor(page);
 
   return (
-    <div aria-hidden="true" className="absolute inset-0 -z-10">
+    <div className="absolute inset-0 -z-10">
       <Image
         src={heroFile(page)}
-        alt=""
+        alt={HERO_ALT[page]}
         fill
         priority
         sizes="100vw"

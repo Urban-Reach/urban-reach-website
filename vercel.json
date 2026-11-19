@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "urban-reach-website.vercel.app" }],
+      "destination": "https://www.urbanreachtx.com/:path*",
+      "permanent": true
+    }
+  ]
+}

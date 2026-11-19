@@ -4,16 +4,18 @@ export function BrandMark({
   className = "",
   decorative = false,
   eager = false,
+  alt,
 }: {
   className?: string;
   decorative?: boolean;
   eager?: boolean;
+  alt?: string;
 }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src="/brand/urban-reach-lockup-sm.webp"
-      alt={decorative ? "" : `${site.name} logo`}
+      alt={decorative ? "" : (alt ?? `${site.name} logo`)}
       width={360}
       height={240}
       loading={eager ? "eager" : "lazy"}

@@ -20,7 +20,7 @@ export function SiteFooter() {
           </div>
 
           <nav aria-label="Footer" className="md:col-span-3 md:row-span-2">
-            <h2 className="label-caps text-amber">Navigate</h2>
+            <p className="label-caps text-amber">Navigate</p>
             <ul className="mt-6 flex flex-col gap-3">
               {nav.map((item) => (
                 <li key={item.href}>
@@ -44,7 +44,7 @@ export function SiteFooter() {
           </nav>
 
           <div className="order-last col-span-2 md:order-none md:col-span-4">
-            <h2 className="label-caps text-amber">Contact</h2>
+            <p className="label-caps text-amber">Contact</p>
             <address className="mt-6 flex flex-col gap-3 not-italic">
               <a
                 href={site.phoneHref}
@@ -58,6 +58,7 @@ export function SiteFooter() {
               >
                 {site.email}
               </a>
+              <span className="text-sm text-bone-dim">{site.hours.label}</span>
               <span className="text-sm text-bone-dim">
                 {site.city}, {site.state}
               </span>
@@ -65,7 +66,7 @@ export function SiteFooter() {
           </div>
 
           <div className="md:col-span-4 md:col-start-9">
-            <h2 className="label-caps text-amber">Follow</h2>
+            <p className="label-caps text-amber">Follow</p>
             <ul className="mt-6 flex flex-col gap-3 md:flex-row md:gap-6">
               <li>
                 <a

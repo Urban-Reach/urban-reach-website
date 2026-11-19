@@ -1,6 +1,6 @@
 export const site = {
   name: "Urban Reach",
-  legalName: "Urban Reach",
+  legalName: "Urban Reach LLC",
   brand: "Urban Reach®",
   tagline: "Austin's Partner in Commercial Appliance Fulfillment",
 
@@ -10,6 +10,13 @@ export const site = {
 
   email: "info@urbanreachtx.com",
   emailHref: "mailto:info@urbanreachtx.com",
+
+  hours: {
+    label: "Mon–Fri, 8am–5pm",
+    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "08:00",
+    closes: "17:00",
+  },
 
   city: "Austin",
   state: "TX",
@@ -32,7 +39,7 @@ export const site = {
     instagram: "https://www.instagram.com/urbanreach_tx/",
   },
 
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://urbanreachtx.com",
+  url: "https://www.urbanreachtx.com",
 } as const;
 
 export function serviceAreaSentence() {

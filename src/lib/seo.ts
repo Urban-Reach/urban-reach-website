@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/data/site";
 import { faqs } from "@/data/faq";
+import { brands } from "@/data/brands";
 
 export const PAGE_SEO = {
   home: {
@@ -84,7 +85,9 @@ export function localBusinessJsonLd() {
     "@type": "LocalBusiness",
     "@id": `${site.url}/#localbusiness`,
     name: site.name,
-    description: site.tagline,
+    legalName: site.legalName,
+    description:
+      "Commercial appliance supplier in Austin, TX. Sourcing, delivery, and installation of appliance packages for general contractors, architects, designers, and developers.",
     url: site.url,
     telephone: site.phoneE164,
     email: site.email,
@@ -100,7 +103,26 @@ export function localBusinessJsonLd() {
       "@type": AREA_TYPE[area] ?? "City",
       name: `${area}, ${site.state}`,
     })),
-    sameAs: [site.social.linkedin, site.social.instagram],
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [...site.hours.days],
+        opens: site.hours.opens,
+        closes: site.hours.closes,
+      },
+    ],
+    brand: brands.map((b) => ({ "@type": "Brand", name: b.name.split(",")[0] })),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Commercial appliance services",
+      itemListElement: [
+        "Commercial appliance sourcing and procurement",
+        "Appliance delivery",
+        "Commercial appliance installation",
+        "Equipment schedule pricing review",
+      ].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })),
+    },
+    sameAs: [site.social.instagram],
   };
 }
 

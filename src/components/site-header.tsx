@@ -72,9 +72,8 @@ export function SiteHeader() {
         <Link
           href="/"
           className="relative z-10 flex items-center"
-          aria-label={`${site.name} home`}
         >
-          <BrandMark decorative eager className="h-11 w-auto sm:h-12" />
+          <BrandMark eager alt={`${site.name} home`} className="h-11 w-auto sm:h-12" />
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">

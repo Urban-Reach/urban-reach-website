@@ -71,6 +71,13 @@ export default function ContactPage() {
                   </div>
 
                   <div>
+                    <h3 className="label-caps text-bone-dim">Hours</h3>
+                    <p className="mt-3 font-display text-xl text-bone">
+                      {site.hours.label}
+                    </p>
+                  </div>
+
+                  <div>
                     <h3 className="label-caps text-bone-dim">Based in</h3>
                     <p className="mt-3 font-display text-xl text-bone">
                       {site.city}, {site.state}
