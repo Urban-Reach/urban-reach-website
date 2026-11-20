@@ -126,7 +126,7 @@ export function localBusinessJsonLd() {
         "Equipment schedule pricing review",
       ].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })),
     },
-    sameAs: [site.social.instagram],
+    sameAs: [site.social.instagram, site.social.linkedin],
   };
 }
 

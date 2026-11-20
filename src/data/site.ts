@@ -35,7 +35,7 @@ export const site = {
   ] as const,
 
   social: {
-    linkedin: "https://www.linkedin.com/in/urban-reach/",
+    linkedin: "https://www.linkedin.com/company/urban-reach-tx/",
     instagram: "https://www.instagram.com/urbanreach_tx/",
   },
 
