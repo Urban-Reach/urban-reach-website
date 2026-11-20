@@ -50,6 +50,9 @@ export const PAGE_SEO = {
 
 type PageKey = keyof typeof PAGE_SEO;
 
+/** Draft pages: reachable by link, but hidden from search and left out of the sitemap. */
+export const DRAFT_PAGES: readonly PageKey[] = ["about", "appliances", "process"];
+
 export function pageMetadata(key: PageKey): Metadata {
   const page = PAGE_SEO[key];
   const url = new URL(page.path, site.url).toString();
@@ -58,6 +61,7 @@ export function pageMetadata(key: PageKey): Metadata {
     title: page.title,
     description: page.description,
     alternates: { canonical: url },
+    ...(DRAFT_PAGES.includes(key) && { robots: { index: false, follow: false } }),
     openGraph: {
       type: "website",
       url,

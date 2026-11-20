@@ -45,7 +45,4 @@ Send the appliance or equipment schedule, relevant plan sheets, and the build se
 
 ## Key pages
 
-- [Appliances and brands](https://www.urbanreachtx.com/appliances)
-- [How a project runs](https://www.urbanreachtx.com/process)
-- [About](https://www.urbanreachtx.com/about)
 - [Contact and FAQs](https://www.urbanreachtx.com/contact)
